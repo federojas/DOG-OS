@@ -2,9 +2,6 @@
 #include <naiveConsole.h>
 #include <stdint.h>
 
-extern uint8_t hasKey();
-extern uint8_t getKey();
-
 void printPressedKey() {
     uint8_t x;
     if(_hasKey()) {
