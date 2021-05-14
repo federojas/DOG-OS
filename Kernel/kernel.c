@@ -143,5 +143,23 @@ int main()
 	ncNewline();
 
 	ncPrint("[Finished]");
+
+	load_idt();
+
+
+    uint8_t changeDetected =0;
+
+    while(1){
+        if(!changeDetected && ticks_elapsed() % 6  ==0){
+            changeDetected=1;
+            ncPrint("6");
+            if(ticks_elapsed()%18==0){
+                ncPrint("T");
+            }
+        }
+        if(changeDetected &&  ticks_elapsed() %6 !=0){
+            changeDetected=0;
+        }
+    }
 	return 0;
 }
