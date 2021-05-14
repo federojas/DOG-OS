@@ -3,6 +3,7 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
+#include <keyboard.h>
 
 #include <RTC.h>
 
@@ -12,9 +13,6 @@ extern uint8_t data;
 extern uint8_t bss;
 extern uint8_t endOfKernelBinary;
 extern uint8_t endOfKernel;
-extern unsigned int getSecondsAsm();
-extern unsigned int getMinutesAsm();
-extern unsigned int getHoursAsm();
 
 static const uint64_t PageSize = 0x1000;
 
@@ -104,22 +102,23 @@ void printString(const char * string) {
 
 int main()
 {	
-	ncPrint("[Querido UY LA RECON Kernel Main]");
-	ncNewline();
-	ncPrint("  Sample code module at 0x");
-	ncPrintHex((uint64_t)sampleCodeModuleAddress);
-	ncNewline();
-	ncPrint("  Calling the sample code module returned: ");
-	ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
-	ncNewline();
-	ncNewline();
+	load_idt();
+	// ncPrint("[Querido UY LA RECON Kernel Main]");
+	// ncNewline();
+	// ncPrint("  Sample code module at 0x");
+	// ncPrintHex((uint64_t)sampleCodeModuleAddress);
+	// ncNewline();
+	// ncPrint("  Calling the sample code module returned: ");
+	// ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
+	// ncNewline();
+	// ncNewline();
 
-	ncPrint("  Sample data module at 0x");
-	ncPrintHex((uint64_t)sampleDataModuleAddress);
-	ncNewline();
-	ncPrint("  Sample data module contents: ");
-	ncPrint((char*)sampleDataModuleAddress);
-	ncNewline();
+	// ncPrint("  Sample data module at 0x");
+	// ncPrintHex((uint64_t)sampleDataModuleAddress);
+	// ncNewline();
+	// ncPrint("  Sample data module contents: ");
+	// ncPrint((char*)sampleDataModuleAddress);
+	// ncNewline();
 
 	printString("Arquitectura de las Computadoras");
 	ncNewline();
@@ -127,25 +126,29 @@ int main()
 	printCurrentTime();
 	ncNewline();
 
-	ncPrint("[Finished]");
+	// ncPrint("[Finished]");
 
-	//TIENEN QUE VOLAR
-	load_idt();
+	while(1){
+		printPressedKey();
+	}
+
+	// //TIENEN QUE VOLAR
+	// load_idt();
 
 
-    uint8_t changeDetected =0;
+    // uint8_t changeDetected =0;
 
-    while(1){
-        if(!changeDetected && ticks_elapsed() % 6  ==0){
-            changeDetected=1;
-            ncPrint("6");
-            if(ticks_elapsed()%18==0){
-                ncPrint("T");
-            }
-        }
-        if(changeDetected &&  ticks_elapsed() %6 !=0){
-            changeDetected=0;
-        }
-    }
+    // while(1){
+    //     if(!changeDetected && ticks_elapsed() % 6  ==0){
+    //         changeDetected=1;
+    //         ncPrint("6");
+    //         if(ticks_elapsed()%18==0){
+    //             ncPrint("T");
+    //         }
+    //     }
+    //     if(changeDetected &&  ticks_elapsed() %6 !=0){
+    //         changeDetected=0;
+    //     }
+    // }
 	return 0;
 }

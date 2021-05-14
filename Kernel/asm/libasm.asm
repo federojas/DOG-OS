@@ -1,5 +1,8 @@
 GLOBAL cpuVendor
-GLOBAL getRTCInfo
+GLOBAL _getRTCInfo
+
+GLOBAL _getKey
+GLOBAL _hasKey
 section .text
 	
 cpuVendor:
@@ -26,7 +29,7 @@ cpuVendor:
 	pop rbp
 	ret
 
-getRTCInfo:
+_getRTCInfo:
     push rbp
     mov rbp,rsp
 
@@ -36,4 +39,27 @@ getRTCInfo:
     in al, 71h
 
     leave
+    ret
+
+_getKey:
+    push rbp
+    mov rbp,rsp
+    
+    xor rax, rax
+    in al,60h
+
+    mov rsp, rbp
+	pop rbp
+    ret
+
+_hasKey:
+    push rbp
+    mov rbp,rsp
+
+    xor rax, rax
+    in al,64h
+    and al,0x01
+
+    mov rsp, rbp
+	pop rbp
     ret
