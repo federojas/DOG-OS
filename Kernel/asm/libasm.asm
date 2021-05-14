@@ -1,7 +1,5 @@
 GLOBAL cpuVendor
-GLOBAL getSecondsAsm
-GLOBAL getMinutesAsm
-GLOBAL getHoursAsm
+GLOBAL getRTCInfo
 section .text
 	
 cpuVendor:
@@ -28,45 +26,14 @@ cpuVendor:
 	pop rbp
 	ret
 
-getSecondsAsm:
-	push rbp
-	mov rbp, rsp 
+getRTCInfo:
+    push rbp
+    mov rbp,rsp
 
-	xor rax, rax 
-	mov al, 0 
-	out 70h, al 
-	xor rax, rax 
-	in al, 71h
+    mov rax, rdi
+    out 70h, al
+    mov rax,0
+    in al, 71h
 
-	mov rsp, rbp
-	pop rbp
-	ret
-
-getHoursAsm:
-	push rbp
-	mov rbp, rsp 
-
-	xor rax, rax 
-	mov al, 4 
-	out 70h, al 
-	xor rax, rax 
-	in al, 71h
-
-	mov rsp, rbp
-	pop rbp
-	ret
-
-getMinutesAsm:
-	push rbp
-	mov rbp, rsp 
-
-	xor rax, rax 
-	mov al, 2 
-	out 70h, al 
-	xor rax, rax 
-	in al, 71h
-
-	mov rsp, rbp
-	pop rbp
-	ret
-
+    leave
+    ret

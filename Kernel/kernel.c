@@ -4,6 +4,8 @@
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 
+#include <RTC.h>
+
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
@@ -85,36 +87,19 @@ void * initializeKernelBinary()
 	return getStackBase();
 }
 
+//TIENEN QUE VOLAR
 void printChar(char character, int colour) {
 	*currentVideo = character;
 	currentVideo += 1;
 	*currentVideo = colour;
 	currentVideo += 1;
 }
-
+//TIENEN QUE VOLAR
 void printString(const char * string) {
 	int i;
 	for(i=0; string[i] != 0; i++){
 		printChar(string[i], 0xF2);
 	}
-}
-
-void printCurrentTime() {
-	ncPrint("Tiempo actual: ");
-	int x = getHoursAsm();
-	ncPrint("Hora: ");
-	ncPrintDec(x);
-
-	x = getMinutesAsm();
-	int result = ((x / 16) * 10) + (x & 0xf);
-	ncPrint(" Minuto: ");
-	ncPrintDec(result);
-
-	x = getSecondsAsm();
-	result = ((x / 16) * 10) + (x & 0xf);
-	ncPrint(" Segundo: ");
-	ncPrintDec(result);
-	ncNewline();
 }
 
 int main()
@@ -144,6 +129,7 @@ int main()
 
 	ncPrint("[Finished]");
 
+	//TIENEN QUE VOLAR
 	load_idt();
 
 
