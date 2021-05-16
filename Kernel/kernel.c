@@ -3,9 +3,11 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
-#include <keyboard.h>
+
 
 #include <RTC.h>
+#include <keyboardDriver.h>
+#include <videoDriver.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -18,8 +20,6 @@ static const uint64_t PageSize = 0x1000;
 
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
-
-static uint8_t * currentVideo = (uint8_t*)0xB8000;
 
 typedef int (*EntryPoint)();
 
@@ -83,21 +83,6 @@ void * initializeKernelBinary()
 	ncNewline();
 	ncNewline();
 	return getStackBase();
-}
-
-//TIENEN QUE VOLAR
-void printChar(char character, int colour) {
-	*currentVideo = character;
-	currentVideo += 1;
-	*currentVideo = colour;
-	currentVideo += 1;
-}
-//TIENEN QUE VOLAR
-void printString(const char * string) {
-	int i;
-	for(i=0; string[i] != 0; i++){
-		printChar(string[i], 0xF2);
-	}
 }
 
 int main()

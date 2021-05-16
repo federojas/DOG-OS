@@ -4,7 +4,8 @@
         "moduleloader.h": "c",
         "string.h": "c",
         "stdint.h": "c",
-        "naiveconsole.h": "c"
+        "naiveconsole.h": "c",
+        "rtc.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }
