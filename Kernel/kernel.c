@@ -88,7 +88,7 @@ void * initializeKernelBinary()
 int main()
 {	
 	load_idt();
-	// ncPrint("[Querido UY LA RECON Kernel Main]");
+	// ncPrint("[Kernel Main]");
 	// ncNewline();
 	// ncPrint("  Sample code module at 0x");
 	// ncPrintHex((uint64_t)sampleCodeModuleAddress);
@@ -105,21 +105,16 @@ int main()
 	// ncPrint((char*)sampleDataModuleAddress);
 	// ncNewline();
 
+	// ncPrint("[Finished]");
+
 	printString("Arquitectura de las Computadoras");
 	ncNewline();
 
 	printCurrentTime();
 	ncNewline();
 
-	// ncPrint("[Finished]");
-
-	while(1){
-		printPressedKey();
+	while(1) {
 	}
-
-	// //TIENEN QUE VOLAR
-	// load_idt();
-
 
     // uint8_t changeDetected =0;
 

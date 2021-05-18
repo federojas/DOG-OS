@@ -1,6 +1,6 @@
 #ifndef keyboardDriver_H
 #define keyboardDriver_H
 
-void printPressedKey();
+void keyboardHandler();
 
 #endif

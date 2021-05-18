@@ -38,7 +38,7 @@ uint8_t getAction(uint8_t scanCode) {
     return ERROR;
 }
 
-void printPressedKey() {
+void keyboardHandler() {
     uint8_t scanCode;
     uint8_t currentAction;
     if(_hasKey()) {
