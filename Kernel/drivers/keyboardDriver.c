@@ -54,7 +54,7 @@ void keyboardHandler() {
             }
             else {
                 if (charTable[scanCode][0] != 0) {
-                    if(shift || capsLock)
+                    if(shift || (capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') )
                         ncPrintChar(charTable[scanCode][1]);
                     else
                         ncPrintChar(charTable[scanCode][0]);        
