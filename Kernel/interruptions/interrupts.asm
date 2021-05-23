@@ -1,4 +1,3 @@
-
 GLOBAL _cli
 GLOBAL _sti
 GLOBAL picMasterMask
@@ -14,6 +13,7 @@ GLOBAL _irq04Handler
 GLOBAL _irq05Handler
 
 GLOBAL _exception0Handler
+GLOBAL _exception6Handler
 
 GLOBAL _syscallHandler
 
@@ -146,6 +146,9 @@ _irq05Handler:
 _exception0Handler:
 	exceptionHandler 0
 
+;Invalid OpCode Exception
+_exception6Handler:
+	exceptionHandler 6
 haltcpu:
 	cli
 	hlt

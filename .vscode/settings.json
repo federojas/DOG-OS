@@ -5,7 +5,10 @@
         "string.h": "c",
         "stdint.h": "c",
         "naiveconsole.h": "c",
-        "rtc.h": "c"
+        "rtc.h": "c",
+        "keyboarddriver.h": "c",
+        "videodriver.h": "c",
+        "interrupts.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

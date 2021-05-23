@@ -113,6 +113,12 @@ int main()
 	printCurrentTime();
 	ncNewline();
 
+	int check = _checkCPUID();
+	if(check) {
+		ncPrint("This processor has CPUID features.");
+	} else {
+		ncPrint("This processor does not support CPUID.");
+	}
 	while(1) {
 	}
 

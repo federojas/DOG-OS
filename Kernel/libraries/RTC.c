@@ -17,10 +17,11 @@ void printCurrentTime()
 
 	x = _getRTCInfo(0x09);
 	result = ((x / 16) * 10) + (x & 0xf);
+	ncPrintDec(20);
 	ncPrintDec(result);
 	ncNewline();
 
-	ncPrint("Tiempo actual: ");
+	ncPrint("Hora: ");
 	x = _getRTCInfo(0x04);
 	result = ((x / 16) * 10) + (x & 0xf);
 	ncPrintDec(result);
@@ -33,7 +34,7 @@ void printCurrentTime()
 	}
 	ncPrintDec(result);
 	ncPrint(":"); 
-	
+
 	x = _getRTCInfo(0x00);
 	result = ((x / 16) * 10) + (x & 0xf);
 		if(result < 10){

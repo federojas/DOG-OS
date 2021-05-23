@@ -5,5 +5,6 @@
 
 void configureIDT();
 void irqDispatcher(int n);
+void load_idt();
 
 #endif
