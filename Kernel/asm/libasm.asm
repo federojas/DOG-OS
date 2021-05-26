@@ -51,8 +51,43 @@ _checkCPUID:
 ;CODIGO MODIFICADO DE https://wiki.osdev.org/CPUID PONER EN INFORME
 
 _checkCPUFeatures:
-;HACER
+    push rbp
+	mov rbp, rsp
 
+    call _checkCPUID ;checks if processor has CPUID support
+    cmp rax, 0
+    jz .end
+
+	push rdx
+    push rcx
+    push rbx
+
+    xor rcx, rcx
+    xor rdx, rdx
+    xor rax, rax
+	mov rax, 1 ;GET CPU FEATURES
+	cpuid
+
+    mov [rdi], edx
+    mov [rdi + 4], ecx
+
+
+    xor rcx, rcx
+    xor rbx, rbx
+    xor rax, rax
+	mov rax, 7 ;GET CPU EXTENDED FEATURES
+	cpuid
+
+    mov [rdi + 8], ebx
+    mov [rdi + 12], ecx
+
+    pop rdx
+    pop rcx
+    pop rbx
+.end:
+	mov rsp, rbp
+	pop rbp
+	ret
 
 _getRTCInfo:
     push rbp
