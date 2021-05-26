@@ -88,53 +88,6 @@ void * initializeKernelBinary()
 int main()
 {	
 	load_idt();
-	// ncPrint("[Kernel Main]");
-	// ncNewline();
-	// ncPrint("  Sample code module at 0x");
-	// ncPrintHex((uint64_t)sampleCodeModuleAddress);
-	// ncNewline();
-	// ncPrint("  Calling the sample code module returned: ");
-	// ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
-	// ncNewline();
-	// ncNewline();
-
-	// ncPrint("  Sample data module at 0x");
-	// ncPrintHex((uint64_t)sampleDataModuleAddress);
-	// ncNewline();
-	// ncPrint("  Sample data module contents: ");
-	// ncPrint((char*)sampleDataModuleAddress);
-	// ncNewline();
-
-	// ncPrint("[Finished]");
-
-	printString("Arquitectura de las Computadoras");
-	ncNewline();
-
-	printCurrentTime();
-	ncNewline();
-
-	int check = _checkCPUID();
-	if(check) {
-		ncPrint("This processor has CPUID features.");
-	} else {
-		ncPrint("This processor does not support CPUID.");
-	}
-	while(1) {
-	}
-
-    // uint8_t changeDetected =0;
-
-    // while(1){
-    //     if(!changeDetected && ticks_elapsed() % 6  ==0){
-    //         changeDetected=1;
-    //         ncPrint("6");
-    //         if(ticks_elapsed()%18==0){
-    //             ncPrint("T");
-    //         }
-    //     }
-    //     if(changeDetected &&  ticks_elapsed() %6 !=0){
-    //         changeDetected=0;
-    //     }
-    // }
+	initialize();
 	return 0;
 }
