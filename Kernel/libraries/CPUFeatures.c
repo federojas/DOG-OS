@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <CPUFeatures.h>
 
+//AGREGAR AL INFORME https://gist.github.com/macton/4dd5fec2113be284796e
+
 void getCPUFeatures(){
 
     int check = _checkCPUID();
