@@ -18,8 +18,6 @@ void getCPUFeatures(){
     //con eax = 1: buffer[0] = ecx buffer[1] = edx
     //con eax = 7: buffer[2] = ebx buffer[3] = ecx
 
-    
-
 	_checkCPUFeatures(buffer); 
     
     ncPrint("CPU Features:");
