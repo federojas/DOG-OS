@@ -62,20 +62,15 @@ _checkCPUFeatures:
     push rcx
     push rbx
 
-    xor rcx, rcx
-    xor rdx, rdx
-    xor rax, rax
-	mov rax, 1 ;GET CPU FEATURES
+	mov rax, 0x1 ;GET CPU FEATURES
 	cpuid
 
     mov [rdi], edx
     mov [rdi + 4], ecx
 
-
-    xor rcx, rcx
-    xor rbx, rbx
     xor rax, rax
-	mov rax, 7 ;GET CPU EXTENDED FEATURES
+    xor rcx, rcx
+	mov rax, 0x7 ;GET CPU EXTENDED FEATURES
 	cpuid
 
     mov [rdi + 8], ebx
