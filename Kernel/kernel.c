@@ -3,7 +3,7 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
-
+#include <idtLoader.h>
 
 #include <RTC.h>
 #include <keyboardDriver.h>
@@ -89,6 +89,7 @@ int main()
 {	
 	load_idt();
 	initialize();
+	printchar(128,0xFFFFFF,0x000000);
 	putpixel(100,100,0xFFFFFF);
 	return 0;
 }

@@ -69,3 +69,7 @@ void keyboardHandler() {
         }
     }
 }
+
+//getChar no hay nada adentro llamar a hlt para bloquear funcion hastas proxima vez que toques tecla
+//hlt te deja bloqueado hasta interrupcion, es mejor quedarse bloqeuado que while 1
+//hlt, adentro while 

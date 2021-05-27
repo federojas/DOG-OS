@@ -8,7 +8,9 @@
         "rtc.h": "c",
         "keyboarddriver.h": "c",
         "videodriver.h": "c",
-        "interrupts.h": "c"
+        "interrupts.h": "c",
+        "screens.h": "c",
+        "idtloader.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

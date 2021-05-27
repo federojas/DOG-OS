@@ -1,15 +1,16 @@
 #include <videoDriver.h>
 #include <stdint.h>
-
+#include <fonts.h>
+#include <screens.h>
 
 unsigned int WIDTH = 1024;
-unsigned int HEIGHT= 768;
-unsigned int PIXEL_SIZE=3; //bytes por pixel 
-
-
-//codigo basado de https://wiki.osdev.org/User:Omarrx024/VESA_Tutorial
+unsigned int HEIGHT = 768;
+unsigned int PIXEL_SIZE = 3; //bytes por pixel 
 unsigned int DEFAULT_BG_COLOUR=0X0;
 unsigned int DEFAULT_FONT_COLOUR=0XFFFF;
+
+//codigo basado de https://wiki.osdev.org/User:Omarrx024/VESA_Tutorial
+
 struct vbe_mode_info_structure{
     uint16_t attributes;    // deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
     uint8_t window_a;       // deprecated
@@ -50,22 +51,29 @@ struct vbe_mode_info_structure{
 
 static int getPixData(uint32_t x, uint32_t y);
 
-//static struct vbe_mode_info_structure *screen_info = (void *)0x5C00;
 
-struct  vbe_mode_info_structure * screenData = (void*) 0x5C00; //direccion de memoria donde esta la informacion de modo video
+static struct vbe_mode_info_structure * screenData = (void*) 0x5C00; //direccion de memoria donde esta la informacion de modo video
+
+static t_screen * screen; 
 
 void initialize(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PARAMETRO RECIBIR BACKGROUND COLOR Y FONT COLOR
-	WIDTH = screenData->width;
-    HEIGHT = screenData->height;
-    PIXEL_SIZE= screenData->bpp / 8;
-    
-}
-static uint8_t * currentVideo = (uint8_t*)0xB8000;
+    t_screen sc;
+    sc.defaultBGColour = DEFAULT_BG_COLOUR;
+    sc.defaultFontColour = DEFAULT_FONT_COLOUR;
+    sc.blink = 0;
+    sc.currentX = 10;
+    sc.currentY = 10;
+    sc.offset = 2 * CHAR_WIDTH;
+	sc.width = WIDTH;
+    sc.height = HEIGHT;
 
-void putpixel(int x, int y, int colour)
-{
+    *screen = sc;
+}
+
+
+void putpixel(int x, int y, int colour) {
     char *currentFrame = (char *)((uint64_t)screenData->framebuffer);
-    unsigned int offset=getPixData(x,y);
+    int offset=getPixData(x,y);
 
     currentFrame[offset] = colour & 255; //azul
     currentFrame[offset + 1] = (colour >> 8) & 255; // verde
@@ -77,9 +85,31 @@ static int getPixData(uint32_t x, uint32_t y){
     return (x + y*WIDTH) * PIXEL_SIZE;
 }
 
-void printchar(char c, int fontColour,int bgColour  )
+void printchar(char c, int fontColour,int bgColour){
+    char *map=getCharMap(c);
+    
+    uint32_t x = screen->currentX + screen->offset;
+    uint32_t y = screen->currentY;
+
+    for(int i=0;i<CHAR_HEIGHT;i++){
+        for(int j=0;j<CHAR_WIDTH;j++){
+            int8_t isFont = (map[i] >> (CHAR_WIDTH - j - 1)) & 0x01;  //-1 para no romper el decalaje, primera vez tengo q decalar 7
+            if (isFont) {
+                putpixel(x, y, fontColour);
+            } else {
+                putpixel(x, y, bgColour);
+            }
+            x++;
+        }
+        x=screen->currentX + screen->offset;
+        y++;
+    }
+}
 
 //PRE TP MODO TEXTO
+
+//static uint8_t * currentVideo = (uint8_t*)0xB8000;
+
 // void printChar(char character, int colour) {
 // 	*currentVideo = character;
 // 	currentVideo += 1;
