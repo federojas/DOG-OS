@@ -89,5 +89,6 @@ int main()
 {	
 	load_idt();
 	initialize();
+	putpixel(100,100,0xFFFFFF);
 	return 0;
 }
