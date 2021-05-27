@@ -59,9 +59,6 @@ void initialize(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PARAMET
     HEIGHT = screenData->height;
     PIXEL_SIZE= screenData->bpp / 8;
     
-    // WIDTH=screen_info.width;
-    // HEIGHT=screen_info.height;
-    // PIXEL_SIZE=screen_info.bpp/8;
 }
 static uint8_t * currentVideo = (uint8_t*)0xB8000;
 
@@ -75,20 +72,24 @@ void putpixel(int x, int y, int colour)
     currentFrame[offset + 2] = (colour >> 16) & 255; // rojo
 }
 
+
 static int getPixData(uint32_t x, uint32_t y){
     return (x + y*WIDTH) * PIXEL_SIZE;
 }
 
-void printChar(char character, int colour) {
-	*currentVideo = character;
-	currentVideo += 1;
-	*currentVideo = colour;
-	currentVideo += 1;
-}
+void printchar(char c, int fontColour,int bgColour  )
 
-void printString(const char * string) {
-	int i;
-	for(i=0; string[i] != 0; i++){
-		printChar(string[i], 0xF2);
-	}
-}
+//PRE TP MODO TEXTO
+// void printChar(char character, int colour) {
+// 	*currentVideo = character;
+// 	currentVideo += 1;
+// 	*currentVideo = colour;
+// 	currentVideo += 1;
+// }
+
+// void printString(const char * string) {
+// 	int i;
+// 	for(i=0; string[i] != 0; i++){
+// 		printChar(string[i], 0xF2);
+// 	}
+// }
