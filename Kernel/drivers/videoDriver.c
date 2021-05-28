@@ -126,6 +126,17 @@ void newline(){
     screen->currentX=0;
     screen->currentY+=CHAR_HEIGHT;
 }
+
+void deleteChar(){
+    if(screen->currentX==0){
+        if(screen->currentY==0){
+            return;
+        }
+        screen->currentY-=CHAR_HEIGHT;
+    }
+    screen->currentX-=CHAR_WIDTH;
+    printchar(' ',BLACK,BLACK,0);
+}
 //PRE TP MODO TEXTO
 
 //static uint8_t * currentVideo = (uint8_t*)0xB8000;

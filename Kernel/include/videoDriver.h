@@ -11,4 +11,5 @@ void printchar(char c, int fontColour,int bgColour, int stop);
 void initialize();
 void clearScreen();
 void newline();
+void deleteChar();
 #endif
