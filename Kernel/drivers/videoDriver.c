@@ -13,6 +13,8 @@ unsigned int DEFAULT_BG_COLOUR=0X0;
 unsigned int DEFAULT_FONT_COLOUR=0XFFFF;
 
 
+//FALTA HACER UN SCROLL PARA CUANDO LA PANTALLA ESTE LLENA DE TEXTO Y HAYA QUE BAJAR
+
 //codigo basado de https://wiki.osdev.org/User:Omarrx024/VESA_Tutorial
 
 struct vbe_mode_info_structure{
@@ -73,6 +75,7 @@ void initialize(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PARAMET
 
     *screen = sc;
 }
+
 
 
 void putpixel(int x, int y, int colour) {
