@@ -3,11 +3,15 @@
 #include <fonts.h>
 #include <screens.h>
 
+#define BLACK 0x000000
+#define WHITE 0xFFFFFF
+
 unsigned int WIDTH = 1024;
 unsigned int HEIGHT = 768;
 unsigned int PIXEL_SIZE = 3; //bytes por pixel 
 unsigned int DEFAULT_BG_COLOUR=0X0;
 unsigned int DEFAULT_FONT_COLOUR=0XFFFF;
+
 
 //codigo basado de https://wiki.osdev.org/User:Omarrx024/VESA_Tutorial
 
@@ -80,20 +84,15 @@ void putpixel(int x, int y, int colour) {
     currentFrame[offset + 2] = (colour >> 16) & 255; // rojo
 }
 
-void drawRectangle(unsigned int x, unsigned int y, int b, int h, int color){
-    for (int i = 0; i < b; i++)
-    putpixel(x+i,y+1,color);
-        for (int j = 0; j < h; j++)
-            putpixel(x+1,y+j,color);
-}
+
 static int getPixData(uint32_t x, uint32_t y){
     return (x + y*WIDTH) * PIXEL_SIZE;
 }
 
-void printchar(char c, int fontColour,int bgColour){
+void printchar(char c, int fontColour,int bgColour,int next){
     char *map=getCharMap(c);
     
-    uint32_t x = screen->currentX + screen->offset;
+    uint32_t x = screen->currentX+ screen->offset;
     uint32_t y = screen->currentY;
 
     for(int i=0;i<CHAR_HEIGHT;i++){
@@ -109,8 +108,24 @@ void printchar(char c, int fontColour,int bgColour){
         x=screen->currentX + screen->offset;
         y++;
     }
+    if(next){
+        screen->currentX+=CHAR_WIDTH;
+    }
 }
 
+//funcion para limpiar la pantalla 
+void clearScreen(){
+    for(int i=0;i<screen->width;i++){
+        for(int j=0;j<screen->height;j++){
+            putpixel(i,j,BLACK);
+        }
+    }
+}
+
+void newline(){
+    screen->currentX=0;
+    screen->currentY+=CHAR_HEIGHT;
+}
 //PRE TP MODO TEXTO
 
 //static uint8_t * currentVideo = (uint8_t*)0xB8000;

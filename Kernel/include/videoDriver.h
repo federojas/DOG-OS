@@ -7,8 +7,8 @@
 // void printString(const char * string);
 
 void putpixel(int x, int y, int colour);
-void printchar(char c, int fontColour,int bgColour);
+void printchar(char c, int fontColour,int bgColour, int stop);
 void initialize();
-void drawRectangle(unsigned int x, unsigned int y, int b, int h, int color);
-
+void clearScreen();
+void newline();
 #endif

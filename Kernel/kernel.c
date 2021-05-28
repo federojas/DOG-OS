@@ -90,7 +90,15 @@ int main()
 	load_idt();
 	initialize();
 	char c='c';
-	printchar('c',0xFFFFFF,0x000000);
+	printchar('c',0xFFFFFF,0x000000,1);
+	printchar('a',0xFFFFFF,0x000000,1);
+	printchar('p',0xFFFFFF,0x000000,1);
+	printchar('o',0xFFFFFF,0x000000,1);
+	newline();
+	printchar('c',0xFFFFFF,0x000000,1);
+	printchar('s',0xFFFFFF,0x000000,1);
+
+
 	//putpixel(100,100,0xFFFFFF);
 	return 0;
 }
