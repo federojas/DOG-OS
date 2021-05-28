@@ -1,10 +1,15 @@
 #include <keyboardDriver.h>
 #include <stdint.h>
 #include <naiveConsole.h>
-
+#include <videoDriver.h>
 #define PRESS 1
 #define RELEASE 2
 #define ERROR -1
+
+
+//GENERALIZARLO DESPUES
+#define BLACK 0x000000
+#define WHITE 0xFFFFFF
 
 #define LEFT_SHIFT 0x2A
 #define RIGHT_SHIFT 0x36
@@ -55,9 +60,9 @@ void keyboardHandler() {
             else {
                 if (charTable[scanCode][0] != 0) {
                     if(shift || (capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') )
-                        ncPrintChar(charTable[scanCode][1]);
+                        printchar(charTable[scanCode][1],WHITE,BLACK);
                     else
-                        ncPrintChar(charTable[scanCode][0]);        
+                        printchar(charTable[scanCode][0],WHITE,BLACK);        
                 }
             }
         } else if(currentAction == RELEASE) {

@@ -89,18 +89,17 @@ int main()
 {	
 	load_idt();
 	initialize();
-	char c='c';
 
 	//no estoy seguro empieza a escribir en la posicion en la que empieza a escribir 
-	printchar('c',0xFFFFFF,0x000000,1);
-	printchar('a',0xFFFFFF,0x000000,1);
-	printchar('p',0xFFFFFF,0x000000,1);
-	printchar('o',0xFFFFFF,0x000000,1);
-	newline();
-	printchar('c',0xFFFFFF,0x000000,1);
-	printchar('s',0xFFFFFF,0x000000,1);
-	deleteChar();
-	printchar('o',0xFFFFFF,0x000000,1);
+	// printchar('c',0xFFFFFF,0x000000,1);
+	// printchar('a',0xFFFFFF,0x000000,1);
+	// printchar('p',0xFFFFFF,0x000000,1);
+	// printchar('o',0xFFFFFF,0x000000,1);
+	// newline();
+	// printchar('c',0xFFFFFF,0x000000,1);
+	// printchar('s',0xFFFFFF,0x000000,1);
+	// deleteChar();
+	// printchar('o',0xFFFFFF,0x000000,1);
 
 
 
