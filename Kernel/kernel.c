@@ -90,7 +90,10 @@ int main()
 	load_idt();
 	initialize();
 
-	//no estoy seguro empieza a escribir en la posicion en la que empieza a escribir 
+	while(1) {
+		keyboardHandler();
+	}
+
 	// printchar('c',0xFFFFFF,0x000000,1);
 	// printchar('a',0xFFFFFF,0x000000,1);
 	// printchar('p',0xFFFFFF,0x000000,1);
@@ -103,6 +106,6 @@ int main()
 
 
 
-	//putpixel(100,100,0xFFFFFF);
+	// putpixel(100,100,0xFFFFFF);
 	return 0;
 }

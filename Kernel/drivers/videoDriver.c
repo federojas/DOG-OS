@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <fonts.h>
 #include <screens.h>
-
+#include <colors.h>
 #define BLACK 0x000000
 #define WHITE 0xFFFFFF
 
@@ -92,7 +92,7 @@ static int getPixData(uint32_t x, uint32_t y){
     return (x + y*WIDTH) * PIXEL_SIZE;
 }
 
-void printchar(char c, int fontColour,int bgColour,int next){
+void printchar(char c, t_color fontColour, t_color bgColour,int next){
     char *map=getCharMap(c);
     
     uint32_t x = screen->currentX+ screen->offset;
