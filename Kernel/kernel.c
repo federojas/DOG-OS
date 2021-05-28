@@ -89,7 +89,8 @@ int main()
 {	
 	load_idt();
 	initialize();
-	printchar(128,0xFFFFFF,0x000000);
-	putpixel(100,100,0xFFFFFF);
+	char c='c';
+	printchar('c',0xFFFFFF,0x000000);
+	//putpixel(100,100,0xFFFFFF);
 	return 0;
 }

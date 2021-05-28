@@ -61,8 +61,8 @@ void initialize(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PARAMET
     sc.defaultBGColour = DEFAULT_BG_COLOUR;
     sc.defaultFontColour = DEFAULT_FONT_COLOUR;
     sc.blink = 0;
-    sc.currentX = 10;
-    sc.currentY = 10;
+    sc.currentX = 0;
+    sc.currentY = 0;
     sc.offset = 2 * CHAR_WIDTH;
 	sc.width = WIDTH;
     sc.height = HEIGHT;
@@ -80,7 +80,12 @@ void putpixel(int x, int y, int colour) {
     currentFrame[offset + 2] = (colour >> 16) & 255; // rojo
 }
 
-
+void drawRectangle(unsigned int x, unsigned int y, int b, int h, int color){
+    for (int i = 0; i < b; i++)
+    putpixel(x+i,y+1,color);
+        for (int j = 0; j < h; j++)
+            putpixel(x+1,y+j,color);
+}
 static int getPixData(uint32_t x, uint32_t y){
     return (x + y*WIDTH) * PIXEL_SIZE;
 }
