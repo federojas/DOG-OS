@@ -91,7 +91,6 @@ int main()
 	initialize();
 
 	while(1) {
-		keyboardHandler();
 	}
 
 	// printchar('c',0xFFFFFF,0x000000,1);
