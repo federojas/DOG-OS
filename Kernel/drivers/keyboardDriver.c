@@ -1,10 +1,13 @@
 #include <keyboardDriver.h>
 #include <stdint.h>
 #include <naiveConsole.h>
-
+#include <videoDriver.h>
+#include <colors.h>
 #define PRESS 1
 #define RELEASE 2
 #define ERROR -1
+
+
 
 #define LEFT_SHIFT 0x2A
 #define RIGHT_SHIFT 0x36
@@ -55,9 +58,9 @@ void keyboardHandler() {
             else {
                 if (charTable[scanCode][0] != 0) {
                     if(shift || (capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') )
-                        ncPrintChar(charTable[scanCode][1]);
+                        printchar(charTable[scanCode][1], WHITE, BLACK, 1);
                     else
-                        ncPrintChar(charTable[scanCode][0]);        
+                        printchar(charTable[scanCode][0], WHITE, BLACK, 1);        
                 }
             }
         } else if(currentAction == RELEASE) {
@@ -69,3 +72,7 @@ void keyboardHandler() {
         }
     }
 }
+
+//getChar no hay nada adentro llamar a hlt para bloquear funcion hastas proxima vez que toques tecla
+//hlt te deja bloqueado hasta interrupcion, es mejor quedarse bloqeuado que while 1
+//hlt, adentro while 

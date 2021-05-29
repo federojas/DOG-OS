@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.asm": "asm-collection",
         "lib.h": "c",
         "moduleloader.h": "c",
         "string.h": "c",
@@ -9,7 +10,10 @@
         "keyboarddriver.h": "c",
         "videodriver.h": "c",
         "interrupts.h": "c",
-        "cpufeatures.h": "c"
+        "cpufeatures.h": "c",
+        "screens.h": "c",
+        "idtloader.h": "c",
+        "fonts.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

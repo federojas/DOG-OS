@@ -1,8 +1,7 @@
-#ifndef SCREENS_H 
+#ifndef SCREENS_H
 #define SCREENS_H
 
-#include <stdint.h> //include para los uint32_t
-//ACA VAMOS A TENER QUE VER EN QUE SCREEN ESTAMOS 
+#include <stdint.h>
 
 typedef struct
 {
@@ -17,7 +16,4 @@ typedef struct
     uint32_t firstLine;
     uint32_t firstLineWidth;
 } t_screen;
-
-
 #endif
-

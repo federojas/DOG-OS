@@ -3,7 +3,7 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
-
+#include <idtLoader.h>
 #include <RTC.h>
 #include <keyboardDriver.h>
 #include <videoDriver.h>
@@ -114,24 +114,24 @@ int main()
 	// printCurrentTime();
 	// ncNewline();
 
-	getCPUFeatures();
-	ncNewline();
+	// getCPUFeatures();
+	// ncNewline();
+
 	while(1) {
 	}
 
-    // uint8_t changeDetected =0;
+	// printchar('c',0xFFFFFF,0x000000,1);
+	// printchar('a',0xFFFFFF,0x000000,1);
+	// printchar('p',0xFFFFFF,0x000000,1);
+	// printchar('o',0xFFFFFF,0x000000,1);
+	// newline();
+	// printchar('c',0xFFFFFF,0x000000,1);
+	// printchar('s',0xFFFFFF,0x000000,1);
+	// deleteChar();
+	// printchar('o',0xFFFFFF,0x000000,1);
 
-    // while(1){
-    //     if(!changeDetected && ticks_elapsed() % 6  ==0){
-    //         changeDetected=1;
-    //         ncPrint("6");
-    //         if(ticks_elapsed()%18==0){
-    //             ncPrint("T");
-    //         }
-    //     }
-    //     if(changeDetected &&  ticks_elapsed() %6 !=0){
-    //         changeDetected=0;
-    //     }
-    // }
+
+
+	// putpixel(100,100,0xFFFFFF);
 	return 0;
 }
