@@ -1,4 +1,5 @@
-
+#include <prints.h>
+#include <colors.h>
 #define ZERO_EXCEPTION_ID 0
 #define INVOP_EXCEPTION_ID 6
 
@@ -18,9 +19,9 @@ void exceptionDispatcher(int exception) {
 }
 
 static void zero_division() {
-	ncPrint("Exception 0: cannot divide by 0."); //VIDEO 
+	printStringColor("Exception 0: Cannot divide by zero.", BLACK, RED);
 }
 
 static void inv_op_code() {
-	ncPrint("Exception 6: invalid op code."); //VIDEO 
+	printStringColor("Exception 6: Invalid opcode.", BLACK, RED);
 }

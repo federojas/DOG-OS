@@ -90,7 +90,7 @@ static int getPixData(uint32_t x, uint32_t y){
     return (x + y*WIDTH) * PIXEL_SIZE;
 }
 
-void printChar(char c, t_color fontColour, t_color bgColour,int next){
+void printChar(char c, t_color fontColor, t_color bgColor,int next){
     char *map=getCharMap(c);
     
     uint32_t x = screen->currentX+ screen->offset;
@@ -100,9 +100,9 @@ void printChar(char c, t_color fontColour, t_color bgColour,int next){
         for(int j=0;j<CHAR_WIDTH;j++){
             int8_t isFont = (map[i] >> (CHAR_WIDTH - j - 1)) & 0x01;  //-1 para no romper el decalaje, primera vez tengo q decalar 7
             if (isFont) {
-                putPixel(x, y, fontColour);
+                putPixel(x, y, fontColor);
             } else {
-                putPixel(x, y, bgColour);
+                putPixel(x, y, bgColor);
             }
             x++;
         }

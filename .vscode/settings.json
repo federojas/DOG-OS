@@ -13,7 +13,9 @@
         "cpufeatures.h": "c",
         "screens.h": "c",
         "idtloader.h": "c",
-        "fonts.h": "c"
+        "fonts.h": "c",
+        "strings.h": "c",
+        "prints.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

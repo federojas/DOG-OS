@@ -157,7 +157,6 @@ haltcpu:
 _syscallHandler:
 	pushState
 
-	mov rdi, rax 
 	call syscallSelector
 	
 	popState

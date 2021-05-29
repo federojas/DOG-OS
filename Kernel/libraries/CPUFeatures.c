@@ -1,18 +1,31 @@
-#include <naiveConsole.h>
+#include <prints.h>
 #include <stdint.h>
 #include <CPUFeatures.h>
 
 //AGREGAR AL INFORME https://gist.github.com/macton/4dd5fec2113be284796e
 
+void print_feature(int feature, const char * string){
+    if(feature != 0) {
+        printString(string);
+        printString(": YES");
+        newLine();
+    }
+    else {
+        printString(string);
+        printString(": NO");
+        newLine();
+    }
+}
+
 void getCPUFeatures(){
 
     int check = _checkCPUID();
 	if(check) {
-		ncPrint("This processor has CPUID features.");
+		printString("This processor has CPUID features.");
 	} else {
-		ncPrint("This processor does not support CPUID.");
+		printString("This processor does not support CPUID.");
 	}
-    ncNewline();
+    newLine();
 
 	uint32_t buffer[4];
     // El arreglo buffer tendra los arreglos ecx y edx cuando corresponda con eax =1 
@@ -22,8 +35,8 @@ void getCPUFeatures(){
 
 	_checkCPUFeatures(buffer); 
     
-    ncPrint("CPU Features:");
-    ncNewline();
+    printString("CPU Features:");
+    newLine();
     
     print_feature(buffer[0] &  (1<<23), "MMX (Multi-Media Extension)");
     print_feature(buffer[0] &  (1<<25), "SSE (Streaming SIMD Extension 1)");
@@ -37,8 +50,8 @@ void getCPUFeatures(){
     print_feature(buffer[1] &  (1<<29), "F16C (half-precision) FP feature");
     print_feature(buffer[1] &  (1<<12), "FMA3 (Fused Multiply-Add 3-operand Form)");
 
-    ncPrint("CPU Extended Features:");
-    ncNewline();
+    printString("CPU Extended Features:");
+    newLine();
     
     print_feature(buffer[2] &  (1<<5), "AVX2 (Advanced Vector Extensions 2)");
     print_feature(buffer[3] &  (1<<10), "VPCLMULQDQ (CLMUL instruction set (VEX-256/EVEX)");
@@ -46,15 +59,3 @@ void getCPUFeatures(){
 }
 
 
-void print_feature(int feature, const char * string){
-    if(feature != 0) {
-        ncPrint(string);
-        ncPrint(": YES");
-        ncNewline();
-    }
-    else {
-        ncPrint(string);
-        ncPrint(": NO");
-        ncNewline();
-    }
-}

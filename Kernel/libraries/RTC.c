@@ -1,6 +1,6 @@
 #include <RTC.h>
-#include <naiveConsole.h>
 #include <stdint.h>
+#include <prints.h>
 
 #define YEAR 20 //Debe escribir aca los digitos de su año (excepto los ultimos dos)
 #define DAY_RTC_ID 0x07
@@ -12,42 +12,42 @@
 
 void printCurrentTime()
 {
-	ncPrint("Fecha de hoy: "); //DESPUES REEMPLAZAR POR NUESTRO PRINT CON DRIVER DE VIDEO
+	printString("Fecha de hoy: ");
 	uint8_t x = _getRTCInfo(DAY_RTC_ID);
 	uint8_t result = ((x / 16) * 10) + (x & 0xf);
-	ncPrintDec(result); //DESPUES REEMPLAZAR POR NUESTRO PRINT CON DRIVER DE VIDEO
-	ncPrint("/");
+	printIntDec(result);
+	printString("/");
 
 	x = _getRTCInfo(MONTH_RTC_ID);
 	result = ((x / 16) * 10) + (x & 0xf);
-	ncPrintDec(result);
-	ncPrint("/");
+	printIntDec(result);
+	printString("/");
 
 	x = _getRTCInfo(YEAR_RTC_ID);
 	result = ((x / 16) * 10) + (x & 0xf);
-	ncPrintDec(YEAR);
-	ncPrintDec(result);
-	ncNewline();
+	printIntDec(YEAR);
+	printIntDec(result);
+	newLine();
 
-	ncPrint("Hora: ");
+	printString("Hora: ");
 	x = _getRTCInfo(HOUR_RTC_ID);
 	result = ((x / 16) * 10) + (x & 0xf);
-	ncPrintDec(result);
-	ncPrint(":");
+	printIntDec(result);
+	printString(":");
 
 	x = _getRTCInfo(MINUTE_RTC_ID);
 	result = ((x / 16) * 10) + (x & 0xf);
 	if(result < 10){
-		ncPrintDec(0);
+		printIntDec(0);
 	}
-	ncPrintDec(result);
-	ncPrint(":"); 
+	printIntDec(result);
+	printString(":"); 
 
 	x = _getRTCInfo(SECOND_RTC_ID);
 	result = ((x / 16) * 10) + (x & 0xf);
 		if(result < 10){
-		ncPrintDec(0);
+		printIntDec(0);
 	}
-	ncPrintDec(result); 
-	ncNewline();		
+	printIntDec(result); 
+	newLine();		
 }

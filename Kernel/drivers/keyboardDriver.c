@@ -3,11 +3,10 @@
 #include <naiveConsole.h>
 #include <videoDriver.h>
 #include <colors.h>
+
 #define PRESS 1
 #define RELEASE 2
 #define ERROR -1
-
-
 
 #define LEFT_SHIFT 0x2A
 #define RIGHT_SHIFT 0x36

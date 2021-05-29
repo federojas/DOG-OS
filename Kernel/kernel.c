@@ -90,6 +90,8 @@ int main()
 {	
 	load_idt();
 	initializeVideo();
+	
+	//CODIGO PRE TP Y ORIGINAL CATEDRA
 	// ncPrint("[Kernel Main]");
 	// ncNewline();
 	// ncPrint("  Sample code module at 0x");
@@ -112,27 +114,12 @@ int main()
 	// printString("Arquitectura de las Computadoras");
 	// ncNewline();
 
-	// printCurrentTime();
-	// ncNewline();
+	printCurrentTime();
 
-	// getCPUFeatures();
-	// ncNewline();
+	getCPUFeatures();
 
 	while(1) {
 	}
 
-	// printchar('c',0xFFFFFF,0x000000,1);
-	// printchar('a',0xFFFFFF,0x000000,1);
-	// printchar('p',0xFFFFFF,0x000000,1);
-	// printchar('o',0xFFFFFF,0x000000,1);
-	// newline();
-	// printchar('c',0xFFFFFF,0x000000,1);
-	// printchar('s',0xFFFFFF,0x000000,1);
-	// deleteChar();
-	// printchar('o',0xFFFFFF,0x000000,1);
-
-
-
-	// putpixel(100,100,0xFFFFFF);
 	return 0;
 }

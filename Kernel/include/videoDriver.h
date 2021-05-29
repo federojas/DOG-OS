@@ -1,5 +1,5 @@
-#ifndef videoDriver_H
-#define videoDriver_H
+#ifndef VIDEODRIVER_H
+#define VIDEODRIVER_H
 #include <screens.h>
 #include <colors.h>
 
