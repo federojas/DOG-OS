@@ -75,7 +75,7 @@ void printIntDec(uint64_t num) {
 
 void printIntHex(uint64_t num) {
     char buffer[10];
-    uintToBase(num, buffer, 26);
+    uintToBase(num, buffer, 16);
     printString(buffer);
 }
 

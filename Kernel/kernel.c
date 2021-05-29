@@ -114,9 +114,11 @@ int main()
 	// printString("Arquitectura de las Computadoras");
 	// ncNewline();
 
-	printCurrentTime();
+	// printCurrentTime();
 
-	getCPUFeatures();
+	// getCPUFeatures();
+
+	getInfoReg();
 
 	while(1) {
 	}

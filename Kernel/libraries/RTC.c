@@ -10,18 +10,19 @@
 #define MINUTE_RTC_ID 0x02
 #define SECOND_RTC_ID 0x00
 
+// https://wiki.osdev.org/CMOS#Format_of_Bytes
 void printCurrentTime()
 {
 	printString("Fecha de hoy: ");
 	uint8_t x = _getRTCInfo(DAY_RTC_ID);
 	uint8_t result = ((x / 16) * 10) + (x & 0xf);
 	printIntDec(result);
-	printString("/");
+	putChar('/');
 
 	x = _getRTCInfo(MONTH_RTC_ID);
 	result = ((x / 16) * 10) + (x & 0xf);
 	printIntDec(result);
-	printString("/");
+	putChar('/');
 
 	x = _getRTCInfo(YEAR_RTC_ID);
 	result = ((x / 16) * 10) + (x & 0xf);
@@ -33,7 +34,7 @@ void printCurrentTime()
 	x = _getRTCInfo(HOUR_RTC_ID);
 	result = ((x / 16) * 10) + (x & 0xf);
 	printIntDec(result);
-	printString(":");
+	putChar(':');
 
 	x = _getRTCInfo(MINUTE_RTC_ID);
 	result = ((x / 16) * 10) + (x & 0xf);
@@ -41,7 +42,7 @@ void printCurrentTime()
 		printIntDec(0);
 	}
 	printIntDec(result);
-	printString(":"); 
+	putChar(':'); 
 
 	x = _getRTCInfo(SECOND_RTC_ID);
 	result = ((x / 16) * 10) + (x & 0xf);
