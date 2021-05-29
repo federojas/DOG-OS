@@ -8,6 +8,7 @@
 #include <keyboardDriver.h>
 #include <videoDriver.h>
 #include <CPUFeatures.h>
+#include <infoReg.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -118,10 +119,10 @@ int main()
 
 	// getCPUFeatures();
 
-	getInfoReg();
+	// getInfoReg();
 
-	while(1) {
-	}
+	// while(1){
+	// }
 
 	return 0;
 }

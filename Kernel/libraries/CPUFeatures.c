@@ -4,6 +4,10 @@
 
 //AGREGAR AL INFORME https://gist.github.com/macton/4dd5fec2113be284796e
 
+
+//PRINTS EN USERLAND
+//HACER SWITCH QUE TE DE INFO DE ASM Y LISTO
+
 void print_feature(int feature, const char * string){
     if(feature != 0) {
         printString(string);

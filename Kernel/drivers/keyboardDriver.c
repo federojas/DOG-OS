@@ -82,18 +82,20 @@ void keyboardHandler() {
     }
 }
 
-void putCharInBuffer(char c){
-    if(c!=0){
-        buffer[widx]=c;
+// void putCharInBuffer(char c){
+//     if(c!=0){
+//         buffer[widx]=c;
         
-        //HAY QUE TENER CUIDADO DE QUE LOS INDICES NO PASEN EL SIZE DEL BUFFER
-        widx++;
-        if(buffSize<BUFF_LEN){
-            buffSize++;
-        }
+//         //HAY QUE TENER CUIDADO DE QUE LOS INDICES NO PASEN EL SIZE DEL BUFFER
+//         widx++;
+//         if(buffSize<BUFF_LEN){
+//             buffSize++;
+//         }
         
-    }
-}
+//     }
+// }
+
+
 
 //getChar no hay nada adentro llamar a hlt para bloquear funcion hastas proxima vez que toques tecla
 //hlt te deja bloqueado hasta interrupcion, es mejor quedarse bloqeuado que while 1

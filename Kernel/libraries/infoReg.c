@@ -1,5 +1,4 @@
 #include <infoReg.h>
-#include <stdint.h>
 #include <prints.h>
 
 #define REGISTER_AMOUNT 16
@@ -17,7 +16,6 @@ void getInfoReg() {
 for (int i = 0; i < REGISTER_AMOUNT; i++) {
             printString(registerNames[i]);
             printIntHex(registers[i]);
-            newLine();
+            printLine();
       }
-
 }

@@ -1,6 +1,9 @@
 #include <videoDriver.h>
 #include <prints.h>
 
+void printLine() {
+	newLine();
+}
 
 void printString(char * str) {
     printStringColor(str, BLACK,WHITE);

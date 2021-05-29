@@ -11,5 +11,6 @@ void printIntDec(uint64_t num);
 void printIntHex(uint64_t num);
 void printIntBin(uint64_t num);
 void putChar(char c);
+void printLine();
 
 #endif

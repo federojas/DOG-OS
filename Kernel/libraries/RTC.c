@@ -13,6 +13,8 @@
 // https://wiki.osdev.org/CMOS#Format_of_Bytes
 void printCurrentTime()
 {
+	//PRINTS EN USERLAND
+	//HACER SWITCH QUE TE DE INFO DE ASM Y LISTO
 	printString("Fecha de hoy: ");
 	uint8_t x = _getRTCInfo(DAY_RTC_ID);
 	uint8_t result = ((x / 16) * 10) + (x & 0xf);
