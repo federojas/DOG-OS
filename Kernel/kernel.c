@@ -89,6 +89,7 @@ void * initializeKernelBinary()
 int main()
 {	
 	load_idt();
+	initializeVideo();
 	// ncPrint("[Kernel Main]");
 	// ncNewline();
 	// ncPrint("  Sample code module at 0x");

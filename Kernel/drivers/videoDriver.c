@@ -60,7 +60,7 @@ static struct vbe_mode_info_structure * screenData = (void*) 0x5C00; //direccion
 
 static t_screen * screen; 
 
-void initialize(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PARAMETRO RECIBIR BACKGROUND COLOR Y FONT COLOR
+void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PARAMETRO RECIBIR BACKGROUND COLOR Y FONT COLOR
     t_screen sc;
     sc.defaultBGColour = DEFAULT_BG_COLOUR;
     sc.defaultFontColour = DEFAULT_FONT_COLOUR;
@@ -76,7 +76,7 @@ void initialize(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PARAMET
 
 
 
-void putpixel(int x, int y, int colour) {
+void putPixel(int x, int y, int colour) {
     char *currentFrame = (char *)((uint64_t)screenData->framebuffer);
     int offset=getPixData(x,y);
 
@@ -90,7 +90,7 @@ static int getPixData(uint32_t x, uint32_t y){
     return (x + y*WIDTH) * PIXEL_SIZE;
 }
 
-void printchar(char c, t_color fontColour, t_color bgColour,int next){
+void printChar(char c, t_color fontColour, t_color bgColour,int next){
     char *map=getCharMap(c);
     
     uint32_t x = screen->currentX+ screen->offset;
@@ -100,9 +100,9 @@ void printchar(char c, t_color fontColour, t_color bgColour,int next){
         for(int j=0;j<CHAR_WIDTH;j++){
             int8_t isFont = (map[i] >> (CHAR_WIDTH - j - 1)) & 0x01;  //-1 para no romper el decalaje, primera vez tengo q decalar 7
             if (isFont) {
-                putpixel(x, y, fontColour);
+                putPixel(x, y, fontColour);
             } else {
-                putpixel(x, y, bgColour);
+                putPixel(x, y, bgColour);
             }
             x++;
         }
@@ -118,12 +118,12 @@ void printchar(char c, t_color fontColour, t_color bgColour,int next){
 void clearScreen(){
     for(int i=0;i<screen->width;i++){
         for(int j=0;j<screen->height;j++){
-            putpixel(i,j,BLACK);
+            putPixel(i,j,BLACK);
         }
     }
 }
 
-void newline(){
+void newLine(){
     screen->currentX=0;
     screen->currentY+=CHAR_HEIGHT;
 }
@@ -136,8 +136,9 @@ void deleteChar(){
         screen->currentY-=CHAR_HEIGHT;
     }
     screen->currentX-=CHAR_WIDTH;
-    printchar(' ',BLACK,BLACK,0);
+    printChar(' ',BLACK,BLACK,0);
 }
+
 //PRE TP MODO TEXTO
 
 //static uint8_t * currentVideo = (uint8_t*)0xB8000;

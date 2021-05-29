@@ -58,9 +58,9 @@ void keyboardHandler() {
             else {
                 if (charTable[scanCode][0] != 0) {
                     if(shift || (capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') )
-                        printchar(charTable[scanCode][1], WHITE, BLACK, 1);
+                        printChar(charTable[scanCode][1], WHITE, BLACK, 1);
                     else
-                        printchar(charTable[scanCode][0], WHITE, BLACK, 1);        
+                        printChar(charTable[scanCode][0], WHITE, BLACK, 1);        
                 }
             }
         } else if(currentAction == RELEASE) {
