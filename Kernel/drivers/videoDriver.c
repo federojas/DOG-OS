@@ -96,6 +96,15 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
     uint32_t x = screen->currentX+ screen->offset;
     uint32_t y = screen->currentY;
 
+    if(screen->currentX!=0 && screen->width-screen->currentX < CHAR_WIDTH){
+        screen->currentY+=CHAR_HEIGHT;
+        screen->currentX=0;
+    }
+        if(screen->height-screen->currentY <CHAR_HEIGHT){
+            screen->currentY -=CHAR_HEIGHT;
+            scrollDown();
+        }
+
     for(int i=0;i<CHAR_HEIGHT;i++){
         for(int j=0;j<CHAR_WIDTH;j++){
             int8_t isFont = (map[i] >> (CHAR_WIDTH - j - 1)) & 0x01;  //-1 para no romper el decalaje, primera vez tengo q decalar 7
@@ -139,6 +148,24 @@ void deleteChar(){
     printChar(' ',BLACK,BLACK,0);
 }
 
+//funcion destinada a hacer espacio en pantalla cuando este llena de texto
+void scrollDown(){
+    for(int i=0; i<CHAR_HEIGHT; i++){
+        for(int j=0;j<CHAR_WIDTH;j++){
+            //aca tengo que guardarme el estado de cada linea de la pantalla
+        }
+    }
+            clearLine();
+}
+
+void clearLine(){
+    for(int i=0;i<screen->height;i++){
+        for(int j=0;screen->width;j++){
+            putPixel(j+screen->offset,screen->currentY+i, BLACK);
+            //clearScreen();
+        }
+    }
+}
 //PRE TP MODO TEXTO
 
 //static uint8_t * currentVideo = (uint8_t*)0xB8000;

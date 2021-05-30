@@ -13,5 +13,7 @@ void initializeVideo();
 void clearScreen();
 void newLine();
 void deleteChar();
+void clearLine();
+void scrollDown();
 
 #endif

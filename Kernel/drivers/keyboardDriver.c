@@ -66,6 +66,10 @@ void keyboardHandler() {
             }
             else {
                 if (charTable[scanCode][0] != 0) {
+                    if(charTable[scanCode][0]=='\n'){
+                        printLine();
+                        
+                    }
                     if((shift && !capsLock) || (shift && capsLock && !(charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z')) || (!shift && capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') )
                         putChar(charTable[scanCode][1]);
                     else

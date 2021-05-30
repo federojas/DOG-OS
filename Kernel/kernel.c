@@ -91,6 +91,9 @@ int main()
 {	
 	load_idt();
 	initializeVideo();
+	while(1){
+		keyboardHandler();
+	}
 	
 	//CODIGO PRE TP Y ORIGINAL CATEDRA
 	// ncPrint("[Kernel Main]");
