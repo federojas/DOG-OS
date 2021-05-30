@@ -18,7 +18,7 @@ static int widx=0; //posicion de lectura
 #define CAPS_LOCK 0x3A
 #define CTRL 0x1D
 
-static char buffer[BUFF_LEN];
+static char buffer[BUFF_LEN]={0};
 
 static int shift = 0;
 static int ctrl = 0;
@@ -67,13 +67,16 @@ void keyboardHandler() {
             else {
                 if (charTable[scanCode][0] != 0) {
                     if(charTable[scanCode][0]=='\n'){
-                        printLine();
+                        printLine(); //ESTO DESPUES HAY QUE SACARLO 
                         
                     }
                     if((shift && !capsLock) || (shift && capsLock && !(charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z')) || (!shift && capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') )
-                        putChar(charTable[scanCode][1]);
+                        //putChar(charTable[scanCode][1]); 
+                        putCharInBuffer(charTable[scanCode][1]);
                     else
-                        putChar(charTable[scanCode][0]);        
+                        //putChar(charTable[scanCode][0]);        
+                        putCharInBuffer(charTable[scanCode][0]);
+
                 }
             }
         } else if(currentAction == RELEASE) {
@@ -86,19 +89,37 @@ void keyboardHandler() {
     }
 }
 
-// void putCharInBuffer(char c){
-//     if(c!=0){
-//         buffer[widx]=c;
-        
-//         //HAY QUE TENER CUIDADO DE QUE LOS INDICES NO PASEN EL SIZE DEL BUFFER
-//         widx++;
-//         if(buffSize<BUFF_LEN){
-//             buffSize++;
-//         }
-        
-//     }
-// }
 
+void putCharInBuffer(char c){
+    if(c!=0){
+        buffer[widx]=c;
+        
+        //HAY QUE TENER CUIDADO DE QUE LOS INDICES NO PASEN EL SIZE DEL BUFFER
+
+        widx++;
+        if(widx == BUFF_LEN){
+            widx=0; //si llegue al tope del buffer vuelvo al inicio, esto va a hacer que se vaya pisando el buffer pero que no haya overflow de teclas
+        }
+        if(buffSize<BUFF_LEN){
+            buffSize++;
+        }else{
+            ridx++;
+            if(ridx == BUFF_LEN){
+                ridx=0;
+            }
+        }    
+    }
+}
+
+//funcion destinada a usarse cuando se quiere borrar una tecla
+void removeCharFromBuffer(){
+    if(buffSize<=0)
+        return;
+    ridx=(ridx +1)%BUFF_LEN; //mas rapido que ir preguntando si el indice alcanzo el maximo, y de esta manera recorremos ciclicamente el buffer
+    widx=(widx+1)%BUFF_LEN;
+    buffSize--;
+
+}
 
 
 //getChar no hay nada adentro llamar a hlt para bloquear funcion hastas proxima vez que toques tecla
