@@ -16,7 +16,12 @@
         "fonts.h": "c",
         "strings.h": "c",
         "prints.h": "c",
-        "colors.h": "c"
+        "colors.h": "c",
+        "stdlib.h": "c",
+        "syscalls.h": "c",
+        "stdarg.h": "c",
+        "libc.h": "c",
+        "rtcid.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

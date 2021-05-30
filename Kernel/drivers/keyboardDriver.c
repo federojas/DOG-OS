@@ -1,5 +1,4 @@
 #include <keyboardDriver.h>
-#include <stdint.h>
 #include <naiveConsole.h>
 #include <prints.h>
 #include <colors.h>
@@ -23,6 +22,8 @@ static char buffer[BUFF_LEN]={0};
 static int shift = 0;
 static int ctrl = 0;
 static int capsLock = 0;
+
+static uint64_t registers[16] = {0};
 
 //https://www.qbasic.net/en/reference/general/scan-codes.htm
 static char charTable[58][2] = {{0, 0}, {0, 0}, {'1', '!'}, {'2', '@'}, 
@@ -48,7 +49,7 @@ uint8_t getAction(uint8_t scanCode) {
     return ERROR;
 }
 
-void keyboardHandler() {
+void keyboardHandler(uint64_t* rsp) {
     uint8_t scanCode;
     uint8_t currentAction;
     if(_hasKey()) {
@@ -66,16 +67,15 @@ void keyboardHandler() {
             }
             else {
                 if (charTable[scanCode][0] != 0) {
-                    if(charTable[scanCode][0]=='\n'){
-                        printLine(); //ESTO DESPUES HAY QUE SACARLO 
-                        
+                    if(ctrl && charTable[scanCode][0] == 'r'){
+                        updateRegisters(rsp);
                     }
-                    if((shift && !capsLock) || (shift && capsLock && !(charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z')) || (!shift && capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') )
-                        //putChar(charTable[scanCode][1]); 
+                    else if((shift && !capsLock) || (shift && capsLock && !(charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z')) || (!shift && capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') ) {
                         putCharInBuffer(charTable[scanCode][1]);
-                    else
-                        //putChar(charTable[scanCode][0]);        
+                    }
+                    else {
                         putCharInBuffer(charTable[scanCode][0]);
+                    }
 
                 }
             }
@@ -111,14 +111,35 @@ void putCharInBuffer(char c){
     }
 }
 
+void dumpBuffer(char *dest, int size){
+    int i=0;
+    if(size<=0 || buffSize <=0)return;
+    
+    while(i<size && buffSize >0){
+        dest[i++]=removeCharFromBuffer();
+    }
+    dest[i]=0;
+    return i;
+}
+
 //funcion destinada a usarse cuando se quiere borrar una tecla
-void removeCharFromBuffer(){
+char removeCharFromBuffer(){
     if(buffSize<=0)
         return;
     ridx=(ridx +1)%BUFF_LEN; //mas rapido que ir preguntando si el indice alcanzo el maximo, y de esta manera recorremos ciclicamente el buffer
     widx=(widx+1)%BUFF_LEN;
     buffSize--;
 
+}
+
+uint64_t* getRegisters(){
+    return registers;
+}
+
+void updateRegisters(uint64_t* rsp){
+    for (int i =0 ; i<16;i++)
+        
+        registers[i] = rsp[i];  
 }
 
 

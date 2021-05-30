@@ -104,6 +104,10 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
             screen->currentY -=CHAR_HEIGHT;
             scrollDown();
         }
+    if(c=='\n'){
+        newLine();
+        return ;
+    }
 
     for(int i=0;i<CHAR_HEIGHT;i++){
         for(int j=0;j<CHAR_WIDTH;j++){

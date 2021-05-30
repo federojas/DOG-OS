@@ -12,5 +12,5 @@ void printIntHex(uint64_t num);
 void printIntBin(uint64_t num);
 void putChar(char c);
 void printLine();
-
+void sys_read(uint64_t buffer, uint64_t lenght);
 #endif

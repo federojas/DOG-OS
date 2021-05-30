@@ -8,7 +8,6 @@
 #include <keyboardDriver.h>
 #include <videoDriver.h>
 #include <CPUFeatures.h>
-#include <infoReg.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -91,41 +90,32 @@ int main()
 {	
 	load_idt();
 	initializeVideo();
-	while(1){
-		keyboardHandler();
-	}
-	
-	//CODIGO PRE TP Y ORIGINAL CATEDRA
-	// ncPrint("[Kernel Main]");
-	// ncNewline();
-	// ncPrint("  Sample code module at 0x");
-	// ncPrintHex((uint64_t)sampleCodeModuleAddress);
-	// ncNewline();
-	// ncPrint("  Calling the sample code module returned: ");
-	// ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
-	// ncNewline();
-	// ncNewline();
 
-	// ncPrint("  Sample data module at 0x");
-	// ncPrintHex((uint64_t)sampleDataModuleAddress);
-	// ncNewline();
-	// ncPrint("  Sample data module contents: ");
-	// ncPrint((char*)sampleDataModuleAddress);
-	// ncNewline();
+	ncPrint("[Kernel Main]");
+	ncNewline();
+	ncPrint("  Sample code module at 0x");
+	ncPrintHex((uint64_t)sampleCodeModuleAddress);
+	ncNewline();
+	ncPrint("  Calling the sample code module returned: ");
+	ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
+	ncNewline();
+	ncNewline();
 
-	// ncPrint("[Finished]");
+	ncPrint("  Sample data module at 0x");
+	ncPrintHex((uint64_t)sampleDataModuleAddress);
+	ncNewline();
+	ncPrint("  Sample data module contents: ");
+	ncPrint((char*)sampleDataModuleAddress);
+	ncNewline();
 
+	ncPrint("[Finished]");
+
+	//PRE TP
 	// printString("Arquitectura de las Computadoras");
 	// ncNewline();
 
-	// printCurrentTime();
-
-	// getCPUFeatures();
-
-	// getInfoReg();
-
-	// while(1){
-	// }
+	while(1){
+	}
 
 	return 0;
 }
