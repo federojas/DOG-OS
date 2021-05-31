@@ -9,12 +9,12 @@
 
 //returns current date and time
 void getCurrentDayTime(int argc, char** args) {
-      if (argc != 0) {
-            printf("Cantidad invalida de argumentos.\n");
-            return;
-      }
+	if (argc != 0) {
+		printf("Cantidad invalida de argumentos.\n");
+		return;
+	}
     printf("Fecha de hoy: ");
-    uint8_t result = _syscall(SYS_RTC_ID, DAY_RTC_ID, 0, 0, 0, 0);
+    uint64_t result = _syscall(SYS_RTC_ID, DAY_RTC_ID, 0, 0, 0, 0);
     printf("%d", result);
 	putChar('/');
 
@@ -61,9 +61,10 @@ void getCPUFeatures(int argc, char** args){
             printf("Cantidad invalida de argumentos.\n");
             return;
       }
-	uint64_t check = _syscall(SYS_CPUID_ID,0 , 0, 0, 0, 0);
+	uint8_t check = _syscall(SYS_CPUID_ID,0 , 0, 0, 0, 0);
+	printf("%d", check);
 	if(check) {
-		printf("Este procesador \\ soporta CPUID.\n");
+		printf("Este procesador soporta CPUID.\n");
 	} else {
 		printf("Este processor no soporta CPUID.\n");
 		return ;

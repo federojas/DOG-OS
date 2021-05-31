@@ -156,11 +156,9 @@ haltcpu:
 	ret
 
 _syscallHandler:
-	pushState
 
 	call syscallSelector
 	
-	popState
 	iretq
 
 SECTION .bss

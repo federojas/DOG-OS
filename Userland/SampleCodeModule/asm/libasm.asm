@@ -2,7 +2,6 @@ GLOBAL _syscall
 section .text
 
 %macro pushState 0
-	push rax
 	push rbx
 	push rcx
 	push rdx
@@ -34,7 +33,6 @@ section .text
 	pop rdx
 	pop rcx
 	pop rbx
-	pop rax
 %endmacro
 _syscall:
     push rbp

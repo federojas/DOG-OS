@@ -4,6 +4,7 @@
 #include <colors.h>
 #include <prints.h>
 #include <keyboardDriver.h>
+#include <prints.h>
 
 #define SYS_RTC_ID 1
 #define SYS_CPUFEATURES_ID 2
@@ -20,7 +21,7 @@ uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10,
             sys_write((char *)(rsi), (uint8_t)(rdx), (t_color)(r10), (t_color)(r8));
             break;
         case SYS_RTC_ID:
-            return getCurrentTime(rsi);
+            return getCurrentTime((uint8_t) rsi);
             break;
         case SYS_READ_ID:
             sys_read(rsi, rdx);
