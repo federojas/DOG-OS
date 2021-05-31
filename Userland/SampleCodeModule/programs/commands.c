@@ -7,6 +7,8 @@
 
 #define YEAR 20 //Debe escribir aca los digitos de su año (excepto los ultimos dos)
 
+extern void _opcodeExp(void);
+
 //returns current date and time
 void getCurrentDayTime(int argc, char** args) {
 	if (argc != 0) {
@@ -108,3 +110,32 @@ void getInfoReg(int argc, char** args) {
       }
 	  newLine();
 }
+
+void divZero(int argc, char** args) {
+	if (argc != 0) {
+            printf("Cantidad invalida de argumentos.\n");
+            return;
+      }
+	int x = 3/0;
+}
+
+// https://mudongliang.github.io/x86/html/file_module_x86_id_318.html
+void opCode(int argc, char** args) {
+	if (argc != 0) {
+            printf("Cantidad invalida de argumentos.\n");
+            return;
+      }
+	_opcodeExp();
+}
+
+void help(int argc, char** args) {
+	printf("Lista de comandos: \n");
+	printf("/help : Listado de comandos\n");
+    printf("/inforeg : Estado de todos los resgitros\n");
+    printf("/cpufeatures : Caracteristicas del CPU\n");
+	printf("/date&time : Fecha y hora actual\n");
+	printf("/printmem : Volcado de memoria de 32 bytes\n");
+	printf("/divzero : Excepcion division por cero\n");
+	printf("/opcode : Excepcion opcode invalido\n");
+}
+

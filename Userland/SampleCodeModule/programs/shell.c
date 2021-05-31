@@ -4,10 +4,9 @@
 
 void startShell(){
     shellWelcomeMessage();
-    readText();
-//     int x = 3;
-//     int y = 0;
-//     x = x/y;
+    divZero(0,0);
+    while(1){
+    }
 }
 
 void shellWelcomeMessage(){

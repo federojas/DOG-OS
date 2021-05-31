@@ -1,4 +1,6 @@
 GLOBAL _syscall
+
+GLOBAL _opcodeExp
 section .text
 
 %macro pushState 0
@@ -46,3 +48,6 @@ _syscall:
     pop rbp
 
     ret
+_opcodeExp:
+	UD2
+	ret
