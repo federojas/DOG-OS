@@ -2,7 +2,7 @@
 #include <naiveConsole.h>
 #include <prints.h>
 #include <colors.h>
-
+#include <interrupts.h>
 #define PRESS 1
 #define RELEASE 2
 #define ERROR -1
@@ -111,9 +111,18 @@ void putCharInBuffer(char c){
     }
 }
 
+char getChar(){
+    char c=0;
+    while(c==0){
+        _hlt();
+        dumpBuffer(&c,1);
+    }
+    return c;
+}
+
 uint64_t dumpBuffer(char *dest, int size){
     int i=0;
-    if(size<=0 || buffSize <=0)return;
+    if(size<=0 || buffSize <=0)return -1;
     
     while(i<size && buffSize >0){
         dest[i++]=removeCharFromBuffer();
@@ -128,7 +137,7 @@ char removeCharFromBuffer(){
         return;
     ridx=(ridx +1)%BUFF_LEN; //mas rapido que ir preguntando si el indice alcanzo el maximo, y de esta manera recorremos ciclicamente el buffer
     widx=(widx+1)%BUFF_LEN;
-    buffSize--;
+    return buffer[buffSize--];
 
 }
 

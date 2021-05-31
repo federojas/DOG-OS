@@ -164,6 +164,9 @@ int getChar(){
 int readText(){
     int c;
     while((c=getChar()) !='\n'){
+        char *s=c;
+        printf("el caracter es: ");
+        printf(s);
         if(c!=-1){
             if(buffSize < BUFF_LEN-1){
                 buffer[buffSize++]=c;
