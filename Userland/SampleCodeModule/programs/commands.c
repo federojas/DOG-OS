@@ -62,7 +62,6 @@ void getCPUFeatures(int argc, char** args){
             return;
       }
 	uint8_t check = _syscall(SYS_CPUID_ID,0 , 0, 0, 0, 0);
-	printf("%d", check);
 	if(check) {
 		printf("Este procesador soporta CPUID.\n");
 	} else {

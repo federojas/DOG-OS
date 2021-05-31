@@ -37,19 +37,31 @@ cpuVendor:
 	ret
 
 
+;https://www.youtube.com/watch?v=p5X1Sf5ejCc
 _checkCPUID:
-    pushfq                               ;Save EFLAGS
-    pushfq                               ;Store EFLAGS
-    xor dword [rsp],0x00200000           ;Invert the ID bit in stored EFLAGS
-    popfq                                ;Load stored EFLAGS (with ID bit inverted)
-    pushfq                               ;Store EFLAGS again (ID bit may or may not be inverted)
-    pop rax                              ;eax = modified EFLAGS (ID bit may or may not be inverted)
-    xor eax,[rsp]                        ;eax = whichever bits were changed
-    popfq                                ;Restore original EFLAGS
-    and eax,0x00200000                   ;eax = zero if ID bit can't be changed, else non-zero
-    ret
-;CODIGO MODIFICADO DE https://wiki.osdev.org/CPUID PONER EN INFORME
+    push rbx ; save callers rbx
+    pushfq ; push the flags register
+    pop rax ; pop it into eax
+    mov rbx, rax ; save value into ebx
+    xor rax, 200000h ; set bit 21, the ID flag, to 1
+    push rax ; push this toggled flags register
+    popfq ; pop the toggled flags back into the flags register
+    ; EN ESTE PASO EL CPU VA A RESETEAR EL BIT 21 A 0 SI NO TIENE CPUID
+    pushfq ; push the flags again
+    pop rax ;pop the flags into eax again
+    
+    cmp rax, rbx ;comapre the flags to the eax version we saved earlier
+    jz No_CPUID
 
+    pop rbx
+    mov rax, 1
+    ret
+No_CPUID:
+    pop rbx
+    mov rax, 0
+    ret
+
+    
 _checkCPUFeatures:
     push rbp
 	mov rbp, rsp
