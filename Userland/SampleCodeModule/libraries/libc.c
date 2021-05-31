@@ -156,7 +156,12 @@ int strlen(const char *s){
 }
 
 int getChar(){
-    return _syscall(SYS_READ_ID, buffer, buffSize, 0, 0, 0);
+    char buff[2]={0};
+    int ret =_syscall(SYS_READ_ID,buff, 2, 0, 0,0);
+    if(ret<=0){
+        return -1;
+    }
+    return buff[0]; 
 }
 
 
@@ -164,14 +169,11 @@ int getChar(){
 int readText(){
     int c;
     while((c=getChar()) !='\n'){
-        char *s=c;
-        printf("el caracter es: ");
-        printf(s);
+        
         if(c!=-1){
             if(buffSize < BUFF_LEN-1){
                 buffer[buffSize++]=c;
             }
-
             putChar(c);
         }
     }

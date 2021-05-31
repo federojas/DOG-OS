@@ -114,6 +114,7 @@ void putCharInBuffer(char c){
 char getChar(){
     char c=0;
     while(c==0){
+
         _hlt();
         dumpBuffer(&c,1);
     }
@@ -124,7 +125,7 @@ uint64_t dumpBuffer(char *dest, int size){
     int i=0;
     if(size<=0 || buffSize <=0)return -1;
     
-    while(i<size && buffSize >0){
+    while(i<size-1 && buffSize){
         dest[i++]=removeCharFromBuffer();
     }
     dest[i]=0;
@@ -132,12 +133,13 @@ uint64_t dumpBuffer(char *dest, int size){
 }
 
 //funcion destinada a usarse cuando se quiere borrar una tecla
-char removeCharFromBuffer(){
+int removeCharFromBuffer(){
     if(buffSize<=0)
         return;
+        int c= buffer[ridx];
     ridx=(ridx +1)%BUFF_LEN; //mas rapido que ir preguntando si el indice alcanzo el maximo, y de esta manera recorremos ciclicamente el buffer
-    widx=(widx+1)%BUFF_LEN;
-    return buffer[buffSize--];
+    buffSize--;
+    return c;
 
 }
 
