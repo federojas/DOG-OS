@@ -22,12 +22,12 @@ void sys_write(char * str, uint8_t len, t_color bgColor, t_color ftColor) {
         printChar(str[i], ftColor, bgColor, 1);     
 }
 
-uint64_t sys_read(uint64_t buffer, uint64_t lenght){
-	if(lenght==0)
+uint64_t sys_read(uint64_t buffer, uint64_t len){
+	if(len==0){
 		return -1;
+	}
 		char *buff=(char* ) buffer;//casteo para evitar el warning
-	return getChar();
-	//return dumpBuffer(buff,lenght);
+	return dumpBuffer(buff,len);
 }
 
 //FUNCION DE CATEDRA
