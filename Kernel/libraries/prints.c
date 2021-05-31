@@ -1,25 +1,17 @@
 #include <videoDriver.h>
 #include <prints.h>
 #include <keyboardDriver.h>
+
 void printLine() {
 	newLine();
 }
 
-void printString(char * str) {
-    printStringColor(str, BLACK,WHITE);
-}
-
-
-static int strlen(char *str) {
+int strlen(char *str) {
       int size = 0;
       for (int i = 0; str[i] != 0; i++) {
             size++;
       }
       return size;
-}
-
-void printStringColor(char * str, t_color bgColor, t_color ftColor) {
-    sys_write(str, strlen(str), bgColor, ftColor);
 }
 
 void sys_write(char * str, uint8_t len, t_color bgColor, t_color ftColor) {
@@ -28,11 +20,6 @@ void sys_write(char * str, uint8_t len, t_color bgColor, t_color ftColor) {
     
     for (int i = 0; str[i] != 0 && i < len; i++) 
         printChar(str[i], ftColor, bgColor, 1);     
-}
-
-
-void putChar(char c){
-    printChar(c,WHITE,BLACK,1);
 }
 
 uint64_t sys_read(uint64_t buffer, uint64_t lenght){
@@ -78,20 +65,20 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 }
 
 void printIntDec(uint64_t num) {
-    char buffer[10];
-    uintToBase(num, buffer, 10);
-    printString(buffer);
+   char buffer[10];
+   uintToBase(num, buffer, 10);
+   sys_write(buffer, strlen(buffer), BLACK, WHITE);
 }
 
 void printIntHex(uint64_t num) {
     char buffer[10];
     uintToBase(num, buffer, 16);
-    printString(buffer);
+    sys_write(buffer, strlen(buffer), BLACK, WHITE);
 }
 
 void printIntBin(uint64_t num) {
     char buffer[10];
     uintToBase(num, buffer, 2);
-    printString(buffer);
+    sys_write(buffer, strlen(buffer), BLACK, WHITE);
 }
 

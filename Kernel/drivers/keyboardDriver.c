@@ -49,7 +49,7 @@ uint8_t getAction(uint8_t scanCode) {
     return ERROR;
 }
 
-void keyboardHandler(uint64_t* rsp) {
+void keyboardHandler(uint64_t rsp) {
     uint8_t scanCode;
     uint8_t currentAction;
     if(_hasKey()) {
@@ -68,7 +68,7 @@ void keyboardHandler(uint64_t* rsp) {
             else {
                 if (charTable[scanCode][0] != 0) {
                     if(ctrl && charTable[scanCode][0] == 'r'){
-                        updateRegisters(rsp);
+                        updateRegisters((uint64_t*) rsp);
                     }
                     else if((shift && !capsLock) || (shift && capsLock && !(charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z')) || (!shift && capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') ) {
                         putCharInBuffer(charTable[scanCode][1]);
@@ -137,9 +137,9 @@ uint64_t* getRegisters(){
 }
 
 void updateRegisters(uint64_t* rsp){
-    for (int i =0 ; i<16;i++)
-        
-        registers[i] = rsp[i];  
+    for (int i =0 ; i<16;i++) {
+        registers[i] = rsp[i]; 
+    } 
 }
 
 

@@ -8,7 +8,7 @@
 static void int_20();
 static void int_21();
 
-void irqDispatcher(uint64_t irq, uint64_t* rsp) {
+void irqDispatcher(uint64_t irq, uint64_t rsp) {
 	switch (irq) {
 		case TIMER:
 			int_20();
@@ -24,6 +24,6 @@ static void int_20() {
 	timer_handler();
 }
 
-static void int_21(uint64_t* rsp) {
+static void int_21(uint64_t rsp) {
     keyboardHandler(rsp);
 }

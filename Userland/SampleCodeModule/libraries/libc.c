@@ -156,7 +156,7 @@ int strlen(const char *s){
 }
 
 int getChar(){
-    return _syscall(SYS_READ_ID,(uint64_t)buffer, buffSize, 0, 0, 0);
+    return _syscall(SYS_READ_ID, buffer, buffSize, 0, 0, 0);
 }
 
 
@@ -170,7 +170,6 @@ int readText(){
             }
 
             putChar(c);
-    printf("llegue aca");
         }
     }
     newLine();

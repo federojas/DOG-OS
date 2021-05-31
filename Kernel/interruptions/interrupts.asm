@@ -80,6 +80,7 @@ SECTION .text
 	pushState
 
 	mov rdi, %1 ; pasaje de parametro
+	mov rsi, rsp
 	call exceptionDispatcher
 
 	popState

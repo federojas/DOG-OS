@@ -4,9 +4,10 @@
 
 void startShell(){
     shellWelcomeMessage();
-
-    getCPUFeatures(0,0);
     readText();
+//     int x = 3;
+//     int y = 0;
+//     x = x/y;
 }
 
 void shellWelcomeMessage(){
