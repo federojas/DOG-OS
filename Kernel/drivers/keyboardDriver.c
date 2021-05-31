@@ -25,6 +25,9 @@ static int capsLock = 0;
 
 static uint64_t registers[16] = {0};
 
+extern uint8_t _getKey(void);
+extern uint8_t _hasKey(void);
+
 //https://www.qbasic.net/en/reference/general/scan-codes.htm
 static char charTable[58][2] = {{0, 0}, {0, 0}, {'1', '!'}, {'2', '@'}, 
     {'3', '#'}, {'4', '$'}, {'5', '%'}, {'6', '^'}, 
@@ -135,8 +138,8 @@ uint64_t dumpBuffer(char *dest, int size){
 //funcion destinada a usarse cuando se quiere borrar una tecla
 int removeCharFromBuffer(){
     if(buffSize<=0)
-        return;
-        int c= buffer[ridx];
+        return -1;
+    int c= buffer[ridx];
     ridx=(ridx +1)%BUFF_LEN; //mas rapido que ir preguntando si el indice alcanzo el maximo, y de esta manera recorremos ciclicamente el buffer
     buffSize--;
     return c;
@@ -152,8 +155,3 @@ void updateRegisters(uint64_t* rsp){
         registers[i] = rsp[i]; 
     } 
 }
-
-
-//getChar no hay nada adentro llamar a hlt para bloquear funcion hastas proxima vez que toques tecla
-//hlt te deja bloqueado hasta interrupcion, es mejor quedarse bloqeuado que while 1
-//hlt, adentro while 

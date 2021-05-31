@@ -1,6 +1,5 @@
 #include <syscallDispatcher.h>
-#include <RTC.h>
-#include <CPUFeatures.h>
+#include <syscalls.h>
 #include <colors.h>
 #include <prints.h>
 #include <keyboardDriver.h>

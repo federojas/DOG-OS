@@ -4,10 +4,8 @@
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 #include <idtLoader.h>
-#include <RTC.h>
 #include <keyboardDriver.h>
 #include <videoDriver.h>
-#include <CPUFeatures.h>
 
 extern uint8_t text;
 extern uint8_t rodata;

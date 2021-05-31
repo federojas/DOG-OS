@@ -1,6 +1,7 @@
 #include <videoDriver.h>
 #include <prints.h>
 #include <keyboardDriver.h>
+#include <syscalls.h>
 
 void printLine() {
 	newLine();
@@ -12,22 +13,6 @@ int strlen(char *str) {
             size++;
       }
       return size;
-}
-
-void sys_write(char * str, uint8_t len, t_color bgColor, t_color ftColor) {
-    if (str == 0 ||  len <= 0 || bgColor < 0 || ftColor < 0) 
-        return ;
-    
-    for (int i = 0; str[i] != 0 && i < len; i++) 
-        printChar(str[i], ftColor, bgColor, 1);     
-}
-
-uint64_t sys_read(uint64_t buffer, uint64_t len){
-	if(len==0){
-		return -1;
-	}
-		char *buff=(char* ) buffer;//casteo para evitar el warning
-	return dumpBuffer(buff,len);
 }
 
 //FUNCION DE CATEDRA

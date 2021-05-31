@@ -4,8 +4,8 @@
 
 void startShell(){
     shellWelcomeMessage();
-    divZero(0,0);
     while(1){
+        readText();
     }
 }
 
