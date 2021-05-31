@@ -39,8 +39,8 @@ uint64_t sys_read(uint64_t buffer, uint64_t lenght){
 	if(lenght==0)
 		return -1;
 		char *buff=(char* ) buffer;//casteo para evitar el warning
-
-	return dumpBuffer(buff,lenght);
+	return getChar();
+	//return dumpBuffer(buff,lenght);
 }
 
 //FUNCION DE CATEDRA

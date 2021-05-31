@@ -3,8 +3,8 @@
 #include <commands.h>
 
 void startShell(){
-    shellWelcomeMessage();
 
+    shellWelcomeMessage();
     getCPUFeatures(0,0);
     readText();
 }
