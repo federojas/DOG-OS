@@ -111,7 +111,7 @@ void putCharInBuffer(char c){
     }
 }
 
-void dumpBuffer(char *dest, int size){
+uint64_t dumpBuffer(char *dest, int size){
     int i=0;
     if(size<=0 || buffSize <=0)return;
     

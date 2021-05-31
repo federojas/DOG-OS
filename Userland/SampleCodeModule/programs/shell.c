@@ -6,6 +6,7 @@ void startShell(){
     shellWelcomeMessage();
 
     getCPUFeatures(0,0);
+    readText();
 }
 
 void shellWelcomeMessage(){
