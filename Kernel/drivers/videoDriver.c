@@ -100,10 +100,10 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
         screen->currentY+=CHAR_HEIGHT;
         screen->currentX=0;
     }
-        if(screen->height-screen->currentY <CHAR_HEIGHT){
-            screen->currentY -=CHAR_HEIGHT;
-            scrollDown();
-        }
+        // if(screen->height-screen->currentY <CHAR_HEIGHT){
+        //     screen->currentY -=CHAR_HEIGHT;
+        //     scrollDown();
+        // }
     if(c=='\n'){
         newLine();
         return ;
@@ -141,8 +141,16 @@ void clearScreen(){
 }
 
 void newLine(){
-    screen->currentX=0;
+    if(screen->height-screen->currentY <CHAR_HEIGHT){
+            //screen->currentY -=CHAR_HEIGHT;
+             screen->currentY=0; //PLAN B POR SI NO PUEDO ARREGLAR EL SCROLL DOWN 
+             clearScreen(); //PLAN B POR SI NO PUEDO ARREGLAR EL SCROLL DOWN 
+            //scrollDown();
+        }else{
     screen->currentY+=CHAR_HEIGHT;
+        }
+
+    screen->currentX=0;
 }
 
 void deleteChar(){
@@ -158,13 +166,16 @@ void deleteChar(){
 
 //funcion destinada a hacer espacio en pantalla cuando este llena de texto
 void scrollDown(){
-	char *pos = (char *)((uint64_t)screenData->framebuffer);
+	//char *pos = (char *)((uint64_t)screenData->framebuffer);
     for(int i=0; i<CHAR_HEIGHT; i++){
         for(int j=0;j<screenData->height-CHAR_WIDTH;j++){
             //aca tengo que guardarme el estado de cada linea de la pantalla
-            
-            *pos= *(pos +(CHAR_HEIGHT* CHAR_WIDTH) *3);
-            pos++;
+                // *pos= *(pos +(CHAR_HEIGHT* CHAR_WIDTH) *3);
+                // pos++;
+               memcpy((void *)((uint64_t)screenData->framebuffer + j * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 4 * CHAR_WIDTH) * PIXEL_SIZE),
+                               (void *)((uint64_t)screenData->framebuffer + (j + 1) * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 4 * CHAR_WIDTH) * PIXEL_SIZE),
+                               WIDTH * PIXEL_SIZE / 2 - 4 * CHAR_WIDTH * PIXEL_SIZE);
+           
         }
     }
             clearLine();
@@ -174,7 +185,6 @@ void clearLine(){
     for(int i=0;i<screen->height;i++){
         for(int j=0;screen->width;j++){
             putPixel(j+screen->offset,screen->currentY+i, BLACK);
-            //clearScreen();
         }
     }
 }
