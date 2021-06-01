@@ -3,7 +3,7 @@
 #include <fonts.h>
 #include <screens.h>
 #include <colors.h>
-
+#include <lib.h>
 unsigned int WIDTH = 1024;
 unsigned int HEIGHT = 768;
 unsigned int PIXEL_SIZE = 3; //bytes por pixel 
@@ -158,9 +158,13 @@ void deleteChar(){
 
 //funcion destinada a hacer espacio en pantalla cuando este llena de texto
 void scrollDown(){
+	char *pos = (char *)((uint64_t)screenData->framebuffer);
     for(int i=0; i<CHAR_HEIGHT; i++){
-        for(int j=0;j<CHAR_WIDTH;j++){
+        for(int j=0;j<screenData->height-CHAR_WIDTH;j++){
             //aca tengo que guardarme el estado de cada linea de la pantalla
+            
+            *pos= *(pos +(CHAR_HEIGHT* CHAR_WIDTH) *3);
+            pos++;
         }
     }
             clearLine();

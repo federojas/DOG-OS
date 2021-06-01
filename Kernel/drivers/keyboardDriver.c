@@ -116,12 +116,11 @@ void putCharInBuffer(char c){
 
 char getChar(){
     char c=0;
-    while(c==0){
-
-        _hlt();
+    c=removeCharFromBuffer();
+    while(c==-1){
         //dumpBuffer(&c,1);
-        c=removeCharFromBuffer();
-
+        _hlt();
+         c=removeCharFromBuffer();
     }
     return c;
 }

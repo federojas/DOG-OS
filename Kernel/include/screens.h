@@ -13,7 +13,7 @@ typedef struct
     uint32_t offset;
     uint32_t width;
     uint32_t height;
-    uint32_t firstLine;
-    uint32_t firstLineWidth;
+   // uint32_t firstLine;
+    //uint32_t firstLineWidth;
 } t_screen;
 #endif

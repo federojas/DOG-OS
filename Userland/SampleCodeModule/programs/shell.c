@@ -8,6 +8,7 @@ void startShell(){
     while(1){
     readText();
     }
+    
 
 }
 
