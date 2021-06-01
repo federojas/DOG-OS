@@ -3,12 +3,16 @@
 #include <commands.h>
 
 void startShell(){
+    for(int i=0;i<40;i++){
     shellWelcomeMessage(); 
+    }
+   
     //CON HLT USAR SIN WHILE 1 
     getMem(1, 0, "1");
     while(1){
     readText();
     }
+    
 
 }
 
