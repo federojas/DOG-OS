@@ -33,6 +33,18 @@ uint64_t sys_read(uint64_t buffer, uint64_t len){
 	if(len==0){
 		return -1;
 	}
+
+	//OPCION CON ESPERA ACTIVA
 		char *buff=(char* ) buffer;//casteo para evitar el warning
 	return dumpBuffer(buff,len);
+	
+	
+	//OPCION CON HLT (ESTA ANDANDO LENTO)
+	// char *buff=(char *) buffer;
+	// int i=0;
+	// while(i<len){
+	// 	buff[i++]=getChar();
+	// }
+	// buff[i]=0;
+	// return i;
 }

@@ -7,6 +7,6 @@ void keyboardHandler();
 void putCharInBuffer(char c);
 uint64_t* getRegisters();
 uint64_t dumpBuffer(char *dest, int size);
-int removeCharFromBuffer();
+char removeCharFromBuffer();
 void updateRegisters(uint64_t* rsp);
 #endif

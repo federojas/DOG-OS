@@ -3,10 +3,12 @@
 #include <commands.h>
 
 void startShell(){
-    shellWelcomeMessage();
+    shellWelcomeMessage(); 
+    //CON HLT USAR SIN WHILE 1 
     while(1){
-        readText();
+    readText();
     }
+
 }
 
 void shellWelcomeMessage(){

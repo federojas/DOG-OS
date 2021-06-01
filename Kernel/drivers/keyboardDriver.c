@@ -119,11 +119,23 @@ char getChar(){
     while(c==0){
 
         _hlt();
-        dumpBuffer(&c,1);
+        //dumpBuffer(&c,1);
+        c=removeCharFromBuffer();
+
     }
     return c;
 }
 
+//taba int antes
+char removeCharFromBuffer(){
+    if(buffSize<=0)
+        return -1;
+    int c= buffer[ridx];
+    ridx=(ridx +1)%BUFF_LEN; //mas rapido que ir preguntando si el indice alcanzo el maximo, y de esta manera recorremos ciclicamente el buffer
+    buffSize--;
+    return c;
+
+}
 uint64_t dumpBuffer(char *dest, int size){
     int i=0;
     if(size<=0 || buffSize <=0)return -1;
@@ -133,17 +145,6 @@ uint64_t dumpBuffer(char *dest, int size){
     }
     dest[i]=0;
     return i;
-}
-
-//funcion destinada a usarse cuando se quiere borrar una tecla
-int removeCharFromBuffer(){
-    if(buffSize<=0)
-        return -1;
-    int c= buffer[ridx];
-    ridx=(ridx +1)%BUFF_LEN; //mas rapido que ir preguntando si el indice alcanzo el maximo, y de esta manera recorremos ciclicamente el buffer
-    buffSize--;
-    return c;
-
 }
 
 uint64_t* getRegisters(){
