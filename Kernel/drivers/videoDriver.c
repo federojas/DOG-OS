@@ -102,21 +102,12 @@ static int getPixData(uint32_t x, uint32_t y){
 void printChar(char c, t_color fontColor, t_color bgColor,int next){
     char *map = getCharMap(c);
     
-    uint32_t x = screen->currentX;//+ screen->offset;
+    uint32_t x = screen->currentX;
     uint32_t y = screen->currentY;
-    // putPixel(x,y,RED);
-    // putPixel(x+1,y,RED);
-    // putPixel(x,y+1,RED);
-
-   // if( /*screen->currentX!=0 &&*/ (screen->width-screen->currentX)+CHAR_WIDTH < CHAR_WIDTH){
-    //putPixel(screen->width,y,RED);
+  
     
     if(x+CHAR_WIDTH>= screen->width){ 
-        // putPixel(x,y,WHITE);
-        // putPixel(100,100,WHITE);
-        // putPixel(x+1,y,RED);
-        // putPixel(x,y+1,RED);
-        // putPixel(x+2,y,RED);
+    
         y+=CHAR_HEIGHT;
         newLine();
         
@@ -144,7 +135,7 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
             }
             x++;
         }
-        x=screen->currentX;// + screen->offset;
+        x=screen->currentX;
         y++;
     }
     if(next){
@@ -152,6 +143,20 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
     }
 }
 
+void newLine(){
+    if(screen->height-screen->currentY <CHAR_HEIGHT){
+            //  screen->currentY=0; //PLAN B POR SI NO PUEDO ARREGLAR EL SCROLL DOWN 
+            //  clearScreen(); //PLAN B POR SI NO PUEDO ARREGLAR EL SCROLL DOWN 
+            screen->currentY -=CHAR_HEIGHT;
+           
+            scrollDown();
+        }else{
+            screen->currentY+=CHAR_HEIGHT;
+            
+        }
+    screen->currentX=0;
+
+}
 //funcion para limpiar la pantalla 
 void clearScreen(){
     for(int i=0;i<screen->width;i++){
@@ -161,18 +166,6 @@ void clearScreen(){
     }
 }
 
-void newLine(){
-    if(screen->height-screen->currentY <CHAR_HEIGHT){
-            //  screen->currentY=0; //PLAN B POR SI NO PUEDO ARREGLAR EL SCROLL DOWN 
-            //  clearScreen(); //PLAN B POR SI NO PUEDO ARREGLAR EL SCROLL DOWN 
-            screen->currentY -=CHAR_HEIGHT;
-            scrollDown();
-        }else{
-            screen->currentY+=CHAR_HEIGHT;
-        }
-    screen->currentX=0;
-
-}
 
 void deleteChar(){
     if(screen->currentX==0){
@@ -187,15 +180,15 @@ void deleteChar(){
 
 //funcion destinada a hacer espacio en pantalla cuando este llena de texto
 void scrollDown(){
-	//char *pos = (char *)((uint64_t)screenData->framebuffer);
+	char *pos = (char *)((uint64_t)screenData->framebuffer);
     for(int i=0; i<CHAR_HEIGHT*2; i++){
         for(int j=0;j<screenData->height-CHAR_WIDTH;j++){
             //aca tengo que guardarme el estado de cada linea de la pantalla
-                // *pos= *(pos +(CHAR_HEIGHT* CHAR_WIDTH) *3);
-                // pos++;
-               memcpy((void *)((uint64_t)screenData->framebuffer + j * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 4 * CHAR_WIDTH) * PIXEL_SIZE),
-                               (void *)((uint64_t)screenData->framebuffer + (j + 1) * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 4 * CHAR_WIDTH) * PIXEL_SIZE),
-                               WIDTH * PIXEL_SIZE / 2 - 4 * CHAR_WIDTH * PIXEL_SIZE);
+                *pos= *(pos +(CHAR_HEIGHT* CHAR_WIDTH) *3);
+                pos++;
+            //    memcpy((void *)((uint64_t)screenData->framebuffer + j * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 4 * CHAR_WIDTH) * PIXEL_SIZE),
+            //                    (void *)((uint64_t)screenData->framebuffer + (j + 1) * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 4 * CHAR_WIDTH) * PIXEL_SIZE),
+            //                    WIDTH * PIXEL_SIZE / 2 - 4 * CHAR_WIDTH * PIXEL_SIZE);
            
         }
     }

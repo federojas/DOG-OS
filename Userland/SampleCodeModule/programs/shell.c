@@ -3,8 +3,9 @@
 #include <commands.h>
 
 void startShell(){
-
-    shellWelcomeMessage(); 
+    for(int i=0;i<40;i++){
+    shellWelcomeMessage();
+    } 
   
    
     //CON HLT USAR SIN WHILE 1 
