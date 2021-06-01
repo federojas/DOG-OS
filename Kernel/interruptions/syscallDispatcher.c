@@ -26,10 +26,10 @@ uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10,
             return sys_read(rsi, rdx);
             break;
         case SYS_CPUFEATURES_ID:
-            getCPUFeatures(rsi);
+            getCPUFeatures((uint32_t *) rsi);
             break;
         case SYS_PRINTMEM_ID:
-            //printMem();
+            getMem(rsi, (uint8_t*) rdx, r10);
             break;
         case SYS_CPUID_ID:
             return _checkCPUID();

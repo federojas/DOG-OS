@@ -205,6 +205,38 @@ char *strcpy(char *destino, const char *fuente)
  }
 
 
+
+
+// http://vivi.dyndns.org/tech/cpp/atohex.html
+
+static int isdigit(char ch) {
+    return ch >= '0' && ch <= '9';
+}
+
+static int ishexdigit(char ch)
+{
+        return isdigit(ch) || (ch >= 'A' && ch <= 'F') || (ch >= 'a' && ch <= 'f');
+}
+
+int strToHex(const char *str)
+{
+    int val = 0;      
+    while( *str != 0 ) {  
+        if( !ishexdigit(*str) ) { 
+            return -1;
+        }
+        if( isdigit(*str) ) {    
+            val = val * 16 + *str++ - '0';      
+        } else if( *str >= 'A' && *str <= 'F' ) {    
+            val = val * 16 + *str++ - 'A' + 10;      
+        } else {   
+            val = val * 16 + *str++ - 'a' + 10;      
+        }
+    }
+    return val;   
+}
+
+
 // https://www.techiedelight.com/implement-itoa-function-in-c/
 
 int abs(int num){
@@ -270,5 +302,7 @@ char* intToStr(int value, char* buffer, int base)
     // reverse the string and return it
     return reverse(buffer, 0, i - 1);
 }
+
+
 
 

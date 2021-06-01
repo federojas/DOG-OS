@@ -1,5 +1,4 @@
 #include <keyboardDriver.h>
-#include <naiveConsole.h>
 #include <prints.h>
 #include <colors.h>
 #include <interrupts.h>
@@ -25,8 +24,6 @@ static int capsLock = 0;
 
 static uint64_t registers[16] = {0};
 
-extern uint8_t _getKey(void);
-extern uint8_t _hasKey(void);
 
 //https://www.qbasic.net/en/reference/general/scan-codes.htm
 static char charTable[58][2] = {{0, 0}, {0, 0}, {'1', '!'}, {'2', '@'}, 

@@ -55,7 +55,6 @@ struct vbe_mode_info_structure{
 
 static int getPixData(uint32_t x, uint32_t y);
 
-
 static struct vbe_mode_info_structure * screenData = (void*) 0x5C00; //direccion de memoria donde esta la informacion de modo video
 
 static t_screen * screen; 
@@ -80,9 +79,9 @@ void putPixel(int x, int y, int colour) {
     char *currentFrame = (char *)((uint64_t)screenData->framebuffer);
     int offset=getPixData(x,y);
 
-    currentFrame[offset] = colour & 255; //azul
-    currentFrame[offset + 1] = (colour >> 8) & 255; // verde
-    currentFrame[offset + 2] = (colour >> 16) & 255; // rojo
+    currentFrame[offset] = colour & 0x0000FF; //azul
+    currentFrame[offset + 1] = (colour >> 8) & 0x0000FF; // verde
+    currentFrame[offset + 2] = (colour >> 16) & 0x0000FF; // rojo
 }
 
 
@@ -91,7 +90,7 @@ static int getPixData(uint32_t x, uint32_t y){
 }
 
 void printChar(char c, t_color fontColor, t_color bgColor,int next){
-    char *map=getCharMap(c);
+    char *map = getCharMap(c);
     
     uint32_t x = screen->currentX+ screen->offset;
     uint32_t y = screen->currentY;
@@ -100,10 +99,12 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
         screen->currentY+=CHAR_HEIGHT;
         screen->currentX=0;
     }
-        if(screen->height-screen->currentY <CHAR_HEIGHT){
-            screen->currentY -=CHAR_HEIGHT;
-            scrollDown();
-        }
+
+    if(screen->height-screen->currentY <CHAR_HEIGHT){
+        screen->currentY -=CHAR_HEIGHT;
+        scrollDown();
+    }
+
     if(c=='\n'){
         newLine();
         return ;
@@ -163,7 +164,7 @@ void scrollDown(){
             //aca tengo que guardarme el estado de cada linea de la pantalla
         }
     }
-            clearLine();
+    clearLine();
 }
 
 void clearLine(){

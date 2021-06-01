@@ -16,4 +16,5 @@ void swap(char *x, char *y);
 char *strcpy(char *destination, const char *source);
 void newLine();
 int readText();
+int strToHex(const char *str);
 #endif

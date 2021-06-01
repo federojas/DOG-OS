@@ -5,6 +5,7 @@ GLOBAL _checkCPUFeatures
 
 GLOBAL _getKey
 GLOBAL _hasKey
+GLOBAL _getMem
 section .text
 	
 cpuVendor:
@@ -130,3 +131,12 @@ _hasKey:
     mov rsp, rbp
 	pop rbp
     ret
+
+_getMem:
+    push rbp
+	mov rbp,rsp
+
+	mov al, byte[rdi]
+
+	leave
+	ret

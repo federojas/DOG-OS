@@ -1,6 +1,7 @@
 #include <prints.h>
 #include <colors.h>
 #include <infoReg.h>
+#include <syscalls.h>
 
 #define ZERO_EXCEPTION_ID 0
 #define INVOP_EXCEPTION_ID 6
@@ -34,9 +35,9 @@ static void inv_op_code() {
 }
 
 static void printRegs(uint64_t* rsp) {
-      for (int i = 0; i < REGISTER_AMOUNT; i++) {
-            sys_write(registerNames[i], strlen(registerNames[i]), BLACK, WHITE);
-            printIntHex(rsp[i]);
-			printLine();
-      }
+	for (int i = 0; i < REGISTER_AMOUNT; i++) {
+		sys_write(registerNames[i], strlen(registerNames[i]), BLACK, WHITE);
+		printIntHex(rsp[i]);
+		printLine();
+	}
 }

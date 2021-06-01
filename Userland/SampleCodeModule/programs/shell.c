@@ -5,6 +5,7 @@
 void startShell(){
     shellWelcomeMessage(); 
     //CON HLT USAR SIN WHILE 1 
+    getMem(1, 0, "1");
     while(1){
     readText();
     }
