@@ -2,11 +2,13 @@
 #include <syscalls.h>
 #include <stdarg.h>
 
-#define BUFF_LEN 30
+#define BUFF_LEN 500
 // #define PRINTF_FLOAT_PRECISION 4
 
-static int buffSize = 0; //cantidad de elementos del buffer
+static int buffSize = 0;
 char buffer[BUFF_LEN]={0};
+
+
 void putChar(char c){
     _syscall(SYS_WRITE_ID, (uint64_t)&c, 1, BLACK, WHITE, 0);
 }
@@ -173,65 +175,76 @@ void printf(char *str, ...){
 //     }
 // }
 
+//funcion auxiliar para leer palabras
+static char *strcpyScan(char *destino, const char *fuente)
+{
 
-//inspirado en https://iq.opengenus.org/how-printf-and-scanf-function-works-in-c-internally/
-// int scan (char * str, ...)
-// {
-//     va_list vl;
-//     int i = 0, j=0, ret = 0;
-//     char tmp[20], c;
-//     char *out_loc;
-//     while(c != '') 
-//     {
-//         if (fread(&c, 1, 1, stdin)) //fread(&c, 1, 1, stdin)
-//         {
-//  	       buffer[i] = c;
-//  	       i++;
-//  	    }
-//  	}
-//  	va_start( vl, str );
-//  	i = 0;
-//  	while (str && str[i])
-//  	{
-//  	    if (str[i] == '%') 
-//  	    {
-//  	       i++;
-//  	       switch (str[i]) 
-//  	       {
-//  	           case 'c': 
-//  	           {
-// 	 	           *(char *)va_arg( vl, char* ) = buffer[j];
-// 	 	           j++;
-// 	 	           ret ++;
-// 	 	           break;
-//  	           }
-//  	           case 'd': 
-//  	           {
-// 	 	           *(int *)va_arg( vl, int* ) =strtol(&buff[j], &out_loc, 10);
-// 	 	           j+=out_loc -&buffer[j];
-// 	 	           ret++;
-// 	 	           break;
-//  	            }
-//  	            case 'x': 
-//  	            {
-// 	 	           *(int *)va_arg( vl, int* ) =strtol(&buff[j], &out_loc, 16);
-// 	 	           j+=out_loc -&buffer[j];
-// 	 	           ret++;
-// 	 	           break;
-//  	            }
-//  	        }
-//  	    } 
-//  	    else 
-//  	    {
-//  	        buffer[j] =str[i];
-//             j++;
-//         }
-//         i++;
-//     }
-//     va_end(vl);
-//     return ret;
-// }
+    char *aux = destino;
 
+    while (*fuente != '\0' && *fuente != ' ')
+    {
+        *destino = *fuente;
+        fuente++;
+        destino++;
+    }
+
+    *destino = '\0';
+    return aux;
+}
+
+// inspirado en https://iq.opengenus.org/how-printf-and-scanf-function-works-in-c-internally/
+int scanf(char * str, ...)
+{
+    buffSize = 0;
+    va_list vl;
+    int i = 0, ret = 0;
+    int sizeNum = 0;
+ 	va_start( vl, str );
+    char *str_arg;
+    readText();
+
+ 	while (str && str[i])
+ 	{
+ 	    if (str[i] == '%') 
+ 	    {
+ 	       i++;
+ 	       switch (str[i]) 
+ 	       {
+ 	            case 'c': 
+ 	            {
+	 	            *(char *)va_arg( vl, char* ) = buffer[buffSize];
+	 	            buffSize++;
+	 	            ret++;
+	 	            break;
+ 	            }
+ 	            case 'd': 
+ 	            {
+	 	            *(int *)va_arg( vl, int* ) = strToInt(&buffer[buffSize], &sizeNum);
+	 	            buffSize+=sizeNum;
+	 	            ret++;
+	 	            break;
+ 	            }
+                case 's':
+                { 
+                    str_arg = (char *)va_arg(vl, char *);
+                    strcpyScan(str_arg, &buffer[buffSize]);
+                    buffSize += strlen(str_arg);      
+                    printf("%d y %d\n", strlen(str_arg), buffSize);
+                    break;
+                }
+                
+ 	        }
+ 	    } 
+ 	    else 
+ 	    {
+ 	        buffer[buffSize] =str[i];
+            buffSize++;
+        }
+        i++;
+    }
+    va_end(vl);
+    return ret;
+}
 
 
 int strlen(const char *s){
@@ -301,6 +314,42 @@ static int isdigit(char ch) {
 static int ishexdigit(char ch)
 {
         return isdigit(ch) || (ch >= 'A' && ch <= 'F') || (ch >= 'a' && ch <= 'f');
+}
+
+//https://www.geeksforgeeks.org/write-your-own-atoi/
+int strToInt(char* str, int * size)
+{
+    *size = 0;
+    // Initialize result
+    int res = 0;
+ 
+    // Initialize sign as positive
+    int sign = 1;
+ 
+    // Initialize index of first digit
+    int i = 0;
+ 
+    // If number is negative,
+    // then update sign
+    if (str[0] == '-') {
+        sign = -1;
+        *size += 1;
+        // Also update index of first digit
+        i++;
+    }
+ 
+    // Iterate through all digits
+    // and update the result
+    for (; str[i] != '\0'; ++i) {
+        if (str[i] < '0' || str[i] > '9')
+             return res;
+        res = res * 10 + str[i] - '0';
+        *size += 1;
+    }
+        
+ 
+    // Return result with sign
+    return sign * res;
 }
 
 int strToHex(const char *str)
@@ -478,6 +527,19 @@ char* intToStr(int value, char* buffer, int base)
     return reverse(buffer, 0, i - 1);
 }
 
-
-
-
+// https://stackoverflow.com/questions/34873209/implementation-of-strcmp/34873406
+int strcmp(char string1[], char string2[])
+{
+    int i = 0, flag = 0;    
+    while (flag == 0) {
+        if (string1[i] > string2[i]) {
+            flag = 1;
+        } else
+        if (string1[i] < string2[i]) {
+            flag = -1;
+        } else {
+            i++;
+        }
+    }
+    return flag;
+}

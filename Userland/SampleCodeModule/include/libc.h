@@ -1,12 +1,13 @@
 #ifndef LIBC_H
 #define LIBC_H
 
-//int scanf(const char *format, ...);
+int scanf(char * str, ...);
 void printf(char *str, ...);
 void putChar(char c);
 int getChar();
 
 int strlen(const char *s);
+int strCmp(char string1[], char string2[]);
 int strToInt(char *str, int* size);
 char *intToStr(int value, char *buffer, int base);
 void newLine();
