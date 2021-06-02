@@ -101,21 +101,21 @@ void getCPUFeatures(int argc, char** args){
 
 void getInfoReg(int argc, char** args) {
 	if (argc != 0) {
-            printf("Cantidad invalida de argumentos.\n");
-            return;
+		printf("Cantidad invalida de argumentos.\n");
+		return;
       }
 	uint64_t* registers = (uint64_t*)_syscall(SYS_INFOREG_ID, 0, 0, 0, 0, 0);
 	for (int i = 0; i < REGISTER_AMOUNT; i++) {
-            printf("%s", registerNames[i]);
-            printf("%x\n", registers[i]);
+		printf("%s", registerNames[i]);
+		printf("%x\n", registers[i]);
       }
 	  newLine();
 }
 
 void getMem(int argc, char** args, char* dirHexa) {
 	if (argc != 1) {
-            printf("Cantidad invalida de argumentos.\n");
-            return;
+		printf("Cantidad invalida de argumentos.\n");
+		return;
     }
 	uint64_t memDir = strToHex(dirHexa);
 	if(memDir == -1) {
@@ -134,8 +134,8 @@ void getMem(int argc, char** args, char* dirHexa) {
 
 void divZero(int argc, char** args) {
 	if (argc != 0) {
-            printf("Cantidad invalida de argumentos.\n");
-            return;
+		printf("Cantidad invalida de argumentos.\n");
+		return;
       }
 	int x = 3/0;
 }
@@ -143,11 +143,69 @@ void divZero(int argc, char** args) {
 // https://mudongliang.github.io/x86/html/file_module_x86_id_318.html
 void opCode(int argc, char** args) {
 	if (argc != 0) {
-            printf("Cantidad invalida de argumentos.\n");
-            return;
+		printf("Cantidad invalida de argumentos.\n");
+		return;
       }
 	_opcodeExp();
 }
+
+// void getRoots(int argc, char** args, float a, float b, float c) {
+// 	if (argc != 3) {
+// 		printf("Cantidad invalida de argumentos.\n");
+// 		return;
+//     }
+// 	if (a == 0) {
+// 		printf("El coeficiente de x^2 no puede ser 0.\n");
+// 		return;
+//     }
+// 	printf("Atencion, la funcion tiene una precision de 4 decimales.\n");
+// 	float results[2];
+// 	// basado en: https://www.programiz.com/c-programming/examples/quadratic-roots
+
+//     float disc = b * b - 4 * a * c;
+// 	if(disc < 0)
+// 		disc *= -1;
+// 	float x = disc;
+  
+//     float sqrtdisc;
+
+  
+//     for(int i = 0; i < 10 ; i++) {
+    
+//         // Calculate more closed x
+//         sqrtdisc = 0.5 * (x + (disc / x));
+  
+//         // Update root
+//         x = sqrtdisc;
+//     }
+
+	
+// 	// condition for real and different roots
+//     if (disc > 0) {
+//         results[0] = (-b + sqrtdisc) / (2 * a);
+//         results[1] = (-b - sqrtdisc) / (2 * a);
+//     }
+//     // condition for real and equal roots
+//     else if (disc == 0) {
+//         results[0] = results[1] = -b / (2 * a);
+//     }
+	
+
+//     // if roots are not real
+//     else {
+//         float realPart = -b / (2 * a);
+//         float imagPart = sqrtdisc / (2 * a);
+// 		results[0] = realPart;
+// 		results[1] = imagPart;
+//     }
+// 	printf("\nsqrtdisc: %d\n", sqrtdisc);
+// 	printf("%d y %d\n", results[0], results[1]);
+// 	// if( disc < 0) {
+// 	// 	printf("Las raices son: i) %f + %f i ii) %f - %f i\n", results[0], results[1], results[0], results[1]);
+// 	// 	return;
+// 	// } 
+// 	// printf("Las raices son: i) %f ii) %f\n", results[0], results[1]);	
+// }
 
 void help(int argc, char** args) {
 	printf("Lista de comandos: \n");
@@ -158,5 +216,6 @@ void help(int argc, char** args) {
 	printf("/printmem : Volcado de memoria de 32 bytes a partir de\n direccion de memoria en hexa ingresada como argumento.\n");
 	printf("/divzero : Excepcion division por cero\n");
 	printf("/opcode : Excepcion opcode invalido\n");
+	printf("/roots : Calculo de raices de una funcion cuadratica.\n Ingrese los 3 valores de la misma como argumentos.\n");
 }
 

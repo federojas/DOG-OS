@@ -3,12 +3,8 @@
 #include <commands.h>
 
 void startShell(){
-    for(int i=0;i<40;i++){
-    shellWelcomeMessage(); 
-    }
-   
     //CON HLT USAR SIN WHILE 1 
-    getMem(1, 0, "1");
+    // getRoots(3,0, 1,  2, -3); 
     while(1){
     readText();
     }
