@@ -10,7 +10,6 @@ unsigned int PIXEL_SIZE = 3; //bytes por pixel
 unsigned int DEFAULT_BG_COLOUR = 0X000000;
 unsigned int DEFAULT_FONT_COLOUR = 0XFFFFFF;
 
-
 //FALTA HACER UN SCROLL PARA CUANDO LA PANTALLA ESTE LLENA DE TEXTO Y HAYA QUE BAJAR
 
 //codigo basado de https://wiki.osdev.org/User:Omarrx024/VESA_Tutorial
@@ -57,28 +56,46 @@ static int getPixData(uint32_t x, uint32_t y);
 
 static struct vbe_mode_info_structure * screenData = (void*) 0x5C00; //direccion de memoria donde esta la informacion de modo video
 
-static t_screen * screen; 
+static t_screen screens[MAX_SCREENS];
+static t_screen * currentScreen; 
 
 void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PARAMETRO RECIBIR BACKGROUND COLOR Y FONT COLOR
     WIDTH=screenData->width;
     HEIGHT=screenData->height;
     
-    t_screen sc;
-    sc.defaultBGColour = DEFAULT_BG_COLOUR;
-    sc.defaultFontColour = DEFAULT_FONT_COLOUR;
-    sc.blink = 0;
-    sc.currentX = 0;
-    sc.currentY = 0;
-    sc.offset = 2 * CHAR_WIDTH;
-	sc.width = WIDTH/2 -2*CHAR_WIDTH-4*CHAR_WIDTH;
-    sc.height = HEIGHT;
+    t_screen sc1;
+    sc1.defaultBGColour = DEFAULT_BG_COLOUR;
+    sc1.defaultFontColour = DEFAULT_FONT_COLOUR;
+    sc1.blink = 0;
+    sc1.currentX = 0;
+    sc1.offset=0;
+    sc1.currentY = 0;
+	sc1.width = WIDTH/2 ;//-CHAR_WIDTH;//-4*CHAR_WIDTH;
+    sc1.height = HEIGHT;
+    
+    //inicializacion de la segunda pantalla
+    t_screen sc2;
+    sc2.defaultBGColour = DEFAULT_BG_COLOUR;
+    sc2.defaultFontColour = DEFAULT_FONT_COLOUR;
+    sc2.blink = 0;
+    sc2.offset=(WIDTH/2)+2*CHAR_WIDTH;
+    sc2.currentX = 0;
+    sc2.currentY = 0;
+	sc2.width = WIDTH/2 ;//-CHAR_WIDTH;//-4*CHAR_WIDTH;
+    sc2.height = HEIGHT;
 
-    *screen = sc;
+    //linea divisoria
+    divideScreen(WHITE);
+    screens[SCREEN1] = sc1;
+    screens[SCREEN2]=sc2;
 
+    changeCurrentScreen(SCREEN2);
     
 }
 
-
+void changeCurrentScreen(t_currentScreen nextScreen){
+    currentScreen=&screens[nextScreen];
+}
 
 void putPixel(int x, int y, int colour) {
     char *currentFrame = (char *)((uint64_t)screenData->framebuffer);
@@ -94,23 +111,26 @@ static int getPixData(uint32_t x, uint32_t y){
     return (x + y*WIDTH) * PIXEL_SIZE;
 }
 
+void divideScreen(t_color color){
+    for(int x=(WIDTH/2);x<(WIDTH/2)+CHAR_WIDTH;x++){
+        for(int y=0; y<HEIGHT;y++ ){
+            putPixel(x,y,color);
+        }
+    }
+}
 void printChar(char c, t_color fontColor, t_color bgColor,int next){
     char *map = getCharMap(c);
     
-    uint32_t x = screen->currentX;
-    uint32_t y = screen->currentY;
+    uint32_t x = currentScreen->currentX+currentScreen->offset;
+    uint32_t y = currentScreen->currentY;
   
     
-    if(x+CHAR_WIDTH>= screen->width){ 
+    if(x+CHAR_WIDTH-currentScreen->offset>= currentScreen->width){ 
     
         y+=CHAR_HEIGHT;
         newLine();
         
     }
-        // if(screen->height-screen->currentY <CHAR_HEIGHT){
-        //     screen->currentY -=CHAR_HEIGHT;
-        //     scrollDown();
-        // }
     if(c=='\n'){
         newLine();
         return ;
@@ -130,33 +150,33 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
             }
             x++;
         }
-        x=screen->currentX;
+        x=currentScreen->currentX+currentScreen->offset;
         y++;
     }
     if(next){
-        screen->currentX+=CHAR_WIDTH;
+        currentScreen->currentX+=CHAR_WIDTH;
     }
 }
 
 void newLine(){
-    if(screen->height-screen->currentY <=CHAR_HEIGHT){
-            //  screen->currentY=0; //PLAN B POR SI NO PUEDO ARREGLAR EL SCROLL DOWN 
-            //  clearScreen(); //PLAN B POR SI NO PUEDO ARREGLAR EL SCROLL DOWN 
-            screen->currentY -=CHAR_HEIGHT;
+    if(currentScreen->height-currentScreen->currentY <=CHAR_HEIGHT){
+            currentScreen->currentY -=CHAR_HEIGHT;
            
             scrollDown();
+            divideScreen(WHITE);
         }else{
-            screen->currentY+=CHAR_HEIGHT;
+            currentScreen->currentY+=CHAR_HEIGHT;
             
         }
-    screen->currentX=0;
+
+    currentScreen->currentX=0;//+currentScreen->offset
 
 
 }
 //funcion para limpiar la pantalla 
 void clearScreen(){
-    for(int i=0;i<screen->width;i++){
-        for(int j=0;j<screen->height;j++){
+    for(int i=0;i<currentScreen->width;i++){
+        for(int j=0;j<currentScreen->height;j++){
             putPixel(i,j,BLACK);
         }
     }
@@ -164,13 +184,13 @@ void clearScreen(){
 
 
 void deleteChar(){
-    if(screen->currentX==0){
-        if(screen->currentY==0){
+    if(currentScreen->currentX==0+currentScreen->offset){
+        if(currentScreen->currentY==0){
             return;
         }
-        screen->currentY-=CHAR_HEIGHT;
+        currentScreen->currentY-=CHAR_HEIGHT;
     }
-    screen->currentX-=CHAR_WIDTH;
+    currentScreen->currentX-=CHAR_WIDTH+currentScreen->offset;
     printChar(' ',BLACK,BLACK,0);
 }
 
@@ -188,8 +208,8 @@ vidmem[x]=vidmem[x+(CHAR_HEIGHT*screenData->width/4)*3];    /* Valid only for 10
 }
 
 void clearLine(){
-    for(int x=0; x<=screen->width;x++){
-        for(int y=screen->currentY;y<=screen->height;y++){
+    for(int x=0; x<=currentScreen->width;x++){
+        for(int y=currentScreen->currentY;y<=currentScreen->height;y++){
             putPixel(x,y,BLACK);
         }
     }

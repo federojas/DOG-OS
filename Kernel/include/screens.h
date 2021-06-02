@@ -2,7 +2,7 @@
 #define SCREENS_H
 
 #include <stdint.h>
-
+#define MAX_SCREENS 2
 typedef struct
 {
     int defaultBGColour;
@@ -16,4 +16,9 @@ typedef struct
    // uint32_t firstLine;
     //uint32_t firstLineWidth;
 } t_screen;
+
+typedef enum{
+    SCREEN1=0,
+    SCREEN2=1
+}t_currentScreen;
 #endif

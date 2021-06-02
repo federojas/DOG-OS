@@ -15,5 +15,5 @@ void newLine();
 void deleteChar();
 void clearLine();
 void scrollDown();
-
+void divideScreen(t_color color);
 #endif
