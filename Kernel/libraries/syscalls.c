@@ -36,22 +36,26 @@ void sys_write(char * str, uint8_t len, t_color bgColor, t_color ftColor) {
         printChar(str[i], ftColor, bgColor, 1);     
 }
 
-uint64_t sys_read(uint64_t buffer, uint64_t len){
-	if(len==0){
-		return -1;
-	}
+//MODO HLT
+uint64_t sys_read(){
+	//MODO ACTIVO
+	// uint64_t sys_read(uint64_t buffer, uint64_t len){
+	// if(len==0){
+	// 	return -1;
+	// }
 
 	//OPCION CON ESPERA ACTIVA
-		char *buff=(char* ) buffer;//casteo para evitar el warning
-	return dumpBuffer(buff,len);
+	// 	char *buff=(char* ) buffer;//casteo para evitar el warning
+	// return dumpBuffer(buff,len);
 	
 	
 	//OPCION CON HLT (ESTA ANDANDO LENTO)
 	// char *buff=(char *) buffer;
 	// int i=0;
 	// while(i<len){
-	// 	buff[i++]=getChar();
+	// 	buff[i++]=getchar();
 	// }
 	// buff[i]=0;
 	// return i;
+	return getChar();
 }

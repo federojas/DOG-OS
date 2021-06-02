@@ -91,6 +91,7 @@ SECTION .text
 _hlt:
 	sti
 	hlt
+	cli
 	ret
 
 _cli:

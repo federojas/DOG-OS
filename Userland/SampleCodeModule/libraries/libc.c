@@ -252,13 +252,15 @@ int strlen(const char *s){
     return i;
 }
 
-int getChar(){
-    char buff[2]={0};
-    int ret =_syscall(SYS_READ_ID,buff, 2, 0, 0,0);
-    if(ret<=0){
-        return -1;
-    }
-    return buff[0]; 
+char getChar(){
+    // MODO ESPERA ACTIVA
+    // char buff[2]={0};
+    // int ret =_syscall(SYS_READ_ID,buff, 2, 0, 0,0);
+    // if(ret<=0){
+    //     return -1;
+    // }
+    // return buff[0]; 
+    return _syscall(SYS_READ_ID, 0, 0, 0, 0,0); //MODO HLT
 }
 
 
