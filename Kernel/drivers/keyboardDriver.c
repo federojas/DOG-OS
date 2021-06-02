@@ -69,6 +69,8 @@ void keyboardHandler(uint64_t rsp) {
                 if (charTable[scanCode][0] != 0) {
                     if(ctrl && charTable[scanCode][0] == 'r'){
                         updateRegisters((uint64_t*) rsp);
+                    }else if(ctrl && charTable[scanCode][0] == '\t'){
+                        changeCurrentScreen();
                     }
                     else if((shift && !capsLock) || (shift && capsLock && !(charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z')) || (!shift && capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') ) {
                         putCharInBuffer(charTable[scanCode][1]);

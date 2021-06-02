@@ -58,7 +58,7 @@ static struct vbe_mode_info_structure * screenData = (void*) 0x5C00; //direccion
 
 static t_screen screens[MAX_SCREENS];
 static t_screen * currentScreen; 
-
+static t_currentScreen ACTUALSCREEN;
 void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PARAMETRO RECIBIR BACKGROUND COLOR Y FONT COLOR
     WIDTH=screenData->width;
     HEIGHT=screenData->height;
@@ -89,12 +89,13 @@ void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PA
     screens[SCREEN1] = sc1;
     screens[SCREEN2]=sc2;
 
-    changeCurrentScreen(SCREEN2);
-    
+    currentScreen=&screens[SCREEN1];    
+    ACTUALSCREEN=SCREEN1;
 }
 
-void changeCurrentScreen(t_currentScreen nextScreen){
-    currentScreen=&screens[nextScreen];
+void changeCurrentScreen(){
+    //currentScreen=&screens[nextScreen];
+    currentScreen=&screens[((int)ACTUALSCREEN+1)%2];
 }
 
 void putPixel(int x, int y, int colour) {
@@ -125,7 +126,7 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
     uint32_t y = currentScreen->currentY;
   
     
-    if(x+CHAR_WIDTH-currentScreen->offset>= currentScreen->width){ 
+    if(x+(2*CHAR_WIDTH)-currentScreen->offset>= currentScreen->width){ 
     
         y+=CHAR_HEIGHT;
         newLine();
