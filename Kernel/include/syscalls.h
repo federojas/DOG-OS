@@ -12,6 +12,7 @@
 #define SYS_PRINTMEM_ID 6
 #define SYS_CPUID_ID 7
 #define SYS_CLEAR_ID 8
+#define SYS_EXIT_ID 9
 
 uint8_t getCurrentTime(uint64_t rtcID);
 uint8_t _getRTCInfo(uint64_t rtcID);
@@ -24,4 +25,6 @@ uint8_t _checkCPUID(void);
 void getMem(uint64_t direc, uint8_t * buffer, uint64_t bytes);
 uint8_t _getMem(uint64_t direc);
 void getRoots(float * results, float a, float b, float c);
+uint8_t _checkCPUID(void);
+void _exit(void);
 #endif

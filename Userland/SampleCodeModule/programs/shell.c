@@ -31,6 +31,9 @@ void shellExecute(){
         if(strcmp("/clear", command) == 0) {
             clear(0,0);
         }
+        if(strcmp("/exit", command) == 0) {
+            exit(0,0);
+        }
     }
     return;
 }

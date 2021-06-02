@@ -214,6 +214,15 @@ void clear(int argc, char** args) {
     }
 	_syscall(SYS_CLEAR_ID,0,0,0,0,0);
 }
+void exit(int argc, char** args) {
+	if (argc != 0) {
+		printf("Cantidad invalida de argumentos.\n");
+		return;
+    }
+	printf("Muchas gracias por utilizar nuestro TP!\n");
+	printf("Usted cerro el TP, el mismo ya no funcionara.\nEsperamos su regreso!\n");
+	_syscall(SYS_EXIT_ID,0,0,0,0,0);
+}
 
 void help(int argc, char** args) {
 	printf("Lista de comandos: \n");

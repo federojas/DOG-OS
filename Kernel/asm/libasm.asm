@@ -6,6 +6,7 @@ GLOBAL _checkCPUFeatures
 GLOBAL _getKey
 GLOBAL _hasKey
 GLOBAL _getMem
+GLOBAL _exit
 section .text
 	
 cpuVendor:
@@ -140,3 +141,6 @@ _getMem:
 
 	leave
 	ret
+
+_exit:
+    jmp $
