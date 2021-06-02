@@ -94,8 +94,8 @@ void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PA
 }
 
 void changeCurrentScreen(){
-    //currentScreen=&screens[nextScreen];
-    currentScreen=&screens[((int)ACTUALSCREEN+1)%2];
+    ACTUALSCREEN=(ACTUALSCREEN+1)%2;
+    currentScreen=&screens[ACTUALSCREEN];
 }
 
 void putPixel(int x, int y, int colour) {
