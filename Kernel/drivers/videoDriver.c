@@ -10,7 +10,6 @@ unsigned int PIXEL_SIZE = 3; //bytes por pixel
 unsigned int DEFAULT_BG_COLOUR = 0X000000;
 unsigned int DEFAULT_FONT_COLOUR = 0XFFFFFF;
 
-
 //FALTA HACER UN SCROLL PARA CUANDO LA PANTALLA ESTE LLENA DE TEXTO Y HAYA QUE BAJAR
 
 //codigo basado de https://wiki.osdev.org/User:Omarrx024/VESA_Tutorial
@@ -57,23 +56,47 @@ static int getPixData(uint32_t x, uint32_t y);
 
 static struct vbe_mode_info_structure * screenData = (void*) 0x5C00; //direccion de memoria donde esta la informacion de modo video
 
-static t_screen * screen; 
-
+static t_screen screens[MAX_SCREENS];
+static t_screen * currentScreen; 
+static t_currentScreen ACTUALSCREEN;
 void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PARAMETRO RECIBIR BACKGROUND COLOR Y FONT COLOR
-    t_screen sc;
-    sc.defaultBGColour = DEFAULT_BG_COLOUR;
-    sc.defaultFontColour = DEFAULT_FONT_COLOUR;
-    sc.blink = 0;
-    sc.currentX = 0;
-    sc.currentY = 0;
-    sc.offset = 2 * CHAR_WIDTH;
-	sc.width = WIDTH;
-    sc.height = HEIGHT;
+    WIDTH=screenData->width;
+    HEIGHT=screenData->height;
+    
+    t_screen sc1;
+    sc1.defaultBGColour = DEFAULT_BG_COLOUR;
+    sc1.defaultFontColour = DEFAULT_FONT_COLOUR;
+    sc1.blink = 0;
+    sc1.currentX = 0;
+    sc1.offset=0;
+    sc1.currentY = 0;
+	sc1.width = WIDTH/2 ;//-CHAR_WIDTH;//-4*CHAR_WIDTH;
+    sc1.height = HEIGHT;
+    
+    //inicializacion de la segunda pantalla
+    t_screen sc2;
+    sc2.defaultBGColour = DEFAULT_BG_COLOUR;
+    sc2.defaultFontColour = DEFAULT_FONT_COLOUR;
+    sc2.blink = 0;
+    sc2.offset=(WIDTH/2)+2*CHAR_WIDTH;
+    sc2.currentX = 0;
+    sc2.currentY = 0;
+	sc2.width = WIDTH/2 ;//-CHAR_WIDTH;//-4*CHAR_WIDTH;
+    sc2.height = HEIGHT;
 
-    *screen = sc;
+    //linea divisoria
+    divideScreen(WHITE);
+    screens[SCREEN1] = sc1;
+    screens[SCREEN2]=sc2;
+
+    currentScreen=&screens[SCREEN1];    
+    ACTUALSCREEN=SCREEN1;
 }
 
-
+void changeCurrentScreen(){
+    ACTUALSCREEN=(ACTUALSCREEN+1)%2;
+    currentScreen=&screens[ACTUALSCREEN];
+}
 
 void putPixel(int x, int y, int colour) {
     char *currentFrame = (char *)((uint64_t)screenData->framebuffer);
@@ -89,20 +112,26 @@ static int getPixData(uint32_t x, uint32_t y){
     return (x + y*WIDTH) * PIXEL_SIZE;
 }
 
+void divideScreen(t_color color){
+    for(int x=(WIDTH/2);x<(WIDTH/2)+CHAR_WIDTH;x++){
+        for(int y=0; y<HEIGHT;y++ ){
+            putPixel(x,y,color);
+        }
+    }
+}
 void printChar(char c, t_color fontColor, t_color bgColor,int next){
     char *map = getCharMap(c);
     
-    uint32_t x = screen->currentX+ screen->offset;
-    uint32_t y = screen->currentY;
-
-    if(screen->currentX!=0 && screen->width-screen->currentX < CHAR_WIDTH){
-        screen->currentY+=CHAR_HEIGHT;
-        screen->currentX=0;
+    uint32_t x = currentScreen->currentX+currentScreen->offset;
+    uint32_t y = currentScreen->currentY;
+  
+    
+    if(x+(2*CHAR_WIDTH)-currentScreen->offset>= currentScreen->width){ 
+    
+        y+=CHAR_HEIGHT;
+        newLine();
+        
     }
-        // if(screen->height-screen->currentY <CHAR_HEIGHT){
-        //     screen->currentY -=CHAR_HEIGHT;
-        //     scrollDown();
-        // }
     if(c=='\n'){
         newLine();
         return ;
@@ -122,70 +151,70 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
             }
             x++;
         }
-        x=screen->currentX + screen->offset;
+        x=currentScreen->currentX+currentScreen->offset;
         y++;
     }
     if(next){
-        screen->currentX+=CHAR_WIDTH;
+        currentScreen->currentX+=CHAR_WIDTH;
     }
 }
 
+void newLine(){
+    if(currentScreen->height-currentScreen->currentY <=CHAR_HEIGHT){
+            currentScreen->currentY -=CHAR_HEIGHT;
+           
+            scrollDown();
+            divideScreen(WHITE);
+        }else{
+            currentScreen->currentY+=CHAR_HEIGHT;
+            
+        }
+
+    currentScreen->currentX=0;//+currentScreen->offset
+
+
+}
 //funcion para limpiar la pantalla 
 void clearScreen(){
-    for(int i=0;i<screen->width;i++){
-        for(int j=0;j<screen->height;j++){
+    for(int i=0;i<currentScreen->width;i++){
+        for(int j=0;j<currentScreen->height;j++){
             putPixel(i,j,BLACK);
         }
     }
 }
 
-void newLine(){
-    if(screen->height-screen->currentY <CHAR_HEIGHT){
-            //screen->currentY -=CHAR_HEIGHT;
-             screen->currentY=0; //PLAN B POR SI NO PUEDO ARREGLAR EL SCROLL DOWN 
-             clearScreen(); //PLAN B POR SI NO PUEDO ARREGLAR EL SCROLL DOWN 
-            //scrollDown();
-        }else{
-    screen->currentY+=CHAR_HEIGHT;
-        }
-
-    screen->currentX=0;
-}
 
 void deleteChar(){
-    if(screen->currentX==0){
-        if(screen->currentY==0){
+    if(currentScreen->currentX==0+currentScreen->offset){
+        if(currentScreen->currentY==0){
             return;
         }
-        screen->currentY-=CHAR_HEIGHT;
+        currentScreen->currentY-=CHAR_HEIGHT;
     }
-    screen->currentX-=CHAR_WIDTH;
+    currentScreen->currentX-=CHAR_WIDTH+currentScreen->offset;
     printChar(' ',BLACK,BLACK,0);
 }
 
-//funcion destinada a hacer espacio en pantalla cuando este llena de texto
 void scrollDown(){
-	//char *pos = (char *)((uint64_t)screenData->framebuffer);
-    for(int i=0; i<CHAR_HEIGHT; i++){
-        for(int j=0;j<screenData->height-CHAR_WIDTH;j++){
-            //aca tengo que guardarme el estado de cada linea de la pantalla
-                // *pos= *(pos +(CHAR_HEIGHT* CHAR_WIDTH) *3);
-                // pos++;
-               memcpy((void *)((uint64_t)screenData->framebuffer + j * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 4 * CHAR_WIDTH) * PIXEL_SIZE),
-                               (void *)((uint64_t)screenData->framebuffer + (j + 1) * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 4 * CHAR_WIDTH) * PIXEL_SIZE),
-                               WIDTH * PIXEL_SIZE / 2 - 4 * CHAR_WIDTH * PIXEL_SIZE);
-           
-        }
-    }
+//basado en: https://forum.osdev.org/viewtopic.php?f=1&t=22702
+unsigned long x=0;
+unsigned long long *vidmem = (unsigned long long*)screenData->framebuffer;
+
+while(x<=HEIGHT*WIDTH/2) //1024*768/2== HEIGHT * WIDTH /2
+{
+vidmem[x]=vidmem[x+(CHAR_HEIGHT*screenData->width/4)*3];    /* Valid only for 1024x768x32bpp */   
+   x=x+1;
+}
     clearLine();
 }
 
 void clearLine(){
-    for(int i=0;i<screen->height;i++){
-        for(int j=0;screen->width;j++){
-            putPixel(j+screen->offset,screen->currentY+i, BLACK);
+    for(int x=0; x<=currentScreen->width;x++){
+        for(int y=currentScreen->currentY;y<=currentScreen->height;y++){
+            putPixel(x,y,BLACK);
         }
     }
+    
 }
 //PRE TP MODO TEXTO
 
