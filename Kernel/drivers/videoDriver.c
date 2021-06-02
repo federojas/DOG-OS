@@ -75,12 +75,7 @@ void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PA
 
     *screen = sc;
 
-    // putPixel(0,0,WHITE);
-    // putPixel(1,0,WHITE);
-    // putPixel(2,0,WHITE);
-    // putPixel(0,1,WHITE);
-    // putPixel(0,2,WHITE);
-    //printChar('c',BLUE,WHITE,1);
+    
 }
 
 
@@ -144,7 +139,7 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
 }
 
 void newLine(){
-    if(screen->height-screen->currentY <CHAR_HEIGHT){
+    if(screen->height-screen->currentY <=CHAR_HEIGHT){
             //  screen->currentY=0; //PLAN B POR SI NO PUEDO ARREGLAR EL SCROLL DOWN 
             //  clearScreen(); //PLAN B POR SI NO PUEDO ARREGLAR EL SCROLL DOWN 
             screen->currentY -=CHAR_HEIGHT;
@@ -155,6 +150,7 @@ void newLine(){
             
         }
     screen->currentX=0;
+
 
 }
 //funcion para limpiar la pantalla 
@@ -178,29 +174,26 @@ void deleteChar(){
     printChar(' ',BLACK,BLACK,0);
 }
 
-//funcion destinada a hacer espacio en pantalla cuando este llena de texto
 void scrollDown(){
-	char *pos = (char *)((uint64_t)screenData->framebuffer);
-    for(int i=0; i<CHAR_HEIGHT*2; i++){
-        for(int j=0;j<screenData->height-CHAR_WIDTH;j++){
-            //aca tengo que guardarme el estado de cada linea de la pantalla
-                *pos= *(pos +(CHAR_HEIGHT* CHAR_WIDTH) *3);
-                pos++;
-            //    memcpy((void *)((uint64_t)screenData->framebuffer + j * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 4 * CHAR_WIDTH) * PIXEL_SIZE),
-            //                    (void *)((uint64_t)screenData->framebuffer + (j + 1) * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 4 * CHAR_WIDTH) * PIXEL_SIZE),
-            //                    WIDTH * PIXEL_SIZE / 2 - 4 * CHAR_WIDTH * PIXEL_SIZE);
-           
-        }
-    }
+//basado en: https://forum.osdev.org/viewtopic.php?f=1&t=22702
+unsigned long x=0;
+unsigned long long *vidmem = (unsigned long long*)screenData->framebuffer;
+
+while(x<=HEIGHT*WIDTH/2) //1024*768/2== HEIGHT * WIDTH /2
+{
+vidmem[x]=vidmem[x+(CHAR_HEIGHT*screenData->width/4)*3];    /* Valid only for 1024x768x32bpp */   
+   x=x+1;
+}
     clearLine();
 }
 
 void clearLine(){
-    for(int i=0;i<screen->height;i++){
-        for(int j=0;screen->width;j++){
-            putPixel(j+screen->offset,screen->currentY+i, BLACK);
+    for(int x=0; x<=screen->width;x++){
+        for(int y=screen->currentY;y<=screen->height;y++){
+            putPixel(x,y,BLACK);
         }
     }
+    
 }
 //PRE TP MODO TEXTO
 
