@@ -86,13 +86,14 @@ void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PA
     //linea divisoria
     divideScreen(WHITE);
     screens[SCREEN1] = sc1;
-    screens[SCREEN2]=sc2;
+    screens[SCREEN2] = sc2;
 
     currentScreen=&screens[SCREEN1];    
     ACTUALSCREEN=SCREEN1;
 }
 
 void changeCurrentScreen(){
+    stopCursor();
     ACTUALSCREEN=(ACTUALSCREEN+1)%2;
     currentScreen=&screens[ACTUALSCREEN];
 }
@@ -169,7 +170,7 @@ void newLine(){
             
         }
 
-    currentScreen->currentX=0;//+currentScreen->offset
+    currentScreen->currentX=0; //+currentScreen->offset
 
 
 }
