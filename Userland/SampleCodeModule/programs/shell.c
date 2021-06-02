@@ -28,6 +28,9 @@ void shellExecute(){
         if(strcmp("/help", command) == 0) {
             help(0,0);
         }
+        if(strcmp("/clear", command) == 0) {
+            clear(0,0);
+        }
     }
     return;
 }

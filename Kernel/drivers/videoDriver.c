@@ -175,11 +175,13 @@ void newLine(){
 }
 //funcion para limpiar la pantalla 
 void clearScreen(){
-    for(int i=0;i<currentScreen->width;i++){
-        for(int j=0;j<currentScreen->height;j++){
-            putPixel(i,j,BLACK);
+    for(int i=0;i<currentScreen->height;i++){
+        for(int j=0;j<currentScreen->width;j++){
+            putPixel(j + currentScreen->offset,i,BLACK);
         }
     }
+    currentScreen->currentX = 0;
+    currentScreen->currentY = 0;
 }
 
 
@@ -228,6 +230,9 @@ void cursor() {
         if(changeDetected &&  ticks_elapsed() %6 !=0){
             changeDetected=0;
         }
+}
+void stopCursor() {
+    printChar(' ', BLACK, BLACK, 0);
 }
 
 //PRE TP MODO TEXTO

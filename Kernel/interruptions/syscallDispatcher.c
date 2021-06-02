@@ -1,6 +1,7 @@
 #include <syscallDispatcher.h>
 #include <syscalls.h>
 #include <keyboardDriver.h>
+#include <videoDriver.h>
 
 uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9) {
     switch (rdi) {
@@ -25,6 +26,9 @@ uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10,
             break;
         case SYS_INFOREG_ID:
             return getRegisters();
+            break;
+        case SYS_CLEAR_ID:
+            clearScreen();
             break;
         default:
             break;

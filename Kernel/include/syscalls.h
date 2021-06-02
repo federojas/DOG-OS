@@ -11,6 +11,7 @@
 #define SYS_INFOREG_ID 5
 #define SYS_PRINTMEM_ID 6
 #define SYS_CPUID_ID 7
+#define SYS_CLEAR_ID 8
 
 uint8_t getCurrentTime(uint64_t rtcID);
 uint8_t _getRTCInfo(uint64_t rtcID);

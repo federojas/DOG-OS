@@ -123,6 +123,7 @@ char getChar(){
         _hlt();
          c=removeCharFromBuffer();
     }
+    stopCursor();
     return c;
 }
 

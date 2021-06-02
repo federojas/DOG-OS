@@ -207,9 +207,18 @@ void opCode(int argc, char** args) {
 // 	// printf("Las raices son: i) %f ii) %f\n", results[0], results[1]);	
 // }
 
+void clear(int argc, char** args) {
+	if (argc != 0) {
+		printf("Cantidad invalida de argumentos.\n");
+		return;
+    }
+	_syscall(SYS_CLEAR_ID,0,0,0,0,0);
+}
+
 void help(int argc, char** args) {
 	printf("Lista de comandos: \n");
 	printf("/help : Listado de comandos\n");
+	printf("/clear : Limpia la pantalla\n");
     printf("/inforeg : Estado de todos los resgitros\n");
     printf("/cpufeatures : Caracteristicas del CPU\n");
 	printf("/date&time : Fecha y hora actual\n");
