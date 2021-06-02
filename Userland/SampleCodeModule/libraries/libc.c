@@ -197,13 +197,13 @@ int scanf(char * str, ...)
 {
     buffSize = 0;
     va_list vl;
-    int i = 0, ret = 0;
+    int i = 0, j = 0, ret = 0;
     int sizeNum = 0;
  	va_start( vl, str );
     char *str_arg;
     readText();
 
- 	while (str && str[i])
+ 	while (str && str[i] && buffer[j])
  	{
  	    if (str[i] == '%') 
  	    {
@@ -212,24 +212,23 @@ int scanf(char * str, ...)
  	       {
  	            case 'c': 
  	            {
-	 	            *(char *)va_arg( vl, char* ) = buffer[buffSize];
-	 	            buffSize++;
+	 	            *(char *)va_arg( vl, char* ) = buffer[j];
+	 	            j++;
 	 	            ret++;
 	 	            break;
  	            }
  	            case 'd': 
  	            {
-	 	            *(int *)va_arg( vl, int* ) = strToInt(&buffer[buffSize], &sizeNum);
-	 	            buffSize+=sizeNum;
+	 	            *(int *)va_arg( vl, int* ) = strToInt(&buffer[j], &sizeNum);
+	 	            j+=sizeNum;
 	 	            ret++;
 	 	            break;
  	            }
                 case 's':
                 { 
                     str_arg = (char *)va_arg(vl, char *);
-                    strcpyScan(str_arg, &buffer[buffSize]);
-                    buffSize += strlen(str_arg);      
-                    printf("%d y %d\n", strlen(str_arg), buffSize);
+                    strcpyScan(str_arg, &buffer[j]);
+                    j += strlen(str_arg);      
                     break;
                 }
                 
@@ -237,8 +236,8 @@ int scanf(char * str, ...)
  	    } 
  	    else 
  	    {
- 	        buffer[buffSize] =str[i];
-            buffSize++;
+ 	        buffer[j] =str[i];
+            j++;
         }
         i++;
     }
@@ -527,19 +526,19 @@ char* intToStr(int value, char* buffer, int base)
     return reverse(buffer, 0, i - 1);
 }
 
-// https://stackoverflow.com/questions/34873209/implementation-of-strcmp/34873406
 int strcmp(char string1[], char string2[])
 {
-    int i = 0, flag = 0;    
-    while (flag == 0) {
-        if (string1[i] > string2[i]) {
-            flag = 1;
-        } else
-        if (string1[i] < string2[i]) {
-            flag = -1;
-        } else {
-            i++;
-        }
+    int i = 0;   
+    while(string1[i]!=0 && string2[i]!=0){
+        if(string1[i] < string2[i])
+            return -1;
+        if(string1[i] > string2[i])
+            return 1;
+        i++;
     }
-    return flag;
+    if(string1[i]==0 && string2[i]==0)
+        return 0;
+    if(string1[i]!=0 && string2[i]==0)
+        return 1;
+    return -1;
 }

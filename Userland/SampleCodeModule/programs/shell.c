@@ -24,12 +24,10 @@ void shellExecute(){
         command[0]=0;
         parameters[0]=0;
 
-        scanf("%s %s",command,parameters);
-        int x = strcmp("help", command);
-        printf("%d", x);
-        // if(strcmp("help", command) == 0) {
-        //     help(0,0);
-        // }
+        scanf("%s",command);
+        if(strcmp("/help", command) == 0) {
+            help(0,0);
+        }
     }
     return;
 }
