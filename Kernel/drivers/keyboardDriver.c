@@ -2,6 +2,7 @@
 #include <prints.h>
 #include <colors.h>
 #include <interrupts.h>
+#include <videoDriver.h>
 #define PRESS 1
 #define RELEASE 2
 #define ERROR -1
@@ -117,7 +118,8 @@ char getChar(){
     char c=0;
     c=removeCharFromBuffer();
     while(c==-1){
-        //dumpBuffer(&c,1);
+        cursor();
+        // dumpBuffer(&c,1);
         _hlt();
          c=removeCharFromBuffer();
     }

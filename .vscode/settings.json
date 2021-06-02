@@ -23,7 +23,8 @@
         "libc.h": "c",
         "rtcid.h": "c",
         "commands.h": "c",
-        "syscalldispatcher.h": "c"
+        "syscalldispatcher.h": "c",
+        "time.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

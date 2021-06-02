@@ -12,6 +12,7 @@ unsigned int DEFAULT_FONT_COLOUR = 0XFFFFFF;
 
 //FALTA HACER UN SCROLL PARA CUANDO LA PANTALLA ESTE LLENA DE TEXTO Y HAYA QUE BAJAR
 
+//cursor basado en codigo de ayudante en practica
 //codigo basado de https://wiki.osdev.org/User:Omarrx024/VESA_Tutorial
 
 struct vbe_mode_info_structure{
@@ -66,7 +67,6 @@ void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PA
     t_screen sc1;
     sc1.defaultBGColour = DEFAULT_BG_COLOUR;
     sc1.defaultFontColour = DEFAULT_FONT_COLOUR;
-    sc1.blink = 0;
     sc1.currentX = 0;
     sc1.offset=0;
     sc1.currentY = 0;
@@ -77,7 +77,6 @@ void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PA
     t_screen sc2;
     sc2.defaultBGColour = DEFAULT_BG_COLOUR;
     sc2.defaultFontColour = DEFAULT_FONT_COLOUR;
-    sc2.blink = 0;
     sc2.offset=(WIDTH/2)+2*CHAR_WIDTH;
     sc2.currentX = 0;
     sc2.currentY = 0;
@@ -216,6 +215,21 @@ void clearLine(){
     }
     
 }
+
+void cursor() {
+    int changeDetected = 0;
+    if(!changeDetected && ticks_elapsed() % 9  ==0){
+            changeDetected=1;
+            printChar('_', WHITE, BLACK, 0);
+            if(ticks_elapsed()%18==0){
+                printChar(' ', WHITE, BLACK, 0);
+            }
+        }
+        if(changeDetected &&  ticks_elapsed() %6 !=0){
+            changeDetected=0;
+        }
+}
+
 //PRE TP MODO TEXTO
 
 //static uint8_t * currentVideo = (uint8_t*)0xB8000;

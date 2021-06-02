@@ -17,4 +17,5 @@ void clearLine();
 void scrollDown();
 void divideScreen(t_color color);
 void changeCurrentScreen();
+void cursor();
 #endif
