@@ -187,13 +187,14 @@ void clearScreen(){
 
 
 void deleteChar(){
-    if(currentScreen->currentX==0+currentScreen->offset){
-        if(currentScreen->currentY==0){
+    if(currentScreen->currentX==0){
+        if(currentScreen->currentY==0 ){
             return;
         }
         currentScreen->currentY-=CHAR_HEIGHT;
+       currentScreen->currentX=currentScreen->width-(2*CHAR_WIDTH);
     }
-    currentScreen->currentX-=CHAR_WIDTH+currentScreen->offset;
+    currentScreen->currentX-=CHAR_WIDTH;
     printChar(' ',BLACK,BLACK,0);
 }
 

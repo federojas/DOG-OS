@@ -10,7 +10,7 @@ char buffer[BUFF_LEN]={0};
 
 
 void putChar(char c){
-    _syscall(SYS_WRITE_ID, (uint64_t)&c, 1, BLACK, WHITE, 0);
+    _syscall(SYS_WRITE_ID, (uint64_t)&c, 1, BLACK, WHITE);
 }
 
 
@@ -95,7 +95,7 @@ void printf(char *str, ...){
         i++;
     }
 
-    _syscall(SYS_WRITE_ID, (uint64_t)buff, j, BLACK, WHITE, 0);
+    _syscall(SYS_WRITE_ID, (uint64_t)buff, j, BLACK, WHITE);
     va_end(args);
     return ;
 }
@@ -260,7 +260,7 @@ char getChar(){
     //     return -1;
     // }
     // return buff[0]; 
-    return _syscall(SYS_READ_ID, 0, 0, 0, 0,0); //MODO HLT
+    return _syscall(SYS_READ_ID, 0, 0, 0, 0); //MODO HLT
 }
 
 
