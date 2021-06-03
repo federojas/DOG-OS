@@ -48,13 +48,12 @@ void getCurrentDayTime(int argc, char** args) {
 	printf("%d\n", result); 	
 }
 
-static void print_feature(int feature, const char * string){
-    if(feature != 0) {
-        printf("%s", string);
+static void print_feature(uint8_t feature, const char * string){
+    printf("%s", string);
+	if(feature != 0) {
         printf(": SI\n");
     }
     else {
-        printf("%s", string);
         printf(": NO\n");
     }
 }
@@ -66,37 +65,41 @@ void getCPUFeatures(int argc, char** args){
 	}
 	uint8_t check = _syscall(SYS_CPUID_ID, 0, 0, 0, 0, 0);
 	if(check) {
-		printf("Este procesador soporta CPUID.\n");
+		printf("\nEste procesador soporta CPUID.\n");
 	} else {
-		printf("Este processor no soporta CPUID.\n");
+		printf("\nEste processor no soporta CPUID.\n");
 		return ;
 	}
 	uint32_t features[4];
 	_syscall(SYS_CPUFEATURES_ID, (uint64_t) features, 0, 0, 0, 0);
 
-	newLine();
-	printf("Caracteristicas del CPU:\n");
-	newLine();
+	printf("\nValor de EDX con EAX en 1: %x\n", features[0]);
+	printf("Valor de ECX con EAX en 1: %x\n", features[1]);
+	printf("Valor de EBX con EAX en 7 y ECX en 0: %x\n", features[2]);
+	printf("Valor de ECX con EAX en 7 y ECX en 0: %x\n", features[3]);
 
-    print_feature(features[0] &  (1<<23), "MMX (Multi-Media Extension)");
-    print_feature(features[0] &  (1<<25), "SSE (Streaming SIMD Extension 1)");
-    print_feature(features[0] &  (1<<26), "SSE2 (Streaming SIMD Extension 2)");
-    print_feature(features[1] &  (1<<0), "SSE3 (Streaming SMD Extension 3)");
-    print_feature(features[1] &  (1<<19), "SSE41 (Streaming SIMD Extensions 4.1)");
-    print_feature(features[1] &  (1<<20), "SSE42 (Streaming SIMD Extensions 4.2)");
-    print_feature(features[1] &  (1<<25), "AES (Advanced Encryption Standard)");
-    print_feature(features[1] &  (1<<1), "PCLMULQDQ (Carry-less Multiplication)");
-    print_feature(features[1] &  (1<<28), "AVX (Advanced Vector Extensions)");
-    print_feature(features[1] &  (1<<29), "F16C (half-precision) FP feature");
-    print_feature(features[1] &  (1<<12), "FMA3 (Fused Multiply-Add 3-operand Form)");
+	printf("\nCaracteristicas del CPU:\n\n");
+	
+    print_feature(features[0] >> 23 & 1, "MMX (Multi-Media Extension)");
+    print_feature(features[0] >> 25 & 1, "SSE (Streaming SIMD Extension 1)");
+    print_feature(features[0] >> 26 & 1, "SSE2 (Streaming SIMD Extension 2)");
+    print_feature(-1*features[1] >> 0 & 1, "SSE3 (Streaming SMD Extension 3)");
+    print_feature(-1*features[1] >> 19 - 1 & 1, "SSE4.1 (Streaming SIMD Extensions 4.1)");
+    print_feature(-1*features[1] >> 20 - 1 & 1, "SSE4.2 (Streaming SIMD Extensions 4.2)");
+    print_feature(-1*features[1] >> 25 & 1, "AES (Advanced Encryption Standard)");
+    print_feature(-1*features[1] >> 1 & 1, "PCLMULQDQ (Carry-less Multiplication)");
+    print_feature(-1*features[1] >> 28 & 1, "AVX (Advanced Vector Extensions)");
+    print_feature(-1*features[1] >> 29 & 1, "F16C (half-precision) FP feature");
+    print_feature(-1*features[1] >> 12 & 1, "FMA3 (Fused Multiply-Add 3-operand Form)");
 
-	newLine();
-    printf("Caracteristicas extendidas del CPU:\n");
-	newLine();
+	
+    printf("\nCaracteristicas extendidas del CPU:\n\n");
+	
 
-    print_feature(features[2] &  (1<<5), "AVX2 (Advanced Vector Extensions 2)");
-    print_feature(features[3] &  (1<<10), "VPCLMULQDQ (CLMUL instruction set (VEX-256/EVEX)");
-    print_feature(features[3] &  (1<<9), "VAES (Vector AES instruction set (VEX-256/EVEX))");
+    print_feature((features[2] >> 5) & 1, "AVX2 (Advanced Vector Extensions 2)");
+    print_feature((features[3] >> 10) & 1, "VPCLMULQDQ (CLMUL instruction set (VEX-256/EVEX)");
+    print_feature((features[3] >> 9) & 1, "VAES (Vector AES instruction set (VEX-256/EVEX))");
+	newLine();
 }
 
 void getInfoReg(int argc, char** args) {

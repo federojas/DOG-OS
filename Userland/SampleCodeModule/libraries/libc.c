@@ -55,7 +55,7 @@ void printf(char *str, ...){
                     j += strlen(str_arg);
                     break;
                 }
-                //Atencion, printf imprime solo con precision de 4 decimales
+                // Atencion, printf imprime solo con precision de 4 decimales
                 // case 'f':
                 // {
                 //     floatToStr(va_arg(args, float),tmp,PRINTF_FLOAT_PRECISION);
