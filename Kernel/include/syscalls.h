@@ -27,4 +27,6 @@ uint8_t _getMem(uint64_t direc);
 void getRoots(float * results, float a, float b, float c);
 uint8_t _checkCPUID(void);
 void _exit(void);
+uint64_t* getRegisters();
+void updateRegisters(uint64_t* rsp);
 #endif

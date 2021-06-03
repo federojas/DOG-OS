@@ -17,31 +17,31 @@ void getCurrentDayTime(int argc, char** args) {
 		return;
 	}
     printf("Fecha de hoy: ");
-    uint64_t result = _syscall(SYS_RTC_ID, DAY_RTC_ID, 0, 0, 0, 0);
+    uint64_t result = _syscall(SYS_RTC_ID, DAY_RTC_ID, 0, 0, 0);
     printf("%d", result);
 	putChar('/');
 
-	result = _syscall(SYS_RTC_ID, MONTH_RTC_ID, 0, 0, 0, 0);
+	result = _syscall(SYS_RTC_ID, MONTH_RTC_ID, 0, 0, 0);
 	printf("%d", result);
 	putChar('/');
 
-	result = _syscall(SYS_RTC_ID, YEAR_RTC_ID, 0, 0, 0, 0);
+	result = _syscall(SYS_RTC_ID, YEAR_RTC_ID, 0, 0, 0);
 	printf("%d", YEAR);
 	printf("%d\n", result);
 
 	printf("Hora: ");
-	result = _syscall(SYS_RTC_ID, HOUR_RTC_ID, 0, 0, 0, 0);
+	result = _syscall(SYS_RTC_ID, HOUR_RTC_ID, 0, 0, 0);
 	printf("%d", result);
 	putChar(':');
 
-	result = _syscall(SYS_RTC_ID, MINUTE_RTC_ID, 0, 0, 0, 0);
+	result = _syscall(SYS_RTC_ID, MINUTE_RTC_ID, 0, 0, 0);
 	if(result < 10){
 		putChar('0'); 
 	}
 	printf("%d", result);
 	putChar(':'); 
 
-	result = _syscall(SYS_RTC_ID, SECOND_RTC_ID, 0, 0, 0, 0);
+	result = _syscall(SYS_RTC_ID, SECOND_RTC_ID, 0, 0, 0);
 	if(result < 10){
 		putChar('0'); 
 	}
@@ -63,7 +63,7 @@ void getCPUFeatures(int argc, char** args){
 		printf("Cantidad invalida de argumentos.\n");
 		return;
 	}
-	uint8_t check = _syscall(SYS_CPUID_ID, 0, 0, 0, 0, 0);
+	uint8_t check = _syscall(SYS_CPUID_ID, 0, 0, 0, 0);
 	if(check) {
 		printf("\nEste procesador soporta CPUID.\n");
 	} else {
@@ -71,7 +71,7 @@ void getCPUFeatures(int argc, char** args){
 		return ;
 	}
 	uint32_t features[4];
-	_syscall(SYS_CPUFEATURES_ID, (uint64_t) features, 0, 0, 0, 0);
+	_syscall(SYS_CPUFEATURES_ID, (uint64_t) features, 0, 0, 0);
 
 	printf("\nValor de EDX con EAX en 1: %x\n", features[0]);
 	printf("Valor de ECX con EAX en 1: %x\n", features[1]);
@@ -107,7 +107,7 @@ void getInfoReg(int argc, char** args) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
       }
-	uint64_t* registers = (uint64_t*)_syscall(SYS_INFOREG_ID, 0, 0, 0, 0, 0);
+	uint64_t* registers = (uint64_t*)_syscall(SYS_INFOREG_ID, 0, 0, 0, 0);
 	for (int i = 0; i < REGISTER_AMOUNT; i++) {
 		printf("%s", registerNames[i]);
 		printf("%x\n", registers[i]);
@@ -128,7 +128,7 @@ void getMem(int argc, char** args, char* dirHexa) {
 	printf("Dump de 32 bytes a partir de la direccion: %s\n\n", dirHexa);
 	uint8_t buffer[BYTES];
 	char print[10];
-	_syscall(SYS_PRINTMEM_ID, memDir, (uint64_t) buffer, BYTES, 0, 0);
+	_syscall(SYS_PRINTMEM_ID, memDir, (uint64_t) buffer, BYTES, 0);
 	for(int i = 0; i < BYTES; i++) {
 		intToStr(buffer[i], print, 16);
 		printf("%s ", print);
@@ -215,7 +215,7 @@ void clear(int argc, char** args) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
     }
-	_syscall(SYS_CLEAR_ID,0,0,0,0,0);
+	_syscall(SYS_CLEAR_ID,0,0,0,0);
 }
 void exit(int argc, char** args) {
 	if (argc != 0) {
@@ -224,7 +224,7 @@ void exit(int argc, char** args) {
     }
 	printf("Muchas gracias por utilizar nuestro TP!\n");
 	printf("Usted cerro el TP, el mismo ya no funcionara.\nEsperamos su regreso!\n");
-	_syscall(SYS_EXIT_ID,0,0,0,0,0);
+	_syscall(SYS_EXIT_ID,0,0,0,0);
 }
 
 void help(int argc, char** args) {

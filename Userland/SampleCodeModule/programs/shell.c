@@ -28,6 +28,9 @@ void shellExecute(){
         if(strcmp("/help", command) == 0) {
             help(0,0);
         }
+        if(strcmp("/inforeg", command) == 0) {
+            getInfoReg(0,0);
+        }
         if(strcmp("/cpufeatures", command) == 0) {
             getCPUFeatures(0,0);
         }

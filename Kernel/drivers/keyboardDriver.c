@@ -3,6 +3,7 @@
 #include <colors.h>
 #include <interrupts.h>
 #include <videoDriver.h>
+#include <syscalls.h>
 #define PRESS 1
 #define RELEASE 2
 #define ERROR -1
@@ -22,8 +23,6 @@ static char buffer[BUFF_LEN]={0};
 static int shift = 0;
 static int ctrl = 0;
 static int capsLock = 0;
-
-static uint64_t registers[16] = {0};
 
 
 //https://www.qbasic.net/en/reference/general/scan-codes.htm
@@ -68,9 +67,7 @@ void keyboardHandler(uint64_t rsp) {
             }
             else {
                 if (charTable[scanCode][0] != 0) {
-                    if(ctrl && charTable[scanCode][0] == 'r'){
-                        updateRegisters((uint64_t*) rsp);
-                    }else if(ctrl && charTable[scanCode][0] == '\t'){
+                    if(ctrl && charTable[scanCode][0] == '\t'){
                         changeCurrentScreen();
                     }
                     else if((shift && !capsLock) || (shift && capsLock && !(charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z')) || (!shift && capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') ) {
@@ -90,6 +87,7 @@ void keyboardHandler(uint64_t rsp) {
             }
         }
     }
+    updateRegisters((uint64_t*) rsp);
 }
 
 
@@ -148,12 +146,3 @@ uint64_t dumpBuffer(char *dest, int size){
     return i;
 }
 
-uint64_t* getRegisters(){
-    return registers;
-}
-
-void updateRegisters(uint64_t* rsp){
-    for (int i =0 ; i<16;i++) {
-        registers[i] = rsp[i]; 
-    } 
-}

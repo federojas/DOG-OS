@@ -1,6 +1,9 @@
 #include <syscalls.h>
 #include <keyboardDriver.h>
 #include <videoDriver.h>
+#include <infoReg.h>
+
+static uint64_t registers[16] = {0};
 
 // https://wiki.osdev.org/CMOS#Format_of_Bytes
 uint8_t getCurrentTime(uint64_t rtcID){
@@ -58,4 +61,14 @@ uint64_t sys_read(){
 	// buff[i]=0;
 	// return i;
 	return getChar();
+}
+
+uint64_t* getRegisters(){
+    return registers;
+}
+
+void updateRegisters(uint64_t* rsp){
+    for (int i =0 ; i<16;i++) {
+        registers[i] = rsp[i]; 
+    } 
 }
