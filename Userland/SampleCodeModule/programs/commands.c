@@ -228,7 +228,7 @@ void exit(int argc, char** args) {
 }
 
 void help(int argc, char** args) {
-	printf("Use ctrl + tab para cambiar de pantalla.\n");
+	printf("Use ctrl + tab para cambiar de pantalla.\n");	
 	printf("Lista de comandos: \n");
 	printf("/help : Listado de comandos\n");
 	printf("/clear : Limpia la pantalla\n");

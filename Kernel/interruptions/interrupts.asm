@@ -158,7 +158,7 @@ haltcpu:
 	ret
 
 _syscallHandler:
-	mov r9, rsp
+
 	call syscallSelector
 	
 	iretq
