@@ -176,21 +176,21 @@ void printf(char *str, ...){
 // }
 
 //funcion auxiliar para leer palabras
-static char *strcpyScan(char *destino, const char *fuente)
-{
+// static char *strcpyScan(char *destino, const char *fuente)
+// {
 
-    char *aux = destino;
+//     char *aux = destino;
 
-    while (*fuente != '\0' && *fuente != ' ')
-    {
-        *destino = *fuente;
-        fuente++;
-        destino++;
-    }
+//     while (*fuente != '\0' && *fuente != ' ')
+//     {
+//         *destino = *fuente;
+//         fuente++;
+//         destino++;
+//     }
 
-    *destino = '\0';
-    return aux;
-}
+//     *destino = '\0';
+//     return aux;
+// }
 
 // inspirado en https://iq.opengenus.org/how-printf-and-scanf-function-works-in-c-internally/
 int scanf(char * str, ...)
@@ -227,7 +227,7 @@ int scanf(char * str, ...)
                 case 's':
                 { 
                     str_arg = (char *)va_arg(vl, char *);
-                    strcpyScan(str_arg, &buffer[j]);
+                    strcpy(str_arg, &buffer[j]);
                     j += strlen(str_arg);      
                     break;
                 }

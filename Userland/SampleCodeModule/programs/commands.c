@@ -79,13 +79,13 @@ void getCPUFeatures(int argc, char** args){
 	printf("Valor de ECX con EAX en 7 y ECX en 0: %x\n", features[3]);
 
 	printf("\nCaracteristicas del CPU:\n\n");
-	
+
     print_feature(features[0] >> 23 & 1, "MMX (Multi-Media Extension)");
     print_feature(features[0] >> 25 & 1, "SSE (Streaming SIMD Extension 1)");
     print_feature(features[0] >> 26 & 1, "SSE2 (Streaming SIMD Extension 2)");
     print_feature(-1*features[1] >> 0 & 1, "SSE3 (Streaming SMD Extension 3)");
-    print_feature(-1*features[1] >> 19 - 1 & 1, "SSE4.1 (Streaming SIMD Extensions 4.1)");
-    print_feature(-1*features[1] >> 20 - 1 & 1, "SSE4.2 (Streaming SIMD Extensions 4.2)");
+    print_feature(-1*features[1] >> 19 & 1, "SSE4.1 (Streaming SIMD Extensions 4.1)");
+    print_feature(-1*features[1] >> 20 & 1, "SSE4.2 (Streaming SIMD Extensions 4.2)");
     print_feature(-1*features[1] >> 25 & 1, "AES (Advanced Encryption Standard)");
     print_feature(-1*features[1] >> 1 & 1, "PCLMULQDQ (Carry-less Multiplication)");
     print_feature(-1*features[1] >> 28 & 1, "AVX (Advanced Vector Extensions)");
@@ -115,17 +115,17 @@ void getInfoReg(int argc, char** args) {
 	  newLine();
 }
 
-void getMem(int argc, char** args, char* dirHexa) {
+void getMem(int argc, char** args) {
 	if (argc != 1) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
     }
-	uint64_t memDir = strToHex(dirHexa);
+	uint64_t memDir = strToHex(args[0]);
 	if(memDir == -1) {
 		printf("El argumento ingresado es invalido. Use /help.\n");
         return;
 	}
-	printf("Dump de 32 bytes a partir de la direccion: %s\n\n", dirHexa);
+	printf("Dump de 32 bytes a partir de la direccion: %s\n\n", args[0]);
 	uint8_t buffer[BYTES];
 	char print[10];
 	_syscall(SYS_PRINTMEM_ID, memDir, (uint64_t) buffer, BYTES, 0,0);
@@ -238,6 +238,6 @@ void help(int argc, char** args) {
 	printf("/printmem : Volcado de memoria de 32 bytes a partir de\n direccion de memoria en hexa ingresada como argumento.\n");
 	printf("/divzero : Excepcion division por cero\n");
 	printf("/opcode : Excepcion opcode invalido\n");
-	printf("/roots : Calculo de raices de una funcion cuadratica.\n Ingrese los 3 valores de la misma como argumentos.\n");
+	//printf("/roots : Calculo de raices de una funcion cuadratica.\n Ingrese los 3 valores de la misma como argumentos.\n");
 }
 
