@@ -8,10 +8,8 @@
 #define YEAR 20 //Debe escribir aca los digitos de su año (excepto los ultimos dos)
 #define BYTES 32 //Cantidad de bytes para el mem dump
 
-extern void _opcodeExp(void);
-
 //returns current date and time
-void getCurrentDayTime(int argc, char** args) {
+void getCurrentDayTime(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -58,7 +56,7 @@ static void print_feature(uint8_t feature, const char * string){
     }
 }
 
-void getCPUFeatures(int argc, char** args){
+void getCPUFeatures(int argc, char* argv[]){
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -102,7 +100,7 @@ void getCPUFeatures(int argc, char** args){
 	newLine();
 }
 
-void getInfoReg(int argc, char** args) {
+void getInfoReg(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -115,27 +113,32 @@ void getInfoReg(int argc, char** args) {
 	  newLine();
 }
 
-void getMem(int argc, char** args) {
+void getMem(int argc, char* argv[]) {
 	if (argc != 1) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
     }
-	uint64_t memDir = strToHex(args[0]);
+	uint64_t memDir = strToHex(argv[0]);
 	if(memDir == -1) {
 		printf("El argumento ingresado es invalido. Use /help.\n");
         return;
 	}
-	printf("Dump de 32 bytes a partir de la direccion: %s\n\n", args[0]);
+	printf("\nDump de 32 bytes a partir de la direccion: %s\n\n", argv[0]);
 	uint8_t buffer[BYTES];
 	char print[10];
 	_syscall(SYS_PRINTMEM_ID, memDir, (uint64_t) buffer, BYTES, 0,0);
 	for(int i = 0; i < BYTES; i++) {
+		if(i == 16) {
+			newLine();
+		}
 		intToStr(buffer[i], print, 16);
 		printf("%s ", print);
 	}   
+	newLine();
+	newLine();
 }
 
-void divZero(int argc, char** args) {
+void divZero(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -144,7 +147,7 @@ void divZero(int argc, char** args) {
 }
 
 // https://mudongliang.github.io/x86/html/file_module_x86_id_318.html
-void opCode(int argc, char** args) {
+void opCode(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -152,7 +155,7 @@ void opCode(int argc, char** args) {
 	_opcodeExp();
 }
 
-// void getRoots(int argc, char** args, float a, float b, float c) {
+// void getRoots(int argc, char[][BUFFER_SIZE] argv, float a, float b, float c) {
 // 	if (argc != 3) {
 // 		printf("Cantidad invalida de argumentos.\n");
 // 		return;
@@ -210,14 +213,14 @@ void opCode(int argc, char** args) {
 // 	// printf("Las raices son: i) %f ii) %f\n", results[0], results[1]);	
 // }
 
-void clear(int argc, char** args) {
+void clear(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
     }
 	_syscall(SYS_CLEAR_ID,0,0,0,0,0);
 }
-void exit(int argc, char** args) {
+void exit(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -227,7 +230,11 @@ void exit(int argc, char** args) {
 	_syscall(SYS_EXIT_ID,0,0,0,0,0);
 }
 
-void help(int argc, char** args) {
+void help(int argc, char* argv[]) {
+	if (argc != 0) {
+		printf("Cantidad invalida de argumentos.\n");
+		return;
+    }
 	printf("Use ctrl + tab para cambiar de pantalla.\n");	
 	printf("Lista de comandos: \n");
 	printf("/help : Listado de comandos\n");

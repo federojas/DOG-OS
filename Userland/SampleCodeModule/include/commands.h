@@ -1,14 +1,15 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
-void help(int argc, char** args);
-void getCurrentDayTime(int argc, char** args);
-void getCPUFeatures(int argc, char** args);
-void getInfoReg(int argc, char** args);
-void divZero(int argc, char** args);
-void opCode(int argc, char** args);
-// void getRoots(int argc, char** args, float a, float b, float c);
-void clear(int argc, char** args);
-void exit(int argc, char** args);
-void getMem(int argc, char** args);
+void help(int argc, char* argv[]);
+void getCurrentDayTime(int argc, char* argv[]);
+void getCPUFeatures(int argc, char* argv[]);
+void getInfoReg(int argc, char* argv[]);
+void divZero(int argc, char* argv[]);
+void opCode(int argc, char* argv[]);
+// void getRoots(int argc, char* argv[], float a, float b, float c);
+void clear(int argc, char* argv[]);
+void exit(int argc, char* argv[]);
+void getMem(int argc, char* argv[]);
+void _opcodeExp(void);
 #endif

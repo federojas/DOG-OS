@@ -25,7 +25,8 @@
         "commands.h": "c",
         "syscalldispatcher.h": "c",
         "time.h": "c",
-        "inforeg.h": "c"
+        "inforeg.h": "c",
+        "shell.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

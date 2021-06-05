@@ -7,7 +7,7 @@ void putChar(char c);
 // int getChar(); // MODO ESPERA ACTIVA
 char getChar(); // MODO HLT
 int strlen(const char *s);
-int strCmp(char string1[], char string2[]);
+int strcmp(char string1[], char string2[]);
 int strToInt(char *str, int* size);
 char *intToStr(int value, char *buffer, int base);
 void newLine();
