@@ -95,6 +95,7 @@ void keyboardHandler(uint64_t rsp) {
 void clearBuffer(){
     while(buffSize>0){
         removeCharFromBuffer();
+        deleteChar();
     }
 }
 void putCharInBuffer(char c){
