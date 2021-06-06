@@ -5,7 +5,7 @@
 #define BUFFER_SIZE 100
 #define USER_SIZE 32
 #define MAX_ARGUMENTS 3
-
+char userName[USER_SIZE] = "DefaultUser";
 void startShell(){
     
     shellExecute();
@@ -36,15 +36,18 @@ static int getCommandArgs(char* userInput, char* command, char* argv[MAX_ARGUMEN
         return -1;
     return argc;
 }
-
+void printUser(){
+     printf("$%s > ", userName);
+}
 void shellExecute(){
     char userInput[BUFFER_SIZE] = {0};
     char command[BUFFER_SIZE] = {0};
     char* argv[MAX_ARGUMENTS];
     int argc = 0;
-    char userName[USER_SIZE] = "DefaultUser";
+    
     while (1){
-        printf("$%s > ", userName);
+        //printf("$%s > ", userName);
+        printUser();
 
         userInput[0] = 0;
 

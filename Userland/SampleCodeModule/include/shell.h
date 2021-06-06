@@ -4,5 +4,5 @@
 void shellWelcomeMessage();
 void startShell();
 void shellExecute();
-
+void printUser();
 #endif

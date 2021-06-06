@@ -1,13 +1,13 @@
 #include <libc.h>
 #include <syscalls.h>
 #include <stdarg.h>
-
+#include <shell.h>
 #define BUFF_LEN 500
 // #define PRINTF_FLOAT_PRECISION 4
 
 static int buffSize = 0;
 char buffer[BUFF_LEN]={0};
-
+static int firstChange=1;
 
 void putChar(char c){
     _syscall(SYS_WRITE_ID, (uint64_t)&c, 1, BLACK, WHITE, 0);
@@ -273,7 +273,18 @@ int readText(){
             if(buffSize < BUFF_LEN-1){
                 buffer[buffSize++]=c;
             }
-            putChar(c);
+            if(c=='\t'){
+                if(firstChange){
+                    firstChange=0;
+                    printUser();     
+                }
+                buffSize=0;
+            }else{
+                if(c=='\b'){
+                    buffSize-=2;
+                }
+                putChar(c);
+            }
         }
     }
     newLine();
