@@ -228,22 +228,13 @@ void scrollDown(){
     }else{
         for(int i=0;i<CHAR_HEIGHT*2;i++){
             for(int j=0; j<HEIGHT;j++){
-                // memcpy((void *)((uint64_t)screenData->framebuffer + j * ((WIDTH)+4*CHAR_WIDTH)* PIXEL_SIZE)+(WIDTH/2*PIXEL_SIZE),
-                //                 (void *)((uint64_t)screenData->framebuffer + (j + 1)*((WIDTH)+4*CHAR_WIDTH) * PIXEL_SIZE)+(WIDTH/2*PIXEL_SIZE),
-                //                  WIDTH * PIXEL_SIZE/ 2 );
                 memcpy((void *)((uint64_t)screenData->framebuffer +j * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 2 * CHAR_WIDTH) * PIXEL_SIZE),
                                (void *)((uint64_t)screenData->framebuffer + (j + 1) * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 2* CHAR_WIDTH) * PIXEL_SIZE),
                                WIDTH * PIXEL_SIZE / 2 - 4 * CHAR_WIDTH * PIXEL_SIZE);
             }
         }
     }
-
-
-
     clearLine();
-// memcpy((void *)((uint64_t)screen_info->framebuffer + y * SCREEN_WIDTH * PIXEL_SIZE),
-//                                (void *)((uint64_t)screen_info->framebuffer + (y + 1) * SCREEN_WIDTH * PIXEL_SIZE),
-//                                SCREEN_WIDTH * PIXEL_SIZE / 2 - 3 * CHAR_WIDTH);
 }
 
 void clearLine(){
