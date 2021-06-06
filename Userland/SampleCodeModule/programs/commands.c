@@ -230,6 +230,18 @@ void exit(int argc, char* argv[]) {
 	_syscall(SYS_EXIT_ID,0,0,0,0,0);
 }
 
+void changeUser(int argc, char* argv[], char userName[USER_SIZE]) {
+	if (argc != 1) {
+		printf("Cantidad invalida de argumentos.\n");
+		return;
+    }
+	if(strlen(argv[0]) > USER_SIZE - 1) {
+		printf("El nombre de usuario puede tener un maximo de %d caracteres.\n", USER_SIZE - 1);
+		return;
+	}
+	strcpy(userName, argv[0]);
+}
+
 void help(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
@@ -239,6 +251,7 @@ void help(int argc, char* argv[]) {
 	printf("Lista de comandos: \n");
 	printf("/help : Listado de comandos\n");
 	printf("/clear : Limpia la pantalla\n");
+	printf("/user : Cambia el nombre de usuario.\nIngrese el nombre como un solo argumento.\n");
     printf("/inforeg : Estado de todos los resgitros.\n Use ctrl + r para capturar los mismos.\n");
     printf("/cpufeatures : Caracteristicas del CPU\n");
 	printf("/date&time : Fecha y hora actual\n");

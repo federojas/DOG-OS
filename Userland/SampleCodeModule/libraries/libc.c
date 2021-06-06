@@ -2,7 +2,7 @@
 #include <syscalls.h>
 #include <stdarg.h>
 #include <shell.h>
-#define BUFF_LEN 500
+#define BUFF_LEN 100
 // #define PRINTF_FLOAT_PRECISION 4
 
 static int buffSize = 0;
@@ -18,7 +18,7 @@ void putChar(char c){
 void printf(char *str, ...){
     va_list args;
     int i = 0, j = 0;
-    char buff[100] = {0}, tmp[20];
+    char buff[BUFF_LEN] = {0}, tmp[20];
     char *str_arg;
     va_start(args, str);
 
@@ -197,7 +197,7 @@ int scanf(char * str, ...)
 {
     buffSize = 0;
     va_list vl;
-    int i = 0, j = 0, ret = 0;
+    int i = 0, j = 0;
     int sizeNum = 0;
  	va_start( vl, str );
     char *str_arg;
@@ -214,14 +214,12 @@ int scanf(char * str, ...)
  	            {
 	 	            *(char *)va_arg( vl, char* ) = buffer[j];
 	 	            j++;
-	 	            ret++;
 	 	            break;
  	            }
  	            case 'd': 
  	            {
 	 	            *(int *)va_arg( vl, int* ) = strToInt(&buffer[j], &sizeNum);
 	 	            j+=sizeNum;
-	 	            ret++;
 	 	            break;
  	            }
                 case 's':
@@ -242,7 +240,7 @@ int scanf(char * str, ...)
         i++;
     }
     va_end(vl);
-    return ret;
+    return j;
 }
 
 

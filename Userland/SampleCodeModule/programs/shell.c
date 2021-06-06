@@ -1,13 +1,12 @@
 #include <shell.h>
 #include <libc.h>
 #include <commands.h>
+#include <stdint.h>
 
 #define BUFFER_SIZE 100
-#define USER_SIZE 32
 #define MAX_ARGUMENTS 3
-char userName[USER_SIZE] = "DefaultUser";
-void startShell(){
-    
+static char userName[USER_SIZE] = "DefaultUser";
+void startShell(){ 
     shellExecute();
 }
 
@@ -40,13 +39,12 @@ void printUser(){
      printf("$%s > ", userName);
 }
 void shellExecute(){
-    char userInput[BUFFER_SIZE] = {0};
     char command[BUFFER_SIZE] = {0};
     char* argv[MAX_ARGUMENTS];
+    char userInput[BUFFER_SIZE] = {0};
     int argc = 0;
     
     while (1){
-        //printf("$%s > ", userName);
         printUser();
 
         userInput[0] = 0;
@@ -84,6 +82,9 @@ void shellExecute(){
         }
         else if(strcmp("/divzero", command) == 0) {
             divZero(argc, argv);
+        }
+        else if(strcmp("/user", command) == 0) {
+            changeUser(argc, argv, userName);
         }
         else {
             printf("Comando invalido: use /help\n");
