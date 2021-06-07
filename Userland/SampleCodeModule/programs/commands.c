@@ -82,14 +82,14 @@ void getCPUFeatures(int argc, char* argv[]){
     print_feature(features[0] >> 23 & 1, "MMX (Multi-Media Extension)");
     print_feature(features[0] >> 25 & 1, "SSE (Streaming SIMD Extension 1)");
     print_feature(features[0] >> 26 & 1, "SSE2 (Streaming SIMD Extension 2)");
-    print_feature(-1*features[1] >> 0 & 1, "SSE3 (Streaming SMD Extension 3)");
-    print_feature(-1*features[1] >> 19 & 1, "SSE4.1 (Streaming SIMD Extensions 4.1)");
-    print_feature(-1*features[1] >> 20 & 1, "SSE4.2 (Streaming SIMD Extensions 4.2)");
-    print_feature(-1*features[1] >> 25 & 1, "AES (Advanced Encryption Standard)");
-    print_feature(-1*features[1] >> 1 & 1, "PCLMULQDQ (Carry-less Multiplication)");
-    print_feature(-1*features[1] >> 28 & 1, "AVX (Advanced Vector Extensions)");
-    print_feature(-1*features[1] >> 29 & 1, "F16C (half-precision) FP feature");
-    print_feature(-1*features[1] >> 12 & 1, "FMA3 (Fused Multiply-Add 3-operand Form)");
+    print_feature(features[1] >> 0 & 1, "SSE3 (Streaming SMD Extension 3)");
+    print_feature(features[1] >> 19 & 1, "SSE4.1 (Streaming SIMD Extensions 4.1)");
+    print_feature(features[1] >> 20 & 1, "SSE4.2 (Streaming SIMD Extensions 4.2)");
+    print_feature(features[1] >> 25 & 1, "AES (Advanced Encryption Standard)");
+    print_feature(features[1] >> 1 & 1, "PCLMULQDQ (Carry-less Multiplication)");
+    print_feature(features[1] >> 28 & 1, "AVX (Advanced Vector Extensions)");
+    print_feature(features[1] >> 29 & 1, "F16C (half-precision) FP feature");
+    print_feature(features[1] >> 12 & 1, "FMA3 (Fused Multiply-Add 3-operand Form)");
 
 	
     printf("\nCaracteristicas extendidas del CPU:\n\n");
