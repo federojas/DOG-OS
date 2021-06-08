@@ -53,9 +53,15 @@ static void cleanBufferofScreen(){
     for(int i=0; i<widx;i++){
         deleteChar();
     }
+    cleanKeyboardBuffer();
+}
+void cleanKeyboardBuffer(){
     buffSize=0;
     widx=0;
     ridx=0;
+}
+int bufferSize(){
+    return buffSize;
 }
 void keyboardHandler(uint64_t rsp) {
     uint8_t scanCode;

@@ -136,6 +136,7 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
     }
     if(c=='\n'){
         newLine();
+        cleanKeyboardBuffer();
         return ;
     }
     if(c=='\b'){
@@ -189,7 +190,7 @@ void clearScreen(){
 
 
 void deleteChar(){
-    if(currentScreen->currentX==USER_NAME_LENGHT*CHAR_WIDTH){
+    if(currentScreen->currentX==USER_NAME_LENGHT*CHAR_WIDTH  ){
         if(currentScreen->currentY==0 ){
             return;
         }
