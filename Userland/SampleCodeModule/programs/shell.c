@@ -6,7 +6,9 @@
 #define BUFFER_SIZE 100
 #define MAX_ARGUMENTS 3
 static char userName[USER_SIZE] = "DefaultUser";
+
 void startShell(){ 
+    getRoots(3, 0, 1, -3, 2);
     shellExecute();
 }
 

@@ -14,28 +14,24 @@
 ; Return value:
 ;   returns 1 if real roots found, else 0
 
-%define a               qword [ebp+8]
-%define b               qword [ebp+16]
-%define c               qword [ebp+24]
-%define root1           dword [ebp+32]
-%define root2           dword [ebp+36]
-%define disc            qword [ebp-8]
-%define one_over_2a     qword [ebp-16]
+global  _quadratic
 
-segment .data
+%define a               qword [rdi]              // double
+%define b               qword [rsi]
+%define c               qword [rdx]
+%define root1           dword [r10]             // pointer
+%define root2           dword [r8]
+%define disc            qword [rbp-8]
+%define one_over_2a     qword [rbp-16]
+
+segment _DATA 
 MinusFour       dw      -4
 
-segment .bss
 
-group DGROUP .bss .data
-
-segment .text 
-
-
-global  _quadratic
+segment _TEXT 
 _quadratic:
-        push    ebp
-        mov     ebp, esp
+        push    rpb
+        mov     rbp, rsp
         sub     esp, 16         ; allocate 2 doubles (disc & one_over_2a)
         push    ebx             ; must save original ebx
 
@@ -54,7 +50,7 @@ _quadratic:
         jb      no_real_solutions ; if disc < 0, no real solutions
         fsqrt                   ; stack: sqrt(b*b - 4*a*c)
         fstp    disc            ; store and pop stack
-        fld1                    ; stack: 1.0
+        fld     1               ; stack: 1.0
         fld     a               ; stack: a, 1.0
         fscale                  ; stack: a * 2^(1.0) = 2*a, 1
         fdivp   st1             ; stack: 1/(2*a)
@@ -63,7 +59,7 @@ _quadratic:
         fld     disc            ; stack: disc, b, 1/(2*a)
         fsubrp  st1             ; stack: disc - b, 1/(2*a)
         fmulp   st1             ; stack: (-b + disc)/(2*a)
-        mov     ebx, root1
+        mov     ebx, root1      
         fstp    qword [ebx]     ; store in *root1
         fld     b               ; stack: b
         fld     disc            ; stack: disc, b

@@ -9,7 +9,7 @@ void getCPUFeatures(int argc, char* argv[]);
 void getInfoReg(int argc, char* argv[]);
 void divZero(int argc, char* argv[]);
 void opCode(int argc, char* argv[]);
-// void getRoots(int argc, char* argv[], float a, float b, float c);
+void getRoots(int argc, char* argv[], double a, double b, double c);
 void clear(int argc, char* argv[]);
 void exit(int argc, char* argv[]);
 void getMem(int argc, char* argv[]);
