@@ -9,7 +9,7 @@ unsigned int HEIGHT = 768;
 unsigned int PIXEL_SIZE = 3; //bytes por pixel 
 unsigned int DEFAULT_BG_COLOUR = 0X000000;
 unsigned int DEFAULT_FONT_COLOUR = 0XFFFFFF;
-
+unsigned int USER_NAME_LENGHT = 14;
 //FALTA HACER UN SCROLL PARA CUANDO LA PANTALLA ESTE LLENA DE TEXTO Y HAYA QUE BAJAR
 
 //cursor basado en codigo de ayudante en practica
@@ -91,7 +91,9 @@ void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PA
     currentScreen=&screens[SCREEN1];    
     ACTUALSCREEN=SCREEN1;
 }
-
+void setUsernameLen(int len){
+    USER_NAME_LENGHT=len;
+}
 void changeCurrentScreen(){
     stopCursor();
     ACTUALSCREEN=(ACTUALSCREEN+1)%2;
@@ -187,7 +189,7 @@ void clearScreen(){
 
 
 void deleteChar(){
-    if(currentScreen->currentX==0){
+    if(currentScreen->currentX==USER_NAME_LENGHT*CHAR_WIDTH){
         if(currentScreen->currentY==0 ){
             return;
         }
