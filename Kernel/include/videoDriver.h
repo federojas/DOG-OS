@@ -19,4 +19,5 @@ void divideScreen(t_color color);
 void changeCurrentScreen();
 void cursor();
 void stopCursor();
+void setUsernameLen(int len);
 #endif

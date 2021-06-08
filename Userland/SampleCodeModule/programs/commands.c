@@ -7,11 +7,10 @@
 
 #define YEAR 20 //Debe escribir aca los digitos de su año (excepto los ultimos dos)
 #define BYTES 32 //Cantidad de bytes para el mem dump
-
-extern void _opcodeExp(void);
+//#define LAST_MEM_POSITION 536870911 //512MB mem que se le pasa en run.sh
 
 //returns current date and time
-void getCurrentDayTime(int argc, char** args) {
+void getCurrentDayTime(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -58,7 +57,7 @@ static void print_feature(uint8_t feature, const char * string){
     }
 }
 
-void getCPUFeatures(int argc, char** args){
+void getCPUFeatures(int argc, char* argv[]){
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -79,18 +78,18 @@ void getCPUFeatures(int argc, char** args){
 	printf("Valor de ECX con EAX en 7 y ECX en 0: %x\n", features[3]);
 
 	printf("\nCaracteristicas del CPU:\n\n");
-	
+
     print_feature(features[0] >> 23 & 1, "MMX (Multi-Media Extension)");
     print_feature(features[0] >> 25 & 1, "SSE (Streaming SIMD Extension 1)");
     print_feature(features[0] >> 26 & 1, "SSE2 (Streaming SIMD Extension 2)");
-    print_feature(-1*features[1] >> 0 & 1, "SSE3 (Streaming SMD Extension 3)");
-    print_feature(-1*features[1] >> 19 - 1 & 1, "SSE4.1 (Streaming SIMD Extensions 4.1)");
-    print_feature(-1*features[1] >> 20 - 1 & 1, "SSE4.2 (Streaming SIMD Extensions 4.2)");
-    print_feature(-1*features[1] >> 25 & 1, "AES (Advanced Encryption Standard)");
-    print_feature(-1*features[1] >> 1 & 1, "PCLMULQDQ (Carry-less Multiplication)");
-    print_feature(-1*features[1] >> 28 & 1, "AVX (Advanced Vector Extensions)");
-    print_feature(-1*features[1] >> 29 & 1, "F16C (half-precision) FP feature");
-    print_feature(-1*features[1] >> 12 & 1, "FMA3 (Fused Multiply-Add 3-operand Form)");
+    print_feature(features[1] >> 0 & 1, "SSE3 (Streaming SMD Extension 3)");
+    print_feature(features[1] >> 19 & 1, "SSE4.1 (Streaming SIMD Extensions 4.1)");
+    print_feature(features[1] >> 20 & 1, "SSE4.2 (Streaming SIMD Extensions 4.2)");
+    print_feature(features[1] >> 25 & 1, "AES (Advanced Encryption Standard)");
+    print_feature(features[1] >> 1 & 1, "PCLMULQDQ (Carry-less Multiplication)");
+    print_feature(features[1] >> 28 & 1, "AVX (Advanced Vector Extensions)");
+    print_feature(features[1] >> 29 & 1, "F16C (half-precision) FP feature");
+    print_feature(features[1] >> 12 & 1, "FMA3 (Fused Multiply-Add 3-operand Form)");
 
 	
     printf("\nCaracteristicas extendidas del CPU:\n\n");
@@ -102,7 +101,7 @@ void getCPUFeatures(int argc, char** args){
 	newLine();
 }
 
-void getInfoReg(int argc, char** args) {
+void getInfoReg(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -115,27 +114,32 @@ void getInfoReg(int argc, char** args) {
 	  newLine();
 }
 
-void getMem(int argc, char** args, char* dirHexa) {
+void getMem(int argc, char* argv[]) {
 	if (argc != 1) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
     }
-	uint64_t memDir = strToHex(dirHexa);
-	if(memDir == -1) {
+	uint64_t memDir = strToHex(argv[0]);
+	if(memDir == -1 /* || memDir + 32 > LAST_MEM_POSITION */ ) {
 		printf("El argumento ingresado es invalido. Use /help.\n");
         return;
 	}
-	printf("Dump de 32 bytes a partir de la direccion: %s\n\n", dirHexa);
+	printf("\nDump de 32 bytes a partir de la direccion: %s\n\n", argv[0]);
 	uint8_t buffer[BYTES];
 	char print[10];
 	_syscall(SYS_PRINTMEM_ID, memDir, (uint64_t) buffer, BYTES, 0,0);
 	for(int i = 0; i < BYTES; i++) {
+		if(i == 16) {
+			newLine();
+		}
 		intToStr(buffer[i], print, 16);
 		printf("%s ", print);
 	}   
+	newLine();
+	newLine();
 }
 
-void divZero(int argc, char** args) {
+void divZero(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -144,7 +148,7 @@ void divZero(int argc, char** args) {
 }
 
 // https://mudongliang.github.io/x86/html/file_module_x86_id_318.html
-void opCode(int argc, char** args) {
+void opCode(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -152,7 +156,7 @@ void opCode(int argc, char** args) {
 	_opcodeExp();
 }
 
-// void getRoots(int argc, char** args, float a, float b, float c) {
+// void getRoots(int argc, char[][BUFFER_SIZE] argv, float a, float b, float c) {
 // 	if (argc != 3) {
 // 		printf("Cantidad invalida de argumentos.\n");
 // 		return;
@@ -210,14 +214,14 @@ void opCode(int argc, char** args) {
 // 	// printf("Las raices son: i) %f ii) %f\n", results[0], results[1]);	
 // }
 
-void clear(int argc, char** args) {
+void clear(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
     }
 	_syscall(SYS_CLEAR_ID,0,0,0,0,0);
 }
-void exit(int argc, char** args) {
+void exit(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -227,17 +231,48 @@ void exit(int argc, char** args) {
 	_syscall(SYS_EXIT_ID,0,0,0,0,0);
 }
 
-void help(int argc, char** args) {
+void changeUser(int argc, char* argv[], char userName[USER_SIZE]) {
+	if (argc != 1) {
+		printf("Cantidad invalida de argumentos.\n");
+		return;
+    }
+	if(strlen(argv[0]) > USER_SIZE - 1) {
+		printf("El nombre de usuario puede tener un maximo de %d caracteres.\n", USER_SIZE - 1);
+		return;
+	}
+	strcpy(userName, argv[0]);
+}
+
+void getCPUVendor(int argc, char* argv[]) {
+	if (argc != 0) {
+		printf("Cantidad invalida de argumentos.\n");
+		return;
+    }
+	char buffer[9];
+	_syscall(SYS_CPUVENDOR_ID,(uint64_t) buffer,0,0,0,0);
+	printf("\nID de fabricante: %s\n\n", buffer);
+}
+
+void help(int argc, char* argv[]) {
+	if (argc != 0) {
+		printf("Cantidad invalida de argumentos.\n");
+		return;
+    }
 	printf("Use ctrl + tab para cambiar de pantalla.\n");	
 	printf("Lista de comandos: \n");
 	printf("/help : Listado de comandos\n");
 	printf("/clear : Limpia la pantalla\n");
+	printf("/user : Cambia el nombre de usuario.\nIngrese el nombre como un solo argumento.\n");
     printf("/inforeg : Estado de todos los resgitros.\n Use ctrl + r para capturar los mismos.\n");
     printf("/cpufeatures : Caracteristicas del CPU\n");
 	printf("/date&time : Fecha y hora actual\n");
-	printf("/printmem : Volcado de memoria de 32 bytes a partir de\n direccion de memoria en hexa ingresada como argumento.\n");
+	printf("/printmem : Volcado de memoria de 32 bytes a partir de\ndireccion de memoria en hexa ingresada como argumento.\n");
+	//printf("La direccion debe estar comprendida en el rango: 0 - %x\n", LAST_MEM_POSITION - 32); CHEQUEO MAXMEM
 	printf("/divzero : Excepcion division por cero\n");
 	printf("/opcode : Excepcion opcode invalido\n");
-	printf("/roots : Calculo de raices de una funcion cuadratica.\n Ingrese los 3 valores de la misma como argumentos.\n");
+	printf("/cpuvendor : ID de fabricante\n");
+	//printf("/roots : Calculo de raices de una funcion cuadratica.\n Ingrese los 3 valores de la misma como argumentos.\n");
 }
+
+
 

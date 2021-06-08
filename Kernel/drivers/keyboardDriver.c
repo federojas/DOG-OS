@@ -48,7 +48,15 @@ uint8_t getAction(uint8_t scanCode) {
     }
     return ERROR;
 }
-
+static void cleanBufferofScreen(){
+    stopCursor();
+    for(int i=0; i<widx;i++){
+        deleteChar();
+    }
+    buffSize=0;
+    widx=0;
+    ridx=0;
+}
 void keyboardHandler(uint64_t rsp) {
     uint8_t scanCode;
     uint8_t currentAction;
@@ -62,13 +70,15 @@ void keyboardHandler(uint64_t rsp) {
                 capsLock = capsLock == 1 ? 0 : 1;
             } else if (scanCode == CTRL) {
                 ctrl = 1;
-            } else if(scanCode >= 58 || scanCode & 0x80) {
+            } else if(scanCode >= 58 || scanCode & 0x80 || (scanCode == 15 && ctrl==0) ) {
                 return ; //NO ASCII
             }
             else {
                 if (charTable[scanCode][0] != 0) {
                     if(ctrl && charTable[scanCode][0] == '\t'){
+                        cleanBufferofScreen();
                         changeCurrentScreen();
+                        putCharInBuffer('\t');
                     } else if(ctrl && charTable[scanCode][0] == 'r') {
                         updateRegisters((uint64_t*) rsp);
                     }
@@ -90,7 +100,6 @@ void keyboardHandler(uint64_t rsp) {
     }
 }
 
-
 void putCharInBuffer(char c){
     if(c!=0){
         buffer[widx]=c;
@@ -111,13 +120,14 @@ void putCharInBuffer(char c){
         }    
     }
 }
-
 char getChar(){
     char c=0;
     c=removeCharFromBuffer();
+    if(c=='\b'){
+        removeCharFromBuffer();
+    }
     while(c==-1){
         cursor();
-        // dumpBuffer(&c,1);
         _hlt();
          c=removeCharFromBuffer();
     }
@@ -129,7 +139,7 @@ char getChar(){
 char removeCharFromBuffer(){
     if(buffSize<=0)
         return -1;
-    int c= buffer[ridx];
+    int c= buffer[ridx]; 
     ridx=(ridx +1)%BUFF_LEN; //mas rapido que ir preguntando si el indice alcanzo el maximo, y de esta manera recorremos ciclicamente el buffer
     buffSize--;
     return c;

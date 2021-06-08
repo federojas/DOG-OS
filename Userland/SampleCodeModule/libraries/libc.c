@@ -1,13 +1,13 @@
 #include <libc.h>
 #include <syscalls.h>
 #include <stdarg.h>
-
-#define BUFF_LEN 500
+#include <shell.h>
+#define BUFF_LEN 100
 // #define PRINTF_FLOAT_PRECISION 4
 
 static int buffSize = 0;
 char buffer[BUFF_LEN]={0};
-
+static int firstChange=1;
 
 void putChar(char c){
     _syscall(SYS_WRITE_ID, (uint64_t)&c, 1, BLACK, WHITE, 0);
@@ -18,7 +18,7 @@ void putChar(char c){
 void printf(char *str, ...){
     va_list args;
     int i = 0, j = 0;
-    char buff[100] = {0}, tmp[20];
+    char buff[BUFF_LEN] = {0}, tmp[20];
     char *str_arg;
     va_start(args, str);
 
@@ -176,28 +176,28 @@ void printf(char *str, ...){
 // }
 
 //funcion auxiliar para leer palabras
-static char *strcpyScan(char *destino, const char *fuente)
-{
+// static char *strcpyScan(char *destino, const char *fuente)
+// {
 
-    char *aux = destino;
+//     char *aux = destino;
 
-    while (*fuente != '\0' && *fuente != ' ')
-    {
-        *destino = *fuente;
-        fuente++;
-        destino++;
-    }
+//     while (*fuente != '\0' && *fuente != ' ')
+//     {
+//         *destino = *fuente;
+//         fuente++;
+//         destino++;
+//     }
 
-    *destino = '\0';
-    return aux;
-}
+//     *destino = '\0';
+//     return aux;
+// }
 
 // inspirado en https://iq.opengenus.org/how-printf-and-scanf-function-works-in-c-internally/
 int scanf(char * str, ...)
 {
     buffSize = 0;
     va_list vl;
-    int i = 0, j = 0, ret = 0;
+    int i = 0, j = 0;
     int sizeNum = 0;
  	va_start( vl, str );
     char *str_arg;
@@ -214,20 +214,18 @@ int scanf(char * str, ...)
  	            {
 	 	            *(char *)va_arg( vl, char* ) = buffer[j];
 	 	            j++;
-	 	            ret++;
 	 	            break;
  	            }
  	            case 'd': 
  	            {
 	 	            *(int *)va_arg( vl, int* ) = strToInt(&buffer[j], &sizeNum);
 	 	            j+=sizeNum;
-	 	            ret++;
 	 	            break;
  	            }
                 case 's':
                 { 
                     str_arg = (char *)va_arg(vl, char *);
-                    strcpyScan(str_arg, &buffer[j]);
+                    strcpy(str_arg, &buffer[j]);
                     j += strlen(str_arg);      
                     break;
                 }
@@ -242,7 +240,7 @@ int scanf(char * str, ...)
         i++;
     }
     va_end(vl);
-    return ret;
+    return j;
 }
 
 
@@ -273,7 +271,18 @@ int readText(){
             if(buffSize < BUFF_LEN-1){
                 buffer[buffSize++]=c;
             }
-            putChar(c);
+            if(c=='\t'){
+                if(firstChange){
+                    firstChange=0;
+                    printUser();    
+                }
+                buffSize=0;
+            }else{
+                if(c=='\b'){
+                    buffSize-=2;
+                }
+                putChar(c);
+            }
         }
     }
     newLine();

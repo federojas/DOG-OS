@@ -9,7 +9,7 @@ unsigned int HEIGHT = 768;
 unsigned int PIXEL_SIZE = 3; //bytes por pixel 
 unsigned int DEFAULT_BG_COLOUR = 0X000000;
 unsigned int DEFAULT_FONT_COLOUR = 0XFFFFFF;
-
+unsigned int USER_NAME_LENGHT = 14;
 //FALTA HACER UN SCROLL PARA CUANDO LA PANTALLA ESTE LLENA DE TEXTO Y HAYA QUE BAJAR
 
 //cursor basado en codigo de ayudante en practica
@@ -91,7 +91,9 @@ void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PA
     currentScreen=&screens[SCREEN1];    
     ACTUALSCREEN=SCREEN1;
 }
-
+void setUsernameLen(int len){
+    USER_NAME_LENGHT=len;
+}
 void changeCurrentScreen(){
     stopCursor();
     ACTUALSCREEN=(ACTUALSCREEN+1)%2;
@@ -187,7 +189,7 @@ void clearScreen(){
 
 
 void deleteChar(){
-    if(currentScreen->currentX==0){
+    if(currentScreen->currentX==USER_NAME_LENGHT*CHAR_WIDTH){
         if(currentScreen->currentY==0 ){
             return;
         }
@@ -199,15 +201,41 @@ void deleteChar(){
 }
 
 void scrollDown(){
+/*
+    si no fueran dos pantallas independientes se podria usar el siguiente codigo comentado, pero como las dos pantallas son independientes
+    es necesario hacer un memcpy el cual se encargue solo de copiar la mitad del estado de la pantalla 
+*/
 //basado en: https://forum.osdev.org/viewtopic.php?f=1&t=22702
-unsigned long x=0;
-unsigned long long *vidmem = (unsigned long long*)screenData->framebuffer;
+    // unsigned long x=0;
+    // unsigned long long *vidmem = (unsigned long long*)screenData->framebuffer;
 
-while(x<=HEIGHT*WIDTH/2) //1024*768/2== HEIGHT * WIDTH /2
-{
-vidmem[x]=vidmem[x+(CHAR_HEIGHT*screenData->width/4)*3];    /* Valid only for 1024x768x32bpp */   
-   x=x+1;
-}
+    // while(x<=HEIGHT*WIDTH/2) //1024*768/2== HEIGHT * WIDTH /2
+    // {
+    // vidmem[x]=vidmem[x+(CHAR_HEIGHT*screenData->width/4)*3];    /* Valid only for 1024x768x32bpp */   
+    // x=x+1;
+    // }    
+
+
+
+    //void *memcpy(void *dest, const void * src, size_t n)
+    // sc2.offset=(WIDTH/2)+2*CHAR_WIDTH;
+    if(currentScreen==&screens[SCREEN1]){
+        for(int i=0;i<CHAR_HEIGHT*2;i++){
+            for(int j=0; j<HEIGHT;j++){
+                memcpy((void *)((uint64_t)screenData->framebuffer + j * WIDTH * PIXEL_SIZE),
+                                (void *)((uint64_t)screenData->framebuffer + (j + 1) * WIDTH * PIXEL_SIZE),
+                                WIDTH * PIXEL_SIZE / 2 );
+            }
+        }
+    }else{
+        for(int i=0;i<CHAR_HEIGHT*2;i++){
+            for(int j=0; j<HEIGHT;j++){
+                memcpy((void *)((uint64_t)screenData->framebuffer +j * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 2 * CHAR_WIDTH) * PIXEL_SIZE),
+                               (void *)((uint64_t)screenData->framebuffer + (j + 1) * WIDTH * PIXEL_SIZE + (WIDTH / 2 + 2* CHAR_WIDTH) * PIXEL_SIZE),
+                               WIDTH * PIXEL_SIZE / 2 - 4 * CHAR_WIDTH * PIXEL_SIZE);
+            }
+        }
+    }
     clearLine();
 }
 

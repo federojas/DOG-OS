@@ -12,6 +12,10 @@ uint8_t getCurrentTime(uint64_t rtcID){
 	return result;
 }
 
+void getCPUVendor(char * buffer) {
+	cpuVendor(buffer);
+}
+
 //AGREGAR AL INFORME https://gist.github.com/macton/4dd5fec2113be284796e
 
 void getCPUFeatures(uint32_t buffer[4]){
@@ -31,12 +35,15 @@ void getMem(uint64_t direc, uint8_t * buffer, uint64_t bytes) {
 }
 
 
-void sys_write(char * str, uint8_t len, t_color bgColor, t_color ftColor) {
+void sys_write(char * str, uint8_t len, t_color bgColor, t_color ftColor, int userSize) {
     if (str == 0 ||  len <= 0 || bgColor < 0 || ftColor < 0) 
         return ;
-    
-    for (int i = 0; str[i] != 0 && i < len; i++) 
-        printChar(str[i], ftColor, bgColor, 1);     
+	if(userSize!=0){
+		setUsernameLen(userSize);
+	}
+		for (int i = 0; str[i] != 0 && i < len; i++) 
+			printChar(str[i], ftColor, bgColor, 1);     
+	
 }
 
 //MODO HLT

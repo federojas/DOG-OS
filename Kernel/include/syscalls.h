@@ -13,10 +13,11 @@
 #define SYS_CPUID_ID 7
 #define SYS_CLEAR_ID 8
 #define SYS_EXIT_ID 9
+#define SYS_CPUVENDOR_ID 10
 
 uint8_t getCurrentTime(uint64_t rtcID);
 uint8_t _getRTCInfo(uint64_t rtcID);
-void sys_write(char * str, uint8_t len, t_color bgColor, t_color ftColor);
+void sys_write(char * str, uint8_t len, t_color bgColor, t_color ftColor, int userSize);
 //uint64_t sys_read(uint64_t buffer, uint64_t len); MODO ESPERA ACTIVO
 uint64_t sys_read(); //MODO HLT
 void getCPUFeatures(uint32_t buffer[4]);
@@ -29,4 +30,6 @@ uint8_t _checkCPUID(void);
 void _exit(void);
 uint64_t* getRegisters();
 void updateRegisters(uint64_t* rsp);
+void getCPUVendor(char * buffer);
+void cpuVendor(char * buffer);
 #endif
