@@ -248,7 +248,7 @@ void getCPUVendor(int argc, char* argv[]) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
     }
-	char buffer[13];
+	char buffer[9];
 	_syscall(SYS_CPUVENDOR_ID,(uint64_t) buffer,0,0,0,0);
 	printf("\nID de fabricante: %s\n\n", buffer);
 }
