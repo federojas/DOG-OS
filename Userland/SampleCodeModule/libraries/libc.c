@@ -274,7 +274,7 @@ int readText(){
             if(c=='\t'){
                 if(firstChange){
                     firstChange=0;
-                    printUser();     
+                    printUser();    
                 }
                 buffSize=0;
             }else{

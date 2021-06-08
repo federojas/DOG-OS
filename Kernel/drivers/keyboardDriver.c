@@ -69,7 +69,6 @@ void keyboardHandler(uint64_t rsp) {
                 if (charTable[scanCode][0] != 0) {
                     if(ctrl && charTable[scanCode][0] == '\t'){
                         changeCurrentScreen();
-                        clearBuffer();
                         putCharInBuffer('\t');
                     } else if(ctrl && charTable[scanCode][0] == 'r') {
                         updateRegisters((uint64_t*) rsp);
@@ -92,12 +91,6 @@ void keyboardHandler(uint64_t rsp) {
     }
 }
 
-void clearBuffer(){
-    while(buffSize>0){
-        removeCharFromBuffer();
-        deleteChar();
-    }
-}
 void putCharInBuffer(char c){
     if(c!=0){
         buffer[widx]=c;

@@ -7,7 +7,7 @@
 
 #define YEAR 20 //Debe escribir aca los digitos de su año (excepto los ultimos dos)
 #define BYTES 32 //Cantidad de bytes para el mem dump
-#define LAST_MEM_POSITION 536870911 //512MB mem que se le pasa en run.sh
+//#define LAST_MEM_POSITION 536870911 //512MB mem que se le pasa en run.sh
 
 //returns current date and time
 void getCurrentDayTime(int argc, char* argv[]) {
@@ -120,7 +120,7 @@ void getMem(int argc, char* argv[]) {
 		return;
     }
 	uint64_t memDir = strToHex(argv[0]);
-	if(memDir == -1 || memDir + 32 > LAST_MEM_POSITION) {
+	if(memDir == -1 /* || memDir + 32 > LAST_MEM_POSITION */ ) {
 		printf("El argumento ingresado es invalido. Use /help.\n");
         return;
 	}
@@ -257,7 +257,7 @@ void help(int argc, char* argv[]) {
     printf("/cpufeatures : Caracteristicas del CPU\n");
 	printf("/date&time : Fecha y hora actual\n");
 	printf("/printmem : Volcado de memoria de 32 bytes a partir de\ndireccion de memoria en hexa ingresada como argumento.\n");
-	printf("La direccion debe estar comprendiad en el rango: 0 - %x\n", LAST_MEM_POSITION - 32);
+	//printf("La direccion debe estar comprendida en el rango: 0 - %x\n", LAST_MEM_POSITION - 32); CHEQUEO MAXMEM
 	printf("/divzero : Excepcion division por cero\n");
 	printf("/opcode : Excepcion opcode invalido\n");
 	//printf("/roots : Calculo de raices de una funcion cuadratica.\n Ingrese los 3 valores de la misma como argumentos.\n");
