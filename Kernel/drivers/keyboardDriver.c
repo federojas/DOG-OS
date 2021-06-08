@@ -48,10 +48,14 @@ uint8_t getAction(uint8_t scanCode) {
     }
     return ERROR;
 }
-static void cleanBufferofScren(){
+static void cleanBufferofScreen(){
+    stopCursor();
     for(int i=0; i<widx;i++){
         deleteChar();
     }
+    buffSize=0;
+    widx=0;
+    ridx=0;
 }
 void keyboardHandler(uint64_t rsp) {
     uint8_t scanCode;
@@ -72,11 +76,8 @@ void keyboardHandler(uint64_t rsp) {
             else {
                 if (charTable[scanCode][0] != 0) {
                     if(ctrl && charTable[scanCode][0] == '\t'){
-                        cleanBufferofScren();
+                        cleanBufferofScreen();
                         changeCurrentScreen();
-                        buffSize=0;
-                        widx=0;
-                        ridx=0;
                         putCharInBuffer('\t');
                     } else if(ctrl && charTable[scanCode][0] == 'r') {
                         updateRegisters((uint64_t*) rsp);
