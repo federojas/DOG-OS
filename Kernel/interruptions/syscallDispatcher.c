@@ -33,6 +33,9 @@ uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10,
         case SYS_EXIT_ID:
             _exit();
             break;
+        case SYS_CPUVENDOR_ID:
+            getCPUVendor((char *)(rsi));
+            break;
         default:
             break;
     }

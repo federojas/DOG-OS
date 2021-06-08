@@ -15,4 +15,5 @@ void exit(int argc, char* argv[]);
 void getMem(int argc, char* argv[]);
 void changeUser(int argc, char* argv[], char userName[USER_SIZE]);
 void _opcodeExp(void);
+void getCPUVendor(int argc, char* argv[]);
 #endif

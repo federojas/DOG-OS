@@ -13,6 +13,7 @@
 #define SYS_CPUID_ID 7
 #define SYS_CLEAR_ID 8
 #define SYS_EXIT_ID 9
+#define SYS_CPUVENDOR_ID 10
 
 uint8_t getCurrentTime(uint64_t rtcID);
 uint8_t _getRTCInfo(uint64_t rtcID);
@@ -29,4 +30,6 @@ uint8_t _checkCPUID(void);
 void _exit(void);
 uint64_t* getRegisters();
 void updateRegisters(uint64_t* rsp);
+void getCPUVendor(char * buffer);
+void cpuVendor(char * buffer);
 #endif

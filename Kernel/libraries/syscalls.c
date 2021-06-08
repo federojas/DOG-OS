@@ -12,6 +12,10 @@ uint8_t getCurrentTime(uint64_t rtcID){
 	return result;
 }
 
+void getCPUVendor(char * buffer) {
+	cpuVendor(buffer);
+}
+
 //AGREGAR AL INFORME https://gist.github.com/macton/4dd5fec2113be284796e
 
 void getCPUFeatures(uint32_t buffer[4]){
