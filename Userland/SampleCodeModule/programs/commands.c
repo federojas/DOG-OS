@@ -271,7 +271,7 @@ void help(int argc, char* argv[]) {
 	printf("/divzero : Excepcion division por cero\n");
 	printf("/opcode : Excepcion opcode invalido\n");
 	printf("/cpuvendor : ID de fabricante\n");
-	//printf("/roots : Calculo de raices de una funcion cuadratica.\n Ingrese los 3 valores de la misma como argumentos.\n");
+	printf("/roots : Calculo de raices de una funcion cuadratica.\n Ingrese los 3 valores de la misma como argumentos.\n");
 }
 
 

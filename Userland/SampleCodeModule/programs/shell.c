@@ -89,6 +89,9 @@ void shellExecute(){
         else if(strcmp("/cpuvendor", command) == 0) {
             getCPUVendor(argc, argv);
         }
+        else if(strcmp("/roots", command) == 0) {
+            getRoots(argc, argv);
+        }
         else {
             printf("Comando invalido: use /help\n");
         }
