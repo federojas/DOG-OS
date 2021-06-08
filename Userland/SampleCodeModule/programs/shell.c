@@ -86,6 +86,9 @@ void shellExecute(){
         else if(strcmp("/user", command) == 0) {
             changeUser(argc, argv, userName);
         }
+        else if(strcmp("/cpuvendor", command) == 0) {
+            getCPUVendor(argc, argv);
+        }
         else {
             printf("Comando invalido: use /help\n");
         }

@@ -243,6 +243,16 @@ void changeUser(int argc, char* argv[], char userName[USER_SIZE]) {
 	strcpy(userName, argv[0]);
 }
 
+void getCPUVendor(int argc, char* argv[]) {
+	if (argc != 0) {
+		printf("Cantidad invalida de argumentos.\n");
+		return;
+    }
+	char buffer[13];
+	_syscall(SYS_CPUVENDOR_ID,(uint64_t) buffer,0,0,0,0);
+	printf("\nID de fabricante: %s\n\n", buffer);
+}
+
 void help(int argc, char* argv[]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
@@ -260,6 +270,9 @@ void help(int argc, char* argv[]) {
 	//printf("La direccion debe estar comprendida en el rango: 0 - %x\n", LAST_MEM_POSITION - 32); CHEQUEO MAXMEM
 	printf("/divzero : Excepcion division por cero\n");
 	printf("/opcode : Excepcion opcode invalido\n");
+	printf("/cpuvendor : ID de fabricante\n");
 	//printf("/roots : Calculo de raices de una funcion cuadratica.\n Ingrese los 3 valores de la misma como argumentos.\n");
 }
+
+
 
