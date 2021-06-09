@@ -33,5 +33,5 @@ uint64_t* getRegisters();
 void updateRegisters(uint64_t* rsp);
 void getCPUVendor(char * buffer);
 void cpuVendor(char * buffer);
-int _quadratic( double a, double b, double c, double * root1, double *root2 );
+int _quadratic(double * a, double * b, double * c, int64_t nada, double * root1, double * root2);
 #endif

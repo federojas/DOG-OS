@@ -200,7 +200,7 @@ void getRoots(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	double root1;
 	double root2;
 
-	_syscall(SYS_ROOTS_ID, (uint64_t) a, (uint64_t) b,(uint64_t) c, (uint64_t) &root1, (uint64_t) &root2);
+	_syscall(SYS_ROOTS_ID, (uint64_t) &a, (uint64_t) &b,(uint64_t) &c, (uint64_t) &root1, (uint64_t) &root2);
 
 	char res1[BUFFER_SIZE];
 	char res2[BUFFER_SIZE];

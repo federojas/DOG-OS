@@ -37,7 +37,7 @@ uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10,
             getCPUVendor((char *)(rsi));
             break;
         case SYS_ROOTS_ID:
-            _quadratic((double) rsi, (double) rdx, (double) r10, (double *) r8, (double *) r9);
+            _quadratic((double *) rsi, (double *) rdx, (double *) r10, 0, (double *) r8, (double *) r9);
             break;
         default:
             break;
