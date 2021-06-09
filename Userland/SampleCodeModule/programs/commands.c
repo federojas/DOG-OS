@@ -255,20 +255,20 @@ void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
     }
-	printf("Use ctrl + tab para cambiar de pantalla.\n");	
+	printf("\nUse ctrl + tab para cambiar de pantalla.\n\n");	
 	printf("Lista de comandos: \n");
-	printf("/help : Listado de comandos\n");
-	printf("/clear : Limpia la pantalla\n");
-	printf("/user : Cambia el nombre de usuario.\nIngrese el nombre como un solo argumento.\n");
-    printf("/inforeg : Estado de todos los resgitros.\n Use ctrl + r para capturar los mismos.\n");
-    printf("/cpufeatures : Caracteristicas del CPU\n");
-	printf("/date&time : Fecha y hora actual\n");
-	printf("/printmem : Volcado de memoria de 32 bytes a partir de\ndireccion de memoria en hexa ingresada como argumento.\n");
+	printf("\n/help : Listado de comandos\n");
+	printf("\n/clear : Limpia la pantalla\n");
+	printf("\n/user : Cambia el nombre de usuario.\nIngrese el nombre como un solo argumento.\n");
+    printf("\n/inforeg : Estado de todos los resgitros.\nUse ctrl + r para capturar los mismos.\n");
+    printf("\n/cpufeatures : Caracteristicas del CPU\n");
+	printf("\n/date&time : Fecha y hora actual\n");
+	printf("\n/printmem : Volcado de memoria de 32 bytes a partir de\ndireccion de memoria en hexa ingresada como argumento.\n");
 	//printf("La direccion debe estar comprendida en el rango: 0 - %x\n", LAST_MEM_POSITION - 32); CHEQUEO MAXMEM
-	printf("/divzero : Excepcion division por cero\n");
-	printf("/opcode : Excepcion opcode invalido\n");
-	printf("/cpuvendor : ID de fabricante\n");
-	printf("/roots : Calculo de raices de una funcion cuadratica.\n Ingrese los 3 valores de la misma como argumentos.\n");
+	printf("\n/divzero : Excepcion division por cero\n");
+	printf("\n/opcode : Excepcion opcode invalido\n");
+	printf("\n/cpuvendor : ID de fabricante\n");
+	printf("\n/roots : Calculo de raices de una funcion cuadratica.\nIngrese los 3 valores de la misma como argumentos.\n\n");
 }
 
 
