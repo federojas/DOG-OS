@@ -112,6 +112,12 @@ void shellExecute(){
         else if(strcmp("/dog", command) == 0) {
             logo();
         }
+        else if(strcmp("/bgcolour", command) == 0){
+            changeColour(argc, argv, 0);
+        }
+        else if(strcmp("/ftcolour", command) == 0){
+            changeColour(argc, argv, 1);
+        }
         else {
             printf("\nComando invalido: use /help\n\n");
         }

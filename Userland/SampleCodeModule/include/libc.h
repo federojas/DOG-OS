@@ -1,6 +1,10 @@
 #ifndef LIBC_H
 #define LIBC_H
 
+#include <colors.h>
+
+void setBGC(t_color colour);
+void setFTC(t_color colour);
 int scanf(char * str, ...);
 void printf(char *str, ...);
 void putChar(char c);

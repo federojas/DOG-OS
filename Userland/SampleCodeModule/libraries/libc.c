@@ -2,18 +2,31 @@
 #include <syscalls.h>
 #include <stdarg.h>
 #include <shell.h>
+
+static int currentBGC = BLACK;
+static int currentFTC = WHITE;
+
 #define BUFF_LEN 100
 
 static int buffSize = 0;
-char buffer[BUFF_LEN]={0};
+static char buffer[BUFF_LEN]={0};
 static int firstChange=1;
 static int changedUserName=0;
+
+void setFTC(t_color colour) {
+    currentFTC = colour;
+}
+
+void setBGC(t_color colour) {
+    currentBGC = colour;
+}
+
 void putChar(char c){
-    _syscall(SYS_WRITE_ID, (uint64_t)&c, 1, BLACK, WHITE, 0);
+    _syscall(SYS_WRITE_ID, (uint64_t)&c, 1, currentBGC, currentFTC, 0);
 }
 
 void sendUserData(char *userName, int len){
-   _syscall(SYS_WRITE_ID, (uint64_t)userName, len+1, BLACK, WHITE, &len);
+   _syscall(SYS_WRITE_ID, (uint64_t)userName, len+1, currentBGC, currentFTC, (uint64_t) &len);
 }
 void setFirstChange(int number){
     if(number<0 || number>1)return;
@@ -76,7 +89,7 @@ void printf(char *str, ...){
         strIdx++;
     }
 
-    _syscall(SYS_WRITE_ID, (uint64_t)buff, buffIdx, BLACK, WHITE, 0);
+    _syscall(SYS_WRITE_ID, (uint64_t)buff, buffIdx, currentBGC, currentFTC, 0);
     va_end(args);
     return ;
 }

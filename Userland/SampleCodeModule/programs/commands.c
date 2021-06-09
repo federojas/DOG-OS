@@ -262,13 +262,67 @@ void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("\nID de fabricante: %s\n\n", buffer);
 }
 
+void changeColour(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], int ft) {
+	if (argc != 1) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	int aux = strToInt(argv[0], 0);
+	if(ft == 1) {
+		switch(aux){
+			case 1:
+				setFTC(WHITE);
+				break;
+			case 2:
+				setFTC(BLACK);
+				break;
+			case 3:
+				setFTC(RED);
+				break;
+			case 4:
+				setFTC(GREEN);
+				break;
+			case 5:
+				setFTC(BLUE);
+				break;
+			default:
+				printf("\nEl codigo de color que ingreso es invalido. Use /help.\n\n");
+				break;
+		}
+	} else {
+		switch(aux){
+			case 1:
+				setBGC(WHITE);
+				break;
+			case 2:
+				setBGC(BLACK);
+				break;
+			case 3:
+				setBGC(RED);
+				break;
+			case 4:
+				setBGC(GREEN);
+				break;
+			case 5:
+				setBGC(BLUE);
+				break;
+			default:
+				printf("\nEl codigo de color que ingreso es invalido. Use /help.\n\n");
+				break;
+		}
+	}
+}
+
 void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	printf("\nUse ctrl + tab para cambiar de pantalla.\n\n");	
-	printf("Lista de comandos: \n");
+	printf("\nUse ctrl + tab para cambiar de pantalla.\n");	
+	printf("\nTabla de colores: \n");
+	printf("\nBLANCO | NEGRO | ROJO | VERDE | AZUL\n");
+	printf("  1    |   2   |  3   |   4   |  5\n");
+	printf("\nLista de comandos: \n");
 	printf("\n/help : Listado de comandos\n");
 	printf("\n/clear : Limpia la pantalla\n");
 	printf("\n/user : Cambia el nombre de usuario.\nIngrese el nombre como un solo argumento.\n");
@@ -282,7 +336,10 @@ void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("\n/cpuvendor : ID de fabricante\n");
 	printf("\n/roots : Calculo de raices de una funcion cuadratica.\nIngrese los 3 valores de la misma como argumentos.\n");
 	printf("\n/dog : Imprime DOG-OS logo\n");
+	printf("\n/ftcolour : Cambia el color del texto.\nPase el color como argumento usando la tabla de colores.\n\n");
+	printf("\n/bgcolour : Cambia el color del fondo.\nPase el color como argumento usando la tabla de colores.\n\n");
 	printf("\n/exit : Finaliza la ejecucion.\n\n");
+	
 }
 
 

@@ -17,4 +17,5 @@ void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], char userName[U
 void _opcodeExp(void);
 void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 void logo(void);
+void changeColour(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], int bg);
 #endif

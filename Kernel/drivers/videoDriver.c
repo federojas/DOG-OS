@@ -62,7 +62,7 @@ static struct vbe_mode_info_structure * screenData = (void*) 0x5C00; //direccion
 static t_screen screens[MAX_SCREENS];
 static t_screen * currentScreen; 
 static t_currentScreen ACTUALSCREEN;
-void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PARAMETRO RECIBIR BACKGROUND COLOR Y FONT COLOR
+void initializeVideo(){
     WIDTH=screenData->width;
     HEIGHT=screenData->height;
     

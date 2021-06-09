@@ -1,5 +1,4 @@
 #include <keyboardDriver.h>
-#include <prints.h>
 #include <colors.h>
 #include <interrupts.h>
 #include <videoDriver.h>
