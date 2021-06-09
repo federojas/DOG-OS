@@ -19,77 +19,61 @@ void sendUserData(char *userName, int len){
 //https://stackoverflow.com/questions/54352400/implementation-of-printf-function
 void printf(char *str, ...){
     va_list args;
-    int i = 0, j = 0;
-    char buff[BUFF_LEN] = {0}, tmp[20];
+    
+    char buff[BUFF_LEN] = {0};
+    int strIdx = 0, buffIdx = 0;
     char *str_arg;
+    char aux[20];
     va_start(args, str);
 
-    while (str && str[i]) {
-        if (str[i] == '%')
+    while (str && str[strIdx]) {
+        if (str[strIdx] == '%')
         {
-            i++;
-            switch (str[i])
+            strIdx++;
+            switch (str[strIdx])
             {
                 case 'c':
                 {
-                    buff[j] = (char)va_arg(args, int);
-                    j++;
+                    buff[buffIdx] = (char)va_arg(args, int);
+                    buffIdx++;
                     break;
                 }
                 case 'd':
                 {
-                    intToStr(va_arg(args, int),tmp,10);
-                    strcpy(&buff[j], tmp);
-                    j += strlen(tmp);
+                    intToStr(va_arg(args, int),aux,10);
+                    strcpy(&buff[buffIdx], aux);
+                    buffIdx += strlen(aux);
                     break;
                 }
                 case 'x':
                 {
-                    intToStr(va_arg(args, int),tmp,16);
-                    strcpy(&buff[j], tmp);
-                    j += strlen(tmp);
+                    intToStr(va_arg(args, int),aux,16);
+                    strcpy(&buff[buffIdx], aux);
+                    buffIdx += strlen(aux);
                     break;
                 }
                 case 's':
                 {
                     str_arg = (char *)va_arg(args, char *);
-                    strcpy(&buff[j], str_arg);
-                    j += strlen(str_arg);
+                    strcpy(&buff[buffIdx], str_arg);
+                    buffIdx += strlen(str_arg);
                     break;
                 }
                 case '%':
                 {
-                    strcpy(&buff[j], "%");
-                    j++;
+                    strcpy(&buff[buffIdx], "%");
+                    buffIdx++;
                     break;
                 }
             }
-        } else if (str[i] == '\\') {
-            i++;
-            switch (str[i])
-            {
-                // case '\\':
-                // {
-                //     strcpy(&buff[j], "\\");
-                //     j++;
-                //     break;
-                // }
-                case 'n':
-                {
-                    newLine();
-                    break;
-                }
-            }
+         } else {
+            buff[buffIdx] = str[strIdx];
+            buffIdx++;
         }
-        else
-        {
-            buff[j] = str[i];
-            j++;
-        }
-        i++;
+        strIdx++;
     }
 
-    _syscall(SYS_WRITE_ID, (uint64_t)buff, j, BLACK, WHITE, 0);
+    _syscall(SYS_WRITE_ID, (uint64_t)buff, buffIdx, BLACK, WHITE, 0);
     va_end(args);
     return ;
 }

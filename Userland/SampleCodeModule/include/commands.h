@@ -16,4 +16,5 @@ void getMem(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], char userName[USER_SIZE]);
 void _opcodeExp(void);
 void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void logo(void);
 #endif

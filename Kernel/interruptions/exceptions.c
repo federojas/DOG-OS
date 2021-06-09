@@ -25,12 +25,12 @@ void exceptionDispatcher(int exception, uint64_t rsp) {
 }
 
 static void zero_division() {
-	sys_write("Exception 0: Cannot divide by zero.", 36, BLACK, RED,0);
+	sys_write("Excecpion 0: No se puede dividir por cero.", 43, BLACK, RED,0);
 	printLine();
 }
 
 static void inv_op_code() {
-	sys_write("Exception 6: Invalid opcode.", 29, BLACK, RED,0);
+	sys_write("Excecpion 6: Opcode invalido.", 30, BLACK, RED,0);
 	printLine();
 }
 

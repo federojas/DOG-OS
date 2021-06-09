@@ -13,7 +13,7 @@
 //returns current date and time
 void getCurrentDayTime(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
-		printf("Cantidad invalida de argumentos.\n");
+		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
 	}
     printf("Fecha de hoy: ");
@@ -60,7 +60,7 @@ static void print_feature(uint8_t feature, const char * string){
 
 void getCPUFeatures(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
 	if (argc != 0) {
-		printf("Cantidad invalida de argumentos.\n");
+		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
 	}
 	uint8_t check = _syscall(SYS_CPUID_ID, 0, 0, 0, 0, 0);
@@ -104,7 +104,7 @@ void getCPUFeatures(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
 
 void getInfoReg(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
-		printf("Cantidad invalida de argumentos.\n");
+		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	uint64_t* registers = (uint64_t*) _syscall(SYS_INFOREG_ID, 0, 0, 0, 0, 0);
@@ -117,12 +117,12 @@ void getInfoReg(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 
 void getMem(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 1) {
-		printf("Cantidad invalida de argumentos.\n");
+		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	uint64_t memDir = strToHex(argv[0]);
 	if(memDir == -1 /* || memDir + 32 > LAST_MEM_POSITION */ ) {
-		printf("El argumento ingresado es invalido. Use /help.\n");
+		printf("\nEl argumento ingresado es invalido. Use /help.\n\n");
         return;
 	}
 	printf("\nDump de 32 bytes a partir de la direccion: %s\n\n", argv[0]);
@@ -142,7 +142,7 @@ void getMem(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 
 void divZero(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
-		printf("Cantidad invalida de argumentos.\n");
+		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	int x = 3/0;
@@ -151,7 +151,7 @@ void divZero(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 // https://mudongliang.github.io/x86/html/file_module_x86_id_318.html
 void opCode(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
-		printf("Cantidad invalida de argumentos.\n");
+		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	_opcodeExp();
@@ -159,7 +159,7 @@ void opCode(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 
 void getRoots(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 3) {
-		printf("Cantidad invalida de argumentos.\n");
+		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 
@@ -183,17 +183,17 @@ void getRoots(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	aux3 = c > 0 ? c : -1*c;
 
 	if (a == 0) {
-		printf("El coeficiente de x^2 no puede ser 0.\n");
+		printf("\nEl coeficiente de x^2 no puede ser 0.\n\n");
 		return;
 	}
 
 	if( aux1 < min || (aux2 < min && b!=0) || (aux3 < min && c!=0) ){
-		printf("Los argumentos pueden tener como maximo %d decimales.\n", FLOAT_PRECISION);
+		printf("\nLos argumentos pueden tener como maximo %d decimales.\n\n", FLOAT_PRECISION);
 		return ;
 	}
 
 	if(b*b - 4*a*c < 0){
-		printf("El polinomio no puede tener raices imaginarias.\nSu discriminante no puede ser menor que 0.\n");
+		printf("\nEl polinomio no puede tener raices imaginarias.\nSu discriminante no puede ser menor que 0.\n\n");
 		return ;
 	}
 
@@ -213,28 +213,38 @@ void getRoots(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 
 void clear(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
-		printf("Cantidad invalida de argumentos.\n");
+		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	_syscall(SYS_CLEAR_ID,0,0,0,0,0);
 }
 void exit(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
-		printf("Cantidad invalida de argumentos.\n");
+		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	printf("Muchas gracias por utilizar nuestro TP!\n");
-	printf("Usted cerro el TP, el mismo ya no funcionara.\nEsperamos su regreso!\n");
+	printf("\nMuchas gracias por utilizar DOG-OS, esperamos su regreso.\n");
+	printf("\nUsted cerro el TP, el mismo ya no funcionara.\n\n");
+	logo();
 	_syscall(SYS_EXIT_ID,0,0,0,0,0);
+}
+
+//https://patorjk.com/software/taag/#p=display&f=Slant&t=DOG-OS
+void logo() {
+	printf("    ____  ____  ______      ____  _____\n");
+	printf("   / __ \\/ __ \\/ ____/     / __ \\/ ___/\n");
+	printf("  / / / / / / / / ________/ / / /\\__ \\ \n");
+	printf(" / /_/ / /_/ / /_/ /_____/ /_/ /___/ /\n");
+	printf("/_____/\\____/\\____/      \\____//____/\n\n");
 }
 
 void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], char userName[USER_SIZE]) {
 	if (argc != 1) {
-		printf("Cantidad invalida de argumentos.\n");
+		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	if(strlen(argv[0]) > USER_SIZE - 1) {
-		printf("El nombre de usuario puede tener un maximo de %d caracteres.\n", USER_SIZE - 1);
+		printf("\nEl nombre de usuario puede tener un maximo de %d caracteres.\n\n", USER_SIZE - 1);
 		return;
 	}
 	strcpy(userName, argv[0]);
@@ -242,7 +252,7 @@ void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], char userName[U
 
 void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
-		printf("Cantidad invalida de argumentos.\n");
+		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	char buffer[9];
@@ -252,7 +262,7 @@ void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 
 void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
-		printf("Cantidad invalida de argumentos.\n");
+		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	printf("\nUse ctrl + tab para cambiar de pantalla.\n\n");	
@@ -268,7 +278,9 @@ void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("\n/divzero : Excepcion division por cero\n");
 	printf("\n/opcode : Excepcion opcode invalido\n");
 	printf("\n/cpuvendor : ID de fabricante\n");
-	printf("\n/roots : Calculo de raices de una funcion cuadratica.\nIngrese los 3 valores de la misma como argumentos.\n\n");
+	printf("\n/roots : Calculo de raices de una funcion cuadratica.\nIngrese los 3 valores de la misma como argumentos.\n");
+	printf("\n/dog : Imprime DOG-OS logo\n");
+	printf("\n/exit : Finaliza la ejecucion.\n\n");
 }
 
 
