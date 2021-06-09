@@ -20,5 +20,5 @@ int readText();
 int strToHex(const char *str);
 void doubleToStr(double n, char* res, int afterpoint);
 int pow(int x, unsigned int y);
-void strToDouble(char *numStr, int *error, double *result);
+void strToDouble(char *numStr, double *result);
 #endif

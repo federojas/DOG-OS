@@ -7,6 +7,7 @@
 
 #define YEAR 20 //Debe escribir aca los digitos de su año (excepto los ultimos dos)
 #define BYTES 32 //Cantidad de bytes para el mem dump
+#define FLOAT_PRECISION 8
 //#define LAST_MEM_POSITION 536870911 //512MB mem que se le pasa en run.sh
 
 //returns current date and time
@@ -105,13 +106,13 @@ void getInfoReg(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
-      }
-	uint64_t* registers = (uint64_t*)_syscall(SYS_INFOREG_ID, 0, 0, 0, 0, 0);
+    }
+	uint64_t* registers = (uint64_t*) _syscall(SYS_INFOREG_ID, 0, 0, 0, 0, 0);
 	for (int i = 0; i < REGISTER_AMOUNT; i++) {
 		printf("%s", registerNames[i]);
 		printf("%x\n", registers[i]);
-      }
-	  newLine();
+    }
+	newLine();
 }
 
 void getMem(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
@@ -143,7 +144,7 @@ void divZero(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
-      }
+    }
 	int x = 3/0;
 }
 
@@ -152,7 +153,7 @@ void opCode(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
-      }
+    }
 	_opcodeExp();
 }
 
@@ -161,32 +162,53 @@ void getRoots(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
     }
-	// double a;
-	// double b;
-	// double c;
 
-	// int * error;
-	// strToDouble(argv[0], error, &a);
-	// strToDouble(argv[1], error, &b);
-	// strToDouble(argv[2], error, &c);
-	// printf("%d\n%d\n%d\n", a,b,c);
-	printf("%f\n", 0.5);
-	// if (a == 0) {
-	// 	printf("El coeficiente de x^2 no puede ser 0.\n");
-	// 	return;
-	// }
-	// double doubles[4] = {1, 2, 0, 3};
-	// double * root1 = doubles;
-	// double * root2 = doubles+1;
+	double a;
+	double b;
+	double c;
 
+	strToDouble(argv[0], &a);
+	strToDouble(argv[1], &b);
+	strToDouble(argv[2], &c);
 
-	// printf("Raiz1: %x\n", (*root1));
-	// printf("Raiz2: %x\n", (*root2));
+	double min = 1.0;
+	min /= pow(10, FLOAT_PRECISION);
 
-	// _syscall(SYS_ROOTS_ID, a,b,c, root1, root2);
+	double aux1;
+	double aux2;
+	double aux3;
+	
+	aux1 = a > 0 ? a : -1*a;
+	aux2 = b > 0 ? b : -1*b;
+	aux3 = c > 0 ? c : -1*c;
 
-	// printf("Raiz1: %d\n", (*root1));
-	// printf("Raiz2: %d\n", (*root2));	
+	if (a == 0) {
+		printf("El coeficiente de x^2 no puede ser 0.\n");
+		return;
+	}
+
+	if( aux1 < min || (aux2 < min && b!=0) || (aux3 < min && c!=0) ){
+		printf("Los argumentos pueden tener como maximo %d decimales.\n", FLOAT_PRECISION);
+		return ;
+	}
+
+	if(b*b - 4*a*c < 0){
+		printf("El polinomio no puede tener raices imaginarias.\nSu discriminante no puede ser menor que 0.\n");
+		return ;
+	}
+
+	double root1;
+	double root2;
+
+	_syscall(SYS_ROOTS_ID, (uint64_t) a, (uint64_t) b,(uint64_t) c, (uint64_t) &root1, (uint64_t) &root2);
+
+	char res1[BUFFER_SIZE];
+	char res2[BUFFER_SIZE];
+
+	doubleToStr(root1, res1, FLOAT_PRECISION);	
+	doubleToStr(root2, res2, FLOAT_PRECISION);
+
+	printf("\nLas raices son: %s y %s\n\n", res1, res2);
 }
 
 void clear(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {

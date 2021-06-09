@@ -50,7 +50,7 @@ void shellExecute(){
     
     while (1){
         printUser();
-
+        
         userInput[0] = 0;
 
         scanf("%s", userInput);
