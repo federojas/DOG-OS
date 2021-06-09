@@ -4,9 +4,11 @@
 #include <stdint.h>
 
 static char userName[USER_SIZE] = "DefaultUser";
+static int shellStartup = 1;
 
 void startShell(){ 
-    shellWelcomeMessage();
+    if(shellStartup)
+        shellWelcomeMessage();
     shellExecute();
 }
 
@@ -17,6 +19,7 @@ void shellWelcomeMessage(){
     printf("Profesores:\n\nHoracio Victor Merovich\n\nSantiago Raul Valles\n\n");
     printf("Integrantes:\n\nFederico Gustavo Rojas 60239\n\nRoberto Franco Rodriguez 60089\n\nLeonardo Agustin D'Agostino 60335\n\n\n");
     printf("\nUtilize el comando /help para obtener un manual de usuario.\n\n\n\n");
+    shellStartup = 0;
 }
 
 static int getCommandArgs(char* userInput, char* command, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
