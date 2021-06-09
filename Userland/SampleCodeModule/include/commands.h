@@ -3,17 +3,17 @@
 
 #include <shell.h>
 
-void help(int argc, char* argv[]);
-void getCurrentDayTime(int argc, char* argv[]);
-void getCPUFeatures(int argc, char* argv[]);
-void getInfoReg(int argc, char* argv[]);
-void divZero(int argc, char* argv[]);
-void opCode(int argc, char* argv[]);
-void getRoots(int argc, char* argv[], double a, double b, double c);
-void clear(int argc, char* argv[]);
-void exit(int argc, char* argv[]);
-void getMem(int argc, char* argv[]);
-void changeUser(int argc, char* argv[], char userName[USER_SIZE]);
+void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void getCurrentDayTime(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void getCPUFeatures(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void getInfoReg(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void divZero(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void opCode(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void getRoots(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void clear(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void exit(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void getMem(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], char userName[USER_SIZE]);
 void _opcodeExp(void);
-void getCPUVendor(int argc, char* argv[]);
+void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 #endif

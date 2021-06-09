@@ -10,7 +10,7 @@
 //#define LAST_MEM_POSITION 536870911 //512MB mem que se le pasa en run.sh
 
 //returns current date and time
-void getCurrentDayTime(int argc, char* argv[]) {
+void getCurrentDayTime(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -57,7 +57,7 @@ static void print_feature(uint8_t feature, const char * string){
     }
 }
 
-void getCPUFeatures(int argc, char* argv[]){
+void getCPUFeatures(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -101,7 +101,7 @@ void getCPUFeatures(int argc, char* argv[]){
 	newLine();
 }
 
-void getInfoReg(int argc, char* argv[]) {
+void getInfoReg(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -114,7 +114,7 @@ void getInfoReg(int argc, char* argv[]) {
 	  newLine();
 }
 
-void getMem(int argc, char* argv[]) {
+void getMem(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 1) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -139,7 +139,7 @@ void getMem(int argc, char* argv[]) {
 	newLine();
 }
 
-void divZero(int argc, char* argv[]) {
+void divZero(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -148,7 +148,7 @@ void divZero(int argc, char* argv[]) {
 }
 
 // https://mudongliang.github.io/x86/html/file_module_x86_id_318.html
-void opCode(int argc, char* argv[]) {
+void opCode(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -156,86 +156,47 @@ void opCode(int argc, char* argv[]) {
 	_opcodeExp();
 }
 
-void getRoots(int argc, char* argv[], double a, double b, double c) {
+void getRoots(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 3) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
     }
-	// aca habria que pasar los a,b,c de argv
-	if (a == 0) {
-		printf("El coeficiente de x^2 no puede ser 0.\n");
-		return;
-	}
-	double doubles[4] = {1, 2, 0, 3};
-	double * root1 = doubles;
-	double * root2 = doubles+1;
+	// double a;
+	// double b;
+	// double c;
 
-
-	printf("Raiz1: %x\n", (*root1));
-	printf("Raiz2: %x\n", (*root2));
-
-	_syscall(SYS_ROOTS_ID, a, b, c, root1, root2);
-
-	printf("Raiz1: %d\n", (*root1));
-	printf("Raiz2: %d\n", (*root2));
-
-	// printf("Atencion, la funcion tiene una precision de 4 decimales.\n");
-	// float results[2];
-	// // basado en: https://www.programiz.com/c-programming/examples/quadratic-roots
-
-    // float disc = b * b - 4 * a * c;
-	// if(disc < 0)
-	// 	disc *= -1;
-	// float x = disc;
-  
-    // float sqrtdisc;
-
-  
-    // for(int i = 0; i < 10 ; i++) {
-    
-    //     // Calculate more closed x
-    //     sqrtdisc = 0.5 * (x + (disc / x));
-  
-    //     // Update root
-    //     x = sqrtdisc;
-    // }
-
-	
-	// // condition for real and different roots
-    // if (disc > 0) {
-    //     results[0] = (-b + sqrtdisc) / (2 * a);
-    //     results[1] = (-b - sqrtdisc) / (2 * a);
-    // }
-    // // condition for real and equal roots
-    // else if (disc == 0) {
-    //     results[0] = results[1] = -b / (2 * a);
-    // }
-	
-
-    // // if roots are not real
-    // else {
-    //     float realPart = -b / (2 * a);
-    //     float imagPart = sqrtdisc / (2 * a);
-	// 	results[0] = realPart;
-	// 	results[1] = imagPart;
-    // }
-	// printf("\nsqrtdisc: %d\n", sqrtdisc);
-	// printf("%d y %d\n", results[0], results[1]);
-	// if( disc < 0) {
-	// 	printf("Las raices son: i) %f + %f i ii) %f - %f i\n", results[0], results[1], results[0], results[1]);
+	// int * error;
+	// strToDouble(argv[0], error, &a);
+	// strToDouble(argv[1], error, &b);
+	// strToDouble(argv[2], error, &c);
+	// printf("%d\n%d\n%d\n", a,b,c);
+	printf("%f\n", 0.5);
+	// if (a == 0) {
+	// 	printf("El coeficiente de x^2 no puede ser 0.\n");
 	// 	return;
-	// } 
-	// printf("Las raices son: i) %f ii) %f\n", results[0], results[1]);	
+	// }
+	// double doubles[4] = {1, 2, 0, 3};
+	// double * root1 = doubles;
+	// double * root2 = doubles+1;
+
+
+	// printf("Raiz1: %x\n", (*root1));
+	// printf("Raiz2: %x\n", (*root2));
+
+	// _syscall(SYS_ROOTS_ID, a,b,c, root1, root2);
+
+	// printf("Raiz1: %d\n", (*root1));
+	// printf("Raiz2: %d\n", (*root2));	
 }
 
-void clear(int argc, char* argv[]) {
+void clear(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
     }
 	_syscall(SYS_CLEAR_ID,0,0,0,0,0);
 }
-void exit(int argc, char* argv[]) {
+void exit(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -245,7 +206,7 @@ void exit(int argc, char* argv[]) {
 	_syscall(SYS_EXIT_ID,0,0,0,0,0);
 }
 
-void changeUser(int argc, char* argv[], char userName[USER_SIZE]) {
+void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], char userName[USER_SIZE]) {
 	if (argc != 1) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -257,7 +218,7 @@ void changeUser(int argc, char* argv[], char userName[USER_SIZE]) {
 	strcpy(userName, argv[0]);
 }
 
-void getCPUVendor(int argc, char* argv[]) {
+void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
@@ -267,7 +228,7 @@ void getCPUVendor(int argc, char* argv[]) {
 	printf("\nID de fabricante: %s\n\n", buffer);
 }
 
-void help(int argc, char* argv[]) {
+void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("Cantidad invalida de argumentos.\n");
 		return;
