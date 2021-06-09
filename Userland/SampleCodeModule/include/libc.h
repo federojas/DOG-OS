@@ -22,4 +22,5 @@ void sendUserData();
 void doubleToStr(double n, char* res, int afterpoint);
 int pow(int x, unsigned int y);
 void strToDouble(char *numStr, double *result);
+void setFirstChange(int number);
 #endif

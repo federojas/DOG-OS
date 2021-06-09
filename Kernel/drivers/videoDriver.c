@@ -250,9 +250,9 @@ void setUsernameLen(int len){
     USER_LENGHT=len;
 }
 void clearLine(){
-    for(int x=0; x<=currentScreen->width;x++){
+    for(int x=0; x<=currentScreen->width-2*CHAR_WIDTH;x++){
         for(int y=currentScreen->currentY;y<=currentScreen->height;y++){
-            putPixel(x,y,BLACK);
+            putPixel(x+currentScreen->offset,y,BLACK);
         }
     }
     

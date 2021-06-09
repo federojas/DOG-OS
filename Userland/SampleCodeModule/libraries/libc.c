@@ -7,7 +7,6 @@
 static int buffSize = 0;
 char buffer[BUFF_LEN]={0};
 static int firstChange=1;
-
 void putChar(char c){
     _syscall(SYS_WRITE_ID, (uint64_t)&c, 1, BLACK, WHITE, 0);
 }
@@ -15,7 +14,10 @@ void putChar(char c){
 void sendUserData(char *userName, int len){
    _syscall(SYS_WRITE_ID, (uint64_t)userName, len+1, BLACK, WHITE, &len);
 }
-
+void setFirstChange(int number){
+    if(number<0 || number>1)return;
+    firstChange=number;
+}
 //https://stackoverflow.com/questions/54352400/implementation-of-printf-function
 void printf(char *str, ...){
     va_list args;
@@ -242,6 +244,7 @@ int readText(){
             if(c=='\t'){
                 if(firstChange){
                     firstChange=0;
+                    newLine();
                     printUser();    
                 }
                 buffSize=0;
