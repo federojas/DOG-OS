@@ -35,9 +35,12 @@ void getMem(uint64_t direc, uint8_t * buffer, uint64_t bytes) {
 }
 
 
-void sys_write(char * str, uint8_t len, t_color bgColor, t_color ftColor) {
+void sys_write(char * str, uint8_t len, t_color bgColor, t_color ftColor, int usrLen) {
     if (str == 0 ||  len <= 0 || bgColor < 0 || ftColor < 0) 
         return ;
+		if(usrLen>1){
+			setUsernameLen(len);
+		}
 	for (int i = 0; str[i] != 0 && i < len; i++) 
 		printChar(str[i], ftColor, bgColor, 1);     
 	

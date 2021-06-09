@@ -25,18 +25,18 @@ void exceptionDispatcher(int exception, uint64_t rsp) {
 }
 
 static void zero_division() {
-	sys_write("Exception 0: Cannot divide by zero.", 36, BLACK, RED);
+	sys_write("Exception 0: Cannot divide by zero.", 36, BLACK, RED,0);
 	printLine();
 }
 
 static void inv_op_code() {
-	sys_write("Exception 6: Invalid opcode.", 29, BLACK, RED);
+	sys_write("Exception 6: Invalid opcode.", 29, BLACK, RED,0);
 	printLine();
 }
 
 static void printRegs(uint64_t* rsp) {
 	for (int i = 0; i < REGISTER_AMOUNT; i++) {
-		sys_write(registerNames[i], strlen(registerNames[i]), BLACK, WHITE);
+		sys_write(registerNames[i], strlen(registerNames[i]), BLACK, WHITE,0);
 		printIntHex(rsp[i]);
 		printLine();
 	}

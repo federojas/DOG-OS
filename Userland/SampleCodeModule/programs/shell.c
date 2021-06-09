@@ -39,8 +39,16 @@ static int getCommandArgs(char* userInput, char* command, char argv[MAX_ARGUMENT
         return -1;
     return argc;
 }
-void printUser(){
-     printf("$%s > ", userName);
+ void printUser(){
+    int len=strlen(userName);
+    len+=4;
+    printf("$ ");
+    //printf("%d\n",len);
+    sendUserData(userName,len);
+    printf(" > ");
+    // putChar('$');
+    // putChar('>'); 
+     //printf("$%s > ", userName);
 }
 void shellExecute(){
     char command[BUFFER_SIZE] = {0};
