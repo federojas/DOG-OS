@@ -209,20 +209,21 @@ void deleteChar(){
 }
 
 void scrollDown(){
-    /*
+/*
     si no fueran dos pantallas independientes se podria usar el siguiente codigo comentado, pero como las dos pantallas son independientes
     es necesario hacer un memcpy el cual se encargue solo de copiar la mitad del estado de la pantalla 
 */
 //basado en: https://forum.osdev.org/viewtopic.php?f=1&t=22702
-// unsigned long x=0;
-// unsigned long long *vidmem = (unsigned long long*)screenData->framebuffer;
+    // unsigned long x=0;
+    // unsigned long long *vidmem = (unsigned long long*)screenData->framebuffer;
 
-// while(x<=HEIGHT*WIDTH/2) //1024*768/2== HEIGHT * WIDTH /2
-// {
-// vidmem[x]=vidmem[x+(CHAR_HEIGHT*screenData->width/4)*3];    /* Valid only for 1024x768x32bpp */   
-//    x=x+1;
-// }
-//     clearLine();
+    // while(x<=HEIGHT*WIDTH/2) //1024*768/2== HEIGHT * WIDTH /2
+    // {
+    // vidmem[x]=vidmem[x+(CHAR_HEIGHT*screenData->width/4)*3];    /* Valid only for 1024x768x32bpp */   
+    // x=x+1;
+    // }    
+
+
 
     //void *memcpy(void *dest, const void * src, size_t n)
     // sc2.offset=(WIDTH/2)+2*CHAR_WIDTH;
