@@ -52,18 +52,18 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 void printIntDec(uint64_t num) {
    char buffer[10];
    uintToBase(num, buffer, 10);
-   sys_write(buffer, strlen(buffer), BLACK, WHITE);
+   sys_write(buffer, strlen(buffer), BLACK, WHITE,0);
 }
 
 void printIntHex(uint64_t num) {
     char buffer[10];
     uintToBase(num, buffer, 16);
-    sys_write(buffer, strlen(buffer), BLACK, WHITE);
+    sys_write(buffer, strlen(buffer), BLACK, WHITE,0);
 }
 
 void printIntBin(uint64_t num) {
     char buffer[10];
     uintToBase(num, buffer, 2);
-    sys_write(buffer, strlen(buffer), BLACK, WHITE);
+    sys_write(buffer, strlen(buffer), BLACK, WHITE,0);
 }
 

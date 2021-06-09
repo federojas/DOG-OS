@@ -50,7 +50,7 @@ uint8_t getAction(uint8_t scanCode) {
 }
 static void cleanBufferofScreen(){
     stopCursor();
-    for(int i=0; i<widx;i++){
+    for(int i=0; i<bufferSize;i++){
         deleteChar();
     }
     cleanKeyboardBuffer();
@@ -105,7 +105,6 @@ void keyboardHandler(uint64_t rsp) {
         }
     }
 }
-
 void putCharInBuffer(char c){
     if(c!=0){
         buffer[widx]=c;
@@ -147,6 +146,7 @@ char removeCharFromBuffer(){
         return -1;
     int c= buffer[ridx]; 
     ridx=(ridx +1)%BUFF_LEN; //mas rapido que ir preguntando si el indice alcanzo el maximo, y de esta manera recorremos ciclicamente el buffer
+    if(buffSize!=0)
     buffSize--;
     return c;
 

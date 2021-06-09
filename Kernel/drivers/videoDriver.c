@@ -10,6 +10,9 @@ unsigned int HEIGHT = 768;
 unsigned int PIXEL_SIZE = 3; //bytes por pixel 
 unsigned int DEFAULT_BG_COLOUR = 0X000000;
 unsigned int DEFAULT_FONT_COLOUR = 0XFFFFFF;
+
+unsigned int USER_LENGHT=0;//14
+unsigned int lineCounter=0;
 //FALTA HACER UN SCROLL PARA CUANDO LA PANTALLA ESTE LLENA DE TEXTO Y HAYA QUE BAJAR
 
 //cursor basado en codigo de ayudante en practica
@@ -129,10 +132,12 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
     if(x+(2*CHAR_WIDTH)-currentScreen->offset>= currentScreen->width){ 
     
         y+=CHAR_HEIGHT;
+        lineCounter++;
         newLine();
         
     }
     if(c=='\n'){
+        lineCounter=0;
         newLine();
         return ;
     }
@@ -170,7 +175,7 @@ void newLine(){
             
         }
 
-    currentScreen->currentX=0; //+currentScreen->offset
+    currentScreen->currentX=0; 
 
 
 }
@@ -186,12 +191,17 @@ void clearScreen(){
 }
 
 
+
 void deleteChar(){
+    if(currentScreen->currentX<=USER_LENGHT*CHAR_WIDTH && lineCounter==0){
+      return;  
+    } 
     if(currentScreen->currentX==0){
         if(currentScreen->currentY==0 ){
             return;
         }
-        currentScreen->currentY-=CHAR_HEIGHT;
+    currentScreen->currentY-=CHAR_HEIGHT;
+    lineCounter--;
        currentScreen->currentX=currentScreen->width-(2*CHAR_WIDTH);
     }
     currentScreen->currentX-=CHAR_WIDTH;
@@ -236,7 +246,9 @@ void scrollDown(){
     }
     clearLine();
 }
-
+void setUsernameLen(int len){
+    USER_LENGHT=len;
+}
 void clearLine(){
     for(int x=0; x<=currentScreen->width;x++){
         for(int y=currentScreen->currentY;y<=currentScreen->height;y++){

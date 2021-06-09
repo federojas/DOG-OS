@@ -18,6 +18,7 @@ char *strcpy(char *destination, const char *source);
 void newLine();
 int readText();
 int strToHex(const char *str);
+void sendUserData();
 // float sqrt(float a);
 // void floatToStr(float n, char* res, int afterpoint);
 // int pow(int x, unsigned int y);

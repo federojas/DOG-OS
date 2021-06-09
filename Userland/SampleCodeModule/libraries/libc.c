@@ -13,6 +13,9 @@ void putChar(char c){
     _syscall(SYS_WRITE_ID, (uint64_t)&c, 1, BLACK, WHITE, 0);
 }
 
+void sendUserData(char *userName, int len){
+   _syscall(SYS_WRITE_ID, (uint64_t)userName, len+1, BLACK, WHITE, &len);
+}
 
 //https://stackoverflow.com/questions/54352400/implementation-of-printf-function
 void printf(char *str, ...){
