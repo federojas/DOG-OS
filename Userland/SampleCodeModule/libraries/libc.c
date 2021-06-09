@@ -3,7 +3,6 @@
 #include <stdarg.h>
 #include <shell.h>
 #define BUFF_LEN 100
-// #define PRINTF_FLOAT_PRECISION 4
 
 static int buffSize = 0;
 char buffer[BUFF_LEN]={0};
@@ -55,14 +54,6 @@ void printf(char *str, ...){
                     j += strlen(str_arg);
                     break;
                 }
-                //Atencion, printf imprime solo con precision de 4 decimales
-                // case 'f':
-                // {
-                //     doubleToStr(va_arg(args, double),tmp,PRINTF_FLOAT_PRECISION);
-                //     strcpy(&buff[j], tmp);
-                //     j += strlen(tmp);
-                //     break;
-                // }
                 case '%':
                 {
                     strcpy(&buff[j], "%");
