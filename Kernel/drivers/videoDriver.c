@@ -182,7 +182,7 @@ void newLine(){
 //funcion para limpiar la pantalla 
 void clearScreen(){
     for(int i=0;i<currentScreen->height;i++){
-        for(int j=0;j<currentScreen->width;j++){
+        for(int j=0;j<currentScreen->width-2*CHAR_WIDTH;j++){
             putPixel(j + currentScreen->offset,i,BLACK);
         }
     }
