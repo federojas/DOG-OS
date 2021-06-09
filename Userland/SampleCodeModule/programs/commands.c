@@ -248,6 +248,7 @@ void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], char userName[U
 		return;
 	}
 	strcpy(userName, argv[0]);
+	setFirstChange(1);
 }
 
 void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
