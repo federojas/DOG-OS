@@ -3,9 +3,8 @@
 #include <commands.h>
 #include <stdint.h>
 
-#define BUFFER_SIZE 100
-#define MAX_ARGUMENTS 3
 static char userName[USER_SIZE] = "DefaultUser";
+
 void startShell(){ 
     shellExecute();
 }
@@ -14,7 +13,7 @@ void shellWelcomeMessage(){
     printf("hola como estas!\n");
 }
 
-static int getCommandArgs(char* userInput, char* command, char* argv[MAX_ARGUMENTS]) {
+static int getCommandArgs(char* userInput, char* command, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
     int argc = 0;
     int i = 0;
     for(i = 0; userInput[i] != 0 && userInput[i] != ' '; i++) {
@@ -22,6 +21,11 @@ static int getCommandArgs(char* userInput, char* command, char* argv[MAX_ARGUMEN
     }
     command[i] = 0;
     int argIdx = 0;
+
+    for(int j = 0; j < MAX_ARGUMENTS; j++) {
+            argv[j][0] = 0;
+    }
+
     while(userInput[i] != 0 && argc < MAX_ARGUMENTS) {
         i++;
         argIdx = 0;
@@ -48,7 +52,7 @@ static int getCommandArgs(char* userInput, char* command, char* argv[MAX_ARGUMEN
 }
 void shellExecute(){
     char command[BUFFER_SIZE] = {0};
-    char* argv[MAX_ARGUMENTS];
+    char argv[MAX_ARGUMENTS][BUFFER_SIZE];
     char userInput[BUFFER_SIZE] = {0};
     int argc = 0;
     
@@ -96,6 +100,9 @@ void shellExecute(){
         }
         else if(strcmp("/cpuvendor", command) == 0) {
             getCPUVendor(argc, argv);
+        }
+        else if(strcmp("/roots", command) == 0) {
+            getRoots(argc, argv);
         }
         else {
             printf("Comando invalido: use /help\n");

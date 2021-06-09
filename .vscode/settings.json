@@ -24,9 +24,17 @@
         "rtcid.h": "c",
         "commands.h": "c",
         "syscalldispatcher.h": "c",
+<<<<<<< Updated upstream
         "time.h": "c",
+<<<<<<< HEAD
+        "inforeg.h": "c"
+=======
+        "calculator.h": "c"
+>>>>>>> Stashed changes
+=======
         "inforeg.h": "c",
         "shell.h": "c"
+>>>>>>> main
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

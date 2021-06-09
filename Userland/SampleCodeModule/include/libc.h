@@ -19,7 +19,7 @@ void newLine();
 int readText();
 int strToHex(const char *str);
 void sendUserData();
-// float sqrt(float a);
-// void floatToStr(float n, char* res, int afterpoint);
-// int pow(int x, unsigned int y);
+void doubleToStr(double n, char* res, int afterpoint);
+int pow(int x, unsigned int y);
+void strToDouble(char *numStr, int *error, double *result);
 #endif

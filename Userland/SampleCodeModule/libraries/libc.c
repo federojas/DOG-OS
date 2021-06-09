@@ -3,7 +3,6 @@
 #include <stdarg.h>
 #include <shell.h>
 #define BUFF_LEN 100
-// #define PRINTF_FLOAT_PRECISION 4
 
 static int buffSize = 0;
 char buffer[BUFF_LEN]={0};
@@ -58,14 +57,6 @@ void printf(char *str, ...){
                     j += strlen(str_arg);
                     break;
                 }
-                // Atencion, printf imprime solo con precision de 4 decimales
-                // case 'f':
-                // {
-                //     floatToStr(va_arg(args, float),tmp,PRINTF_FLOAT_PRECISION);
-                //     strcpy(&buff[j], tmp);
-                //     j += strlen(tmp);
-                //     break;
-                // }
                 case '%':
                 {
                     strcpy(&buff[j], "%");
@@ -105,95 +96,79 @@ void printf(char *str, ...){
 
 
 
-// //https://stackoverflow.com/questions/26860574/pow-implementation-in-cmath-and-efficient-replacement
-// int pow(int x, unsigned int y)
-// {
-//     if (y == 0)
-//         return 1;
-//     else if ((y % 2) == 0)
-//         return pow (x, y / 2) * pow (x, y / 2);
-//     else
-//         return x * pow (x, y / 2) * pow (x, y / 2);
+//https://stackoverflow.com/questions/26860574/pow-implementation-in-cmath-and-efficient-replacement
+int pow(int x, unsigned int y)
+{
+    if (y == 0)
+        return 1;
+    else if ((y % 2) == 0)
+        return pow (x, y / 2) * pow (x, y / 2);
+    else
+        return x * pow (x, y / 2) * pow (x, y / 2);
 
-// }
+}
 
-// // Reverses a string 'str' of length 'len'
-// static void reverseFtoa(char* str, int len)
-// {
-//     int i = 0, j = len - 1, temp;
-//     while (i < j) {
-//         temp = str[i];
-//         str[i] = str[j];
-//         str[j] = temp;
-//         i++;
-//         j--;
-//     }
-// }
+// Reverses a string 'str' of length 'len'
+static void reverseDtoa(char* str, int len)
+{
+    int i = 0, j = len - 1, temp;
+    while (i < j) {
+        temp = str[i];
+        str[i] = str[j];
+        str[j] = temp;
+        i++;
+        j--;
+    }
+}
 
-// // Converts a given integer x to string str[]. 
-// // d is the number of digits required in the output. 
-// // If d is more than the number of digits in x, 
-// // then 0s are added at the beginning.
-// static int intToStrFtoa(int x, char str[], int d)
-// {
-//     int i = 0;
-//     while (x) {
-//         str[i++] = (x % 10) + '0';
-//         x = x / 10;
-//     }
+// Converts a given integer x to string str[]. 
+// d is the number of digits required in the output. 
+// If d is more than the number of digits in x, 
+// then 0s are added at the beginning.
+static int intToStrDtoa(int x, char str[], int d)
+{
+    int i = 0;
+    while (x) {
+        str[i++] = (x % 10) + '0';
+        x = x / 10;
+    }
   
-//     // If number of digits required is more, then
-//     // add 0s at the beginning
-//     while (i < d)
-//         str[i++] = '0';
+    // If number of digits required is more, then
+    // add 0s at the beginning
+    while (i < d)
+        str[i++] = '0';
   
-//     reverseFtoa(str, i);
-//     str[i] = '\0';
-//     return i;
-// }
+    reverseDtoa(str, i);
+    str[i] = '\0';
+    return i;
+}
 
-// // https://www.geeksforgeeks.org/convert-floating-point-number-string/
-// // Converts a floating-point/double number to a string.
-// void floatToStr(float n, char* res, int afterpoint)
-// {
-//     // Extract integer part
-//     int ipart = (int)n;
+// https://www.geeksforgeeks.org/convert-floating-point-number-string/
+// Converts a floating-point/double number to a string.
+void doubleToStr(double n, char* res, int afterpoint)
+{
+    // Extract integer part
+    int ipart = (int)n;
   
-//     // Extract floating part
-//     float fpart = n - (float)ipart;
+    // Extract floating part
+    double fpart = n - (float)ipart;
   
-//     // convert integer part to string
-//     int i = intToStrFtoa(ipart, res, 0);
+    // convert integer part to string
+    int i = intToStrDtoa(ipart, res, 0);
   
-//     // check for display option after point
-//     if (afterpoint != 0) {
-//         res[i] = '.'; // add dot
+    // check for display option after point
+    if (afterpoint != 0) {
+        res[i] = '.'; // add dot
   
-//         // Get the value of fraction part upto given no.
-//         // of points after dot. The third parameter 
-//         // is needed to handle cases like 233.007
-//         fpart = fpart * pow(10, afterpoint);
+        // Get the value of fraction part upto given no.
+        // of points after dot. The third parameter 
+        // is needed to handle cases like 233.007
+        fpart = fpart * pow(10, afterpoint);
   
-//         intToStrFtoa((int)fpart, res + i + 1, afterpoint);
-//     }
-// }
+        intToStrDtoa((int)fpart, res + i + 1, afterpoint);
+    }
+}
 
-//funcion auxiliar para leer palabras
-// static char *strcpyScan(char *destino, const char *fuente)
-// {
-
-//     char *aux = destino;
-
-//     while (*fuente != '\0' && *fuente != ' ')
-//     {
-//         *destino = *fuente;
-//         fuente++;
-//         destino++;
-//     }
-
-//     *destino = '\0';
-//     return aux;
-// }
 
 // inspirado en https://iq.opengenus.org/how-printf-and-scanf-function-works-in-c-internally/
 int scanf(char * str, ...)
@@ -383,96 +358,50 @@ int strToHex(const char *str)
     return val;   
 }
 
-// static float min(float x, float n) {
-//     return n>x ? x : n;
-// }
 
-// static float max(float x, float n) {
-//     return n>x ? n : x;
-// }
+static uint64_t strToIntDtoA(char *str, int *error) {
+      uint64_t num = 0;
+      *error = 0;
+      for (int i = 0; str[i] != 0; i++) {
+            if ('0' <= str[i] && str[i] <= '9') {
+                  num *= 10;
+                  num += str[i] - '0';
+            } else {
+                  *error = 1;
+                  return -1;
+            }
+      }
+      return num;
+}
 
-// float sqrt(float n){
-//   // Max and min are used to take into account numbers less than 1
-//   float lo = min(1, n), hi = max(1, n), mid;
+void strToDouble(char *numStr, int *error, double *result) {
+      *result = 0;
+      int i = 0, k, sign = 0;
+      double commaOffset = 0;
+      char integerPart[BUFF_LEN] = {0};
 
-//   // Update the bounds to be off the target by a factor of 10
-//   while(100 * lo * lo < n) lo *= 10;
-//   while(100 * hi * hi > n) hi *= 0.1;
+      if (numStr[i] == '-') {
+            sign = 1;
+            i++;
+      }
 
-//   for(int i = 0 ; i < 100 ; i++){
-//       mid = (lo+hi)/2;
-//       if(mid*mid == n) return mid;
-//       if(mid*mid > n) hi = mid;
-//       else lo = mid;
-//   }
-//   return mid;
-// }
+      for (k = 0; numStr[i] != 0 && numStr[i] != '.'; i++, k++) {
+            integerPart[k] = numStr[i];
+      }
+      *result += strToIntDtoA(integerPart, error);
+      if (numStr[i] == '.') {
+            i++;
+            for (; numStr[i] != 0; i++, commaOffset++) {
+                  *result *= 10;
+                  *result += numStr[i] - '0';
+            }
+            *result /= pow(10, commaOffset);
+      }
+      if (sign) {
+            *result *= -1;
+      }
+}
 
-// // https://www.codeproject.com/Articles/570700/SquareplusRootplusalgorithmplusforplusC
-// static float powerOfTen(int num){
-//     float rst = 1.0;
-//     if(num >= 0){
-//         for(int i = 0; i < num ; i++){
-//             rst *= 10.0;
-//         }
-//     }else{
-//         for(int i = 0; i < (0 - num ); i++){
-//             rst *= 0.1;
-//         }
-//     }
-//     return rst;
-// }
-
-// float sqrt(float a)
-//  {
-//     /*
-//         find more detail of this method on wiki methods_of_computing_square_roots
-
-//         *** Babylonian method cannot get exact zero but approximately value of the square_root
-//     */
-//     float z = a; 
-//     float rst = 0.0;
-//     int max = 8;     // to define maximum digit 
-//     int i;
-//     float j = 1.0;
-//     for(i = max ; i > 0 ; i--){
-//         // value must be bigger then 0
-//         if(z - (( 2 * rst ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
-//         {
-//             while( z - (( 2 * rst ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
-//             {
-//                 j++;
-//                 if(j >= 10) break;
-
-//             }
-//             j--; //correct the extra value by minus one to j
-//             z -= (( 2 * rst ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)); //find value of z
-
-//             rst += j * powerOfTen(i);     // find sum of a
-
-//             j = 1.0;
-//         }
-
-//     }
- 
-//     for(i = 0 ; i >= 0 - max ; i--){
-//         if(z - (( 2 * rst ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
-//         {
-//             while( z - (( 2 * rst ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
-//             {
-//             j++;
-
-//         }
-//             j--;
-//             z -= (( 2 * rst ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)); //find value of z
-
-//             rst += j * powerOfTen(i);     // find sum of a
-//             j = 1.0;
-//         }
-//     }
-//     // find the number on each digit
-//     return rst;
-//  }
 
 // https://www.techiedelight.com/implement-itoa-function-in-c/
 
