@@ -25,12 +25,16 @@ void exceptionDispatcher(int exception, uint64_t rsp) {
 }
 
 static void zero_division() {
+	printLine();
 	sys_write("Excecpion 0: No se puede dividir por cero.", 43, BLACK, RED,0);
+	printLine();
 	printLine();
 }
 
 static void inv_op_code() {
+	printLine();
 	sys_write("Excecpion 6: Opcode invalido.", 30, BLACK, RED,0);
+	printLine();
 	printLine();
 }
 
@@ -40,4 +44,5 @@ static void printRegs(uint64_t* rsp) {
 		printIntHex(rsp[i]);
 		printLine();
 	}
+	printLine();
 }

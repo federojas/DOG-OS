@@ -7,7 +7,7 @@
 
 #define YEAR 20 //Debe escribir aca los digitos de su año (excepto los ultimos dos)
 #define BYTES 32 //Cantidad de bytes para el mem dump
-#define FLOAT_PRECISION 8
+#define FLOAT_PRECISION 8 //Precision para los puntos flotantes
 //#define LAST_MEM_POSITION 536870911 //512MB mem que se le pasa en run.sh
 
 //returns current date and time
@@ -16,7 +16,7 @@ void getCurrentDayTime(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
 	}
-    printf("Fecha de hoy: ");
+    printf("\nFecha de hoy: ");
     uint64_t result = _syscall(SYS_RTC_ID, DAY_RTC_ID, 0, 0, 0, 0);
     printf("%d", result);
 	putChar('/');
@@ -29,7 +29,7 @@ void getCurrentDayTime(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("%d", YEAR);
 	printf("%d\n", result);
 
-	printf("Hora: ");
+	printf("\nHora: ");
 	result = _syscall(SYS_RTC_ID, HOUR_RTC_ID, 0, 0, 0, 0);
 	printf("%d", result);
 	putChar(':');
@@ -45,7 +45,7 @@ void getCurrentDayTime(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if(result < 10){
 		putChar('0'); 
 	}
-	printf("%d\n", result); 	
+	printf("%d\n\n", result); 	
 }
 
 static void print_feature(uint8_t feature, const char * string){
@@ -73,10 +73,10 @@ void getCPUFeatures(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
 	uint32_t features[4];
 	_syscall(SYS_CPUFEATURES_ID, (uint64_t) features, 0, 0, 0, 0);
 
-	printf("\nValor de EDX con EAX en 1: %x\n", features[0]);
-	printf("Valor de ECX con EAX en 1: %x\n", features[1]);
-	printf("Valor de EBX con EAX en 7 y ECX en 0: %x\n", features[2]);
-	printf("Valor de ECX con EAX en 7 y ECX en 0: %x\n", features[3]);
+	// printf("\nValor de EDX con EAX en 1: %x\n", features[0]);
+	// printf("Valor de ECX con EAX en 1: %x\n", features[1]);
+	// printf("Valor de EBX con EAX en 7 y ECX en 0: %x\n", features[2]);
+	// printf("Valor de ECX con EAX en 7 y ECX en 0: %x\n", features[3]);
 
 	printf("\nCaracteristicas del CPU:\n\n");
 
@@ -108,9 +108,10 @@ void getInfoReg(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 		return;
     }
 	uint64_t* registers = (uint64_t*) _syscall(SYS_INFOREG_ID, 0, 0, 0, 0, 0);
+	newLine();
 	for (int i = 0; i < REGISTER_AMOUNT; i++) {
 		printf("%s", registerNames[i]);
-		printf("%x\n", registers[i]);
+		printf("%x\n\n", registers[i]);
     }
 	newLine();
 }
