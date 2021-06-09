@@ -95,6 +95,7 @@ void initializeVideo(){//POR AHORA LO DEJO A VALORES DEFAULT PERO DESPUES POR PA
 }
 
 void changeCurrentScreen(){
+    lineCounter=0;
     stopCursor();
     ACTUALSCREEN=(ACTUALSCREEN+1)%2;
     currentScreen=&screens[ACTUALSCREEN];
@@ -203,7 +204,7 @@ void deleteChar(){
     lineCounter--;
        currentScreen->currentX=currentScreen->width-(2*CHAR_WIDTH);
     }
-    currentScreen->currentX-=CHAR_WIDTH+currentScreen->offset;
+    currentScreen->currentX-=CHAR_WIDTH;
     printChar(' ',BLACK,BLACK,0);
 }
 
