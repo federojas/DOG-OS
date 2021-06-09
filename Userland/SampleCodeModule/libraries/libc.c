@@ -19,77 +19,61 @@ void sendUserData(char *userName, int len){
 //https://stackoverflow.com/questions/54352400/implementation-of-printf-function
 void printf(char *str, ...){
     va_list args;
-    int i = 0, j = 0;
-    char buff[BUFF_LEN] = {0}, tmp[20];
+    
+    char buff[BUFF_LEN] = {0};
+    int strIdx = 0, buffIdx = 0;
     char *str_arg;
+    char aux[20];
     va_start(args, str);
 
-    while (str && str[i]) {
-        if (str[i] == '%')
+    while (str && str[strIdx]) {
+        if (str[strIdx] == '%')
         {
-            i++;
-            switch (str[i])
+            strIdx++;
+            switch (str[strIdx])
             {
                 case 'c':
                 {
-                    buff[j] = (char)va_arg(args, int);
-                    j++;
+                    buff[buffIdx] = (char)va_arg(args, int);
+                    buffIdx++;
                     break;
                 }
                 case 'd':
                 {
-                    intToStr(va_arg(args, int),tmp,10);
-                    strcpy(&buff[j], tmp);
-                    j += strlen(tmp);
+                    intToStr(va_arg(args, int),aux,10);
+                    strcpy(&buff[buffIdx], aux);
+                    buffIdx += strlen(aux);
                     break;
                 }
                 case 'x':
                 {
-                    intToStr(va_arg(args, int),tmp,16);
-                    strcpy(&buff[j], tmp);
-                    j += strlen(tmp);
+                    intToStr(va_arg(args, int),aux,16);
+                    strcpy(&buff[buffIdx], aux);
+                    buffIdx += strlen(aux);
                     break;
                 }
                 case 's':
                 {
                     str_arg = (char *)va_arg(args, char *);
-                    strcpy(&buff[j], str_arg);
-                    j += strlen(str_arg);
+                    strcpy(&buff[buffIdx], str_arg);
+                    buffIdx += strlen(str_arg);
                     break;
                 }
                 case '%':
                 {
-                    strcpy(&buff[j], "%");
-                    j++;
+                    strcpy(&buff[buffIdx], "%");
+                    buffIdx++;
                     break;
                 }
             }
-        } else if (str[i] == '\\') {
-            i++;
-            switch (str[i])
-            {
-                // case '\\':
-                // {
-                //     strcpy(&buff[j], "\\");
-                //     j++;
-                //     break;
-                // }
-                case 'n':
-                {
-                    newLine();
-                    break;
-                }
-            }
+         } else {
+            buff[buffIdx] = str[strIdx];
+            buffIdx++;
         }
-        else
-        {
-            buff[j] = str[i];
-            j++;
-        }
-        i++;
+        strIdx++;
     }
 
-    _syscall(SYS_WRITE_ID, (uint64_t)buff, j, BLACK, WHITE, 0);
+    _syscall(SYS_WRITE_ID, (uint64_t)buff, buffIdx, BLACK, WHITE, 0);
     va_end(args);
     return ;
 }
@@ -108,8 +92,7 @@ int pow(int x, unsigned int y)
 
 }
 
-// Reverses a string 'str' of length 'len'
-static void reverseDtoa(char* str, int len)
+static void reverseAUX(char* str, int len)
 {
     int i = 0, j = len - 1, temp;
     while (i < j) {
@@ -121,11 +104,7 @@ static void reverseDtoa(char* str, int len)
     }
 }
 
-// Converts a given integer x to string str[]. 
-// d is the number of digits required in the output. 
-// If d is more than the number of digits in x, 
-// then 0s are added at the beginning.
-static int intToStrDtoa(int x, char str[], int d)
+static int intToStrAUX(int x, char str[], int d)
 {
     int i = 0;
     while (x) {
@@ -138,7 +117,7 @@ static int intToStrDtoa(int x, char str[], int d)
     while (i < d)
         str[i++] = '0';
   
-    reverseDtoa(str, i);
+    reverseAUX(str, i);
     str[i] = '\0';
     return i;
 }
@@ -151,21 +130,32 @@ void doubleToStr(double n, char* res, int afterpoint)
     int ipart = (int)n;
   
     // Extract floating part
-    double fpart = n - (float)ipart;
+    double fpart = n - (double)ipart;
+
+    if(n < 0 && n > -1) {
+         res[0] = '-';
+         intToStr(ipart, res + 1, 10);
+    } else {
+         intToStr(ipart, res, 10);
+    }
   
     // convert integer part to string
-    int i = intToStrDtoa(ipart, res, 0);
+   
+
+    int resIdx = strlen(res);
   
     // check for display option after point
     if (afterpoint != 0) {
-        res[i] = '.'; // add dot
+        res[resIdx] = '.'; // add dot
   
         // Get the value of fraction part upto given no.
         // of points after dot. The third parameter 
         // is needed to handle cases like 233.007
         fpart = fpart * pow(10, afterpoint);
+        if(n < 0)
+            fpart *= -1;
   
-        intToStrDtoa((int)fpart, res + i + 1, afterpoint);
+        intToStrAUX((int)fpart, res + resIdx + 1, afterpoint);
     }
 }
 
@@ -358,48 +348,33 @@ int strToHex(const char *str)
     return val;   
 }
 
-
-static uint64_t strToIntDtoA(char *str, int *error) {
-      uint64_t num = 0;
-      *error = 0;
-      for (int i = 0; str[i] != 0; i++) {
-            if ('0' <= str[i] && str[i] <= '9') {
-                  num *= 10;
-                  num += str[i] - '0';
-            } else {
-                  *error = 1;
-                  return -1;
-            }
-      }
-      return num;
-}
-
-void strToDouble(char *numStr, int *error, double *result) {
+void strToDouble(char *numStr, double *result) {
       *result = 0;
-      int i = 0, k, sign = 0;
+      int i = 0, k = 0, sign = 0;
       double commaOffset = 0;
       char integerPart[BUFF_LEN] = {0};
 
-      if (numStr[i] == '-') {
-            sign = 1;
-            i++;
-      }
+    if (numStr[i] == '-' && numStr[i + 1] == '0') {
+        sign = 1;
+        i++;
+    }
 
-      for (k = 0; numStr[i] != 0 && numStr[i] != '.'; i++, k++) {
-            integerPart[k] = numStr[i];
-      }
-      *result += strToIntDtoA(integerPart, error);
-      if (numStr[i] == '.') {
-            i++;
-            for (; numStr[i] != 0; i++, commaOffset++) {
-                  *result *= 10;
-                  *result += numStr[i] - '0';
-            }
-            *result /= pow(10, commaOffset);
-      }
-      if (sign) {
-            *result *= -1;
-      }
+    for (k = 0; numStr[i] != 0 && numStr[i] != '.'; i++, k++) {
+        integerPart[k] = numStr[i];
+    }
+    int aux;
+    *result += strToInt(integerPart, &aux);
+    if (numStr[i] == '.') {
+        i++;
+        for (; numStr[i] != 0; i++, commaOffset++) {
+                *result *= 10;
+                *result += numStr[i] - '0';
+        }
+        *result /= pow(10, commaOffset);
+    }
+    if (sign && numStr[1] == '0') {
+        *result *= -1;
+    }
 }
 
 

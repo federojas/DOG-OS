@@ -20,6 +20,7 @@ GLOBAL _syscallHandler
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN syscallSelector
+EXTERN getStackBase
 
 SECTION .text
 
@@ -59,6 +60,7 @@ SECTION .text
 	pop rax
 %endmacro
 
+
 %macro irqHandlerMaster 1
 	pushState
 
@@ -84,9 +86,13 @@ SECTION .text
 	call exceptionDispatcher
 
 	popState
+
+	sti 
+	mov rax, 0x400000
+	mov [rsp], rax
+	
 	iretq
 %endmacro
-
 
 _hlt:
 	sti

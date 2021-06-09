@@ -6,11 +6,17 @@
 static char userName[USER_SIZE] = "DefaultUser";
 
 void startShell(){ 
+    shellWelcomeMessage();
     shellExecute();
 }
 
 void shellWelcomeMessage(){
-    printf("hola como estas!\n");
+    printf("\nBienvenido a\n\n");
+    logo();
+    printf("\nTrabajo Practico Especial para la materia:\n\n72.08 - Arquitectura de Computadoras\n\n");
+    printf("Profesores:\n\nHoracio Victor Merovich\n\nSantiago Raul Valles\n\n");
+    printf("Integrantes:\n\nFederico Gustavo Rojas 60239\n\nRoberto Franco Rodriguez 60089\n\nLeonardo Agustin D'Agostino 60335\n\n\n");
+    printf("\nUtilize el comando /help para obtener un manual de usuario.\n\n\n\n");
 }
 
 static int getCommandArgs(char* userInput, char* command, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
@@ -43,12 +49,8 @@ static int getCommandArgs(char* userInput, char* command, char argv[MAX_ARGUMENT
     int len=strlen(userName);
     len+=4;
     printf("$ ");
-    //printf("%d\n",len);
     sendUserData(userName,len);
     printf(" > ");
-    // putChar('$');
-    // putChar('>'); 
-     //printf("$%s > ", userName);
 }
 void shellExecute(){
     char command[BUFFER_SIZE] = {0};
@@ -58,7 +60,7 @@ void shellExecute(){
     
     while (1){
         printUser();
-
+        
         userInput[0] = 0;
 
         scanf("%s", userInput);
@@ -66,7 +68,7 @@ void shellExecute(){
         argc = getCommandArgs(userInput, command, argv);
 
         if(argc == -1) {
-            printf("Ingreso argumentos de mas.\nLa maxima cantidad de argumentos permitida es: %d.\n", MAX_ARGUMENTS);
+            printf("\nIngreso argumentos de mas.\nLa maxima cantidad de argumentos permitida es: %d.\n\n", MAX_ARGUMENTS);
         }
         else if(strcmp("/help", command) == 0) {
             help(argc, argv);
@@ -104,8 +106,11 @@ void shellExecute(){
         else if(strcmp("/roots", command) == 0) {
             getRoots(argc, argv);
         }
+        else if(strcmp("/dog", command) == 0) {
+            logo();
+        }
         else {
-            printf("Comando invalido: use /help\n");
+            printf("\nComando invalido: use /help\n\n");
         }
     }
     return;
