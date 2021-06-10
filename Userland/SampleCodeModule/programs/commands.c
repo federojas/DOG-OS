@@ -126,6 +126,7 @@ void getMem(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 		printf("\nEl argumento ingresado es invalido. Use /help.\n\n");
         return;
 	}
+
 	printf("\nDump de 32 bytes a partir de la direccion: %s\n\n", argv[0]);
 	uint8_t buffer[BYTES];
 	char print[10];
@@ -234,11 +235,11 @@ void exit(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 
 //https://patorjk.com/software/taag/#p=display&f=Slant&t=DOG-OS
 void logo() {
-	printf("    ____  ____  ______      ____  _____\n");
-	printf("   / __ \\/ __ \\/ ____/     / __ \\/ ___/\n");
-	printf("  / / / / / / / / ________/ / / /\\__ \\ \n");
-	printf(" / /_/ / /_/ / /_/ /_____/ /_/ /___/ /\n");
-	printf("/_____/\\____/\\____/      \\____//____/\n\n");
+	printf("              ____  ____  ______      ____  _____\n");
+	printf("             / __ \\/ __ \\/ ____/     / __ \\/ ___/\n");
+	printf("            / / / / / / / / ________/ / / /\\__ \\ \n");
+	printf("           / /_/ / /_/ / /_/ /_____/ /_/ /___/ /\n");
+	printf("          /_____/\\____/\\____/      \\____//____/\n\n");
 }
 
 void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], char userName[USER_SIZE]) {
