@@ -71,7 +71,7 @@ void initializeVideo(){
     sc1.currentX = 0;
     sc1.offset=0;
     sc1.currentY = 0;
-	sc1.width = WIDTH/2 ;//-CHAR_WIDTH;//-4*CHAR_WIDTH;
+	sc1.width = WIDTH/2 ;
     sc1.height = HEIGHT;
     
     //inicializacion de la segunda pantalla
@@ -81,7 +81,7 @@ void initializeVideo(){
     sc2.offset=(WIDTH/2)+2*CHAR_WIDTH;
     sc2.currentX = 0;
     sc2.currentY = 0;
-	sc2.width = WIDTH/2 ;//-CHAR_WIDTH;//-4*CHAR_WIDTH;
+	sc2.width = WIDTH/2 ;
     sc2.height = HEIGHT;
 
     //linea divisoria
@@ -179,6 +179,7 @@ void newLine(){
 
 
 }
+
 //funcion para limpiar la pantalla 
 void clearScreen(){
     for(int i=0;i<currentScreen->height;i++){

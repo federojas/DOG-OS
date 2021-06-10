@@ -32,6 +32,7 @@ void setFirstChange(int number){
     if(number<0 || number>1)return;
     changedUserName=number;
 }
+
 //https://stackoverflow.com/questions/54352400/implementation-of-printf-function
 void printf(char *str, ...){
     va_list args;
@@ -235,14 +236,7 @@ int strlen(const char *s){
 }
 
 char getChar(){
-    // MODO ESPERA ACTIVA
-    // char buff[2]={0};
-    // int ret =_syscall(SYS_READ_ID,buff, 2, 0, 0,0);
-    // if(ret<=0){
-    //     return -1;
-    // }
-    // return buff[0]; 
-    return _syscall(SYS_READ_ID, 0, 0, 0, 0, 0); //MODO HLT
+    return _syscall(SYS_READ_ID, 0, 0, 0, 0, 0);
 }
 
 

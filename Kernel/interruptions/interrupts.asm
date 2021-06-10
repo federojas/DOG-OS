@@ -87,8 +87,6 @@ SECTION .text
 
 	popState
  
-	call getStackBase
-	mov [rsp + 3*8], rax
 	mov rax, 0x400000
 	mov [rsp], rax
 	

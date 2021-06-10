@@ -107,8 +107,6 @@ void keyboardHandler(uint64_t rsp) {
 void putCharInBuffer(char c){
     if(c!=0){
         buffer[widx]=c;
-        
-        //HAY QUE TENER CUIDADO DE QUE LOS INDICES NO PASEN EL SIZE DEL BUFFER
 
         widx++;
         if(widx == BUFF_LEN){
@@ -139,7 +137,6 @@ char getChar(){
     return c;
 }
 
-//taba int antes
 char removeCharFromBuffer(){
     if(buffSize<=0)
         return -1;
