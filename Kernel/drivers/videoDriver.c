@@ -159,6 +159,7 @@ void printChar(char c, t_color fontColor, t_color bgColor,int next){
         x=currentScreen->currentX+currentScreen->offset;
         y++;
     }
+    
     if(next){
         currentScreen->currentX+=CHAR_WIDTH;
     }
