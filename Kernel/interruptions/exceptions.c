@@ -10,6 +10,7 @@ static void zero_division();
 static void inv_op_code();
 static void printRegs(uint64_t* rsp);
 
+
 void exceptionDispatcher(int exception, uint64_t rsp) {
 	switch (exception)
 	{
@@ -26,14 +27,14 @@ void exceptionDispatcher(int exception, uint64_t rsp) {
 
 static void zero_division() {
 	printLine();
-	sys_write("Excecpion 0: No se puede dividir por cero.", 43, BLACK, RED,0);
+	sys_write("Excecpion 0: No se puede dividir por cero.", 42, BLACK, RED,0);
 	printLine();
 	printLine();
 }
 
 static void inv_op_code() {
 	printLine();
-	sys_write("Excecpion 6: Opcode invalido.", 30, BLACK, RED,0);
+	sys_write("Excecpion 6: Opcode invalido.", 29, BLACK, RED,0);
 	printLine();
 	printLine();
 }

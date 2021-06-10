@@ -12,7 +12,6 @@ unsigned int DEFAULT_FONT_COLOUR = 0XFFFFFF;
 
 unsigned int USER_LENGHT=0;//14
 unsigned int lineCounter=0;
-//FALTA HACER UN SCROLL PARA CUANDO LA PANTALLA ESTE LLENA DE TEXTO Y HAYA QUE BAJAR
 
 //cursor basado en codigo de ayudante en practica
 //codigo basado de https://wiki.osdev.org/User:Omarrx024/VESA_Tutorial

@@ -86,8 +86,9 @@ SECTION .text
 	call exceptionDispatcher
 
 	popState
-
-	sti 
+ 
+	call getStackBase
+	mov [rsp + 3*8], rax
 	mov rax, 0x400000
 	mov [rsp], rax
 	

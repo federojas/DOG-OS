@@ -1,6 +1,7 @@
 GLOBAL _syscall
 
 GLOBAL _opcodeExp
+
 section .text
 
 %macro pushState 0
