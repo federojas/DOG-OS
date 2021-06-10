@@ -16,7 +16,7 @@ https://www.docker.com/
 
 
 
-##Manejo correcto del programa 
+## Manejo correcto del programa 
 
 ### Cambio de ventanas
 Para cambiar de terminal, presione **CTRL + TAB**
@@ -42,6 +42,6 @@ Para cambiar de terminal, presione **CTRL + TAB**
 
 ### Calculadora de raices 
 
-$$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$
+![formula](https://render.githubusercontent.com/render/math?math=x=\frac{-b\pm\sqrt{b^2-4ac}}{2a})
 
 Se la debe llamar con el comando `/roots` y los tres coeficientes **a**, **b** y **c** respectivamente como argumentos.
