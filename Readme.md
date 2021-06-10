@@ -45,3 +45,11 @@ Para cambiar de terminal, presione **CTRL + TAB**
 ![formula](https://render.githubusercontent.com/render/math?math=x=\frac{-b\pm\sqrt{b^2-4ac}}{2a})
 
 Se la debe llamar con el comando `/roots` y los tres coeficientes **a**, **b** y **c** respectivamente como argumentos.
+
+## Anexo
+
+### Tabla de colores
+
+|  BLANCO |  VERDE  |  ROJO  |  VERDE  |  AZUL  |
+| ------------ | ------------ | ------------ | ------------ | ------------ |
+|   1 | 2 | 3  | 4  | 5  |
