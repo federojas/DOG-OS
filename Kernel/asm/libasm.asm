@@ -13,9 +13,9 @@ cpuVendor:
 	push rbp
 	mov rbp, rsp
 
-    call _checkCPUID ;checks if processor has CPUID support AGREGAR A INFORME
-    cmp rax, 0 ;AGREGAR A INFORME
-    jz .end  ; AGREGAR A INFORME
+    call _checkCPUID ;checks if processor has CPUID support 
+    cmp rax, 0
+    jz .end 
 
 	push rbx
 
