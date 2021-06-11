@@ -14,7 +14,6 @@
 #define SYS_CLEAR_ID 8
 #define SYS_EXIT_ID 9
 #define SYS_CPUVENDOR_ID 10
-#define SYS_ROOTS_ID 11
 
 uint8_t getCurrentTime(uint64_t rtcID);
 uint8_t _getRTCInfo(uint64_t rtcID);
@@ -32,5 +31,4 @@ uint64_t* getRegisters();
 void updateRegisters(uint64_t* rsp);
 void getCPUVendor(char * buffer);
 void cpuVendor(char * buffer);
-int _quadratic(double * a, double * b, double * c, int64_t nada, double * root1, double * root2);
 #endif

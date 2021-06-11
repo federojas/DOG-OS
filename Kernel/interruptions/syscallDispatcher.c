@@ -3,10 +3,10 @@
 #include <keyboardDriver.h>
 #include <videoDriver.h>
 
-uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9) {
+uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
     switch (rdi) {
         case SYS_WRITE_ID:
-            sys_write((char *)(rsi), (uint8_t)(rdx), (t_color)(r10), (t_color)(r8), (uint64_t) r9);
+            sys_write((char *)(rsi), (uint8_t)(rdx), (t_color)(rcx), (t_color)(r8), (uint64_t) r9);
             break;
         case SYS_RTC_ID:
             return getCurrentTime((uint8_t) rsi);
@@ -18,7 +18,7 @@ uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10,
             getCPUFeatures((uint32_t *) rsi);
             break;
         case SYS_PRINTMEM_ID:
-            getMem(rsi, (uint8_t*) rdx, r10);
+            getMem(rsi, (uint8_t*) rdx, rcx);
             break;
         case SYS_CPUID_ID:
             return _checkCPUID();
@@ -34,9 +34,6 @@ uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10,
             break;
         case SYS_CPUVENDOR_ID:
             getCPUVendor((char *)(rsi));
-            break;
-        case SYS_ROOTS_ID:
-            _quadratic((double *) rsi, (double *) rdx, (double *) r10, 0, (double *) r8, (double *) r9);
             break;
         default:
             break;

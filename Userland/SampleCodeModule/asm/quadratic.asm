@@ -47,14 +47,14 @@ _quadratic:
     fld qword[disc]     ; sqrt(bb - 4a*c), b, 1/2a
     fsubrp st1          ; sqrt(bb - 4a*c) - b, 1/2a
     fmulp st1           ; sqrt(bb - 4a*c) - b * 1/2a
-    fstp qword[r8]     ; guardo raiz1 y vacio stack 
+    fstp qword[rcx]     ; guardo raiz1 y vacio stack 
 
     fld b               ; b
     fld qword[disc]     ; sqrt(bb - 4a*c), b
     fchs                ; -sqrt(bb - 4a*c), b
     fsubrp st1          ; -sqrt(bb - 4a*c) - b
     fmul qword[uno_sobre_2a] ; -sqrt(bb - 4a*c) - b * 1/2a
-    fstp qword[r9] ; guardo raiz2 y vacio stack 
+    fstp qword[r8] ; guardo raiz2 y vacio stack 
 
     mov rax, 1
 
