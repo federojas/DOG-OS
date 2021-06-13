@@ -204,7 +204,7 @@ void getRoots(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	double root1;
 	double root2;
 
-	_quadratic(&a, &b, &c, &root1, &root2);
+	_quadratic(a, b, c, &root1, &root2);
 
 	char res1[BUFFER_SIZE];
 	char res2[BUFFER_SIZE];
