@@ -1,8 +1,8 @@
 ; Ecuacion cuadratica
 
-%define a               rbx
-%define b               rcx
-%define c               rdx
+%define a               qword [rdi]
+%define b               qword [rsi]
+%define c               qword [rdx]
 
 global _quadratic
 
@@ -23,14 +23,9 @@ _quadratic:
 
     push rbx
     push rcx
-    push rdx
-
-    mov [rbx], xmm0
-    mov [rcx], xmm1
-    mov [rdx], xmm2
                         
     fild word[minusFour] ; -4
-    fld a              ; a, -4
+    fld a               ; a, -4
     fld c               ; c, a, -4
     fmulp st1           ; ac, -4
     fmulp st1           ;   -4ac
@@ -52,18 +47,17 @@ _quadratic:
     fld qword[disc]     ; sqrt(bb - 4a*c), b, 1/2a
     fsubrp st1          ; sqrt(bb - 4a*c) - b, 1/2a
     fmulp st1           ; sqrt(bb - 4a*c) - b * 1/2a
-    fstp qword[rdi]     ; guardo raiz1 y vacio stack 
+    fstp qword[rcx]     ; guardo raiz1 y vacio stack 
 
     fld b               ; b
     fld qword[disc]     ; sqrt(bb - 4a*c), b
     fchs                ; -sqrt(bb - 4a*c), b
     fsubrp st1          ; -sqrt(bb - 4a*c) - b
     fmul qword[uno_sobre_2a] ; -sqrt(bb - 4a*c) - b * 1/2a
-    fstp qword[rsi] ; guardo raiz2 y vacio stack 
+    fstp qword[r8] ; guardo raiz2 y vacio stack 
 
     mov rax, 1
 
-    pop rdx
     pop rcx
     pop rbx
     

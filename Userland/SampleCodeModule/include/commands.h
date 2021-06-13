@@ -18,5 +18,5 @@ void _opcodeExp(void);
 void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 void logo(void);
 void changeColour(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], int bg);
-void _quadratic(double a, double b, double c, double * root1, double * root2);
+void _quadratic(double * a, double * b, double * c, double * root1, double * root2);
 #endif
