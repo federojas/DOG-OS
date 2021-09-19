@@ -8,7 +8,7 @@ static int shellStartup = 1;
 
 void startShell(){ 
     if(shellStartup)
-        shellWelcomeMessage();
+        //shellWelcomeMessage();
     shellExecute();
 }
 
@@ -120,5 +120,5 @@ void shellExecute(){
             printf("\nComando invalido: use /help\n\n");
         }
     }
-    return;
+    return ;
 }
