@@ -8,6 +8,8 @@
 #include <videoDriver.h>
 #include <memoryManager.h>
 
+#define HEAP_MEMORY_SIZE 1024 * 1024 * 64 // 64MB
+
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
@@ -58,7 +60,7 @@ int main()
 {
 	load_idt();
 	initializeVideo();
-	initializeMemoryManager(sampleCodeModuleHeapAddress);
+	initializeMemoryManager(sampleCodeModuleHeapAddress, HEAP_MEMORY_SIZE);
 	((EntryPoint)sampleCodeModuleAddress)();
 	return 0;
 }
