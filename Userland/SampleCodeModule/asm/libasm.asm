@@ -3,8 +3,7 @@ GLOBAL _syscall
 GLOBAL _opcodeExp
 
 section .text
-
-%macro pushState 0
+%macro pushStateNoRAX 0
 	push rbx
 	push rcx
 	push rdx
@@ -21,7 +20,7 @@ section .text
 	push r15
 %endmacro
 
-%macro popState 0
+%macro popStateNoRax 0
 	pop r15
 	pop r14
 	pop r13
@@ -40,11 +39,11 @@ section .text
 _syscall:
     push rbp
     mov rbp, rsp
-	pushState
+	pushStateNoRAX
 
     int 80h
 
-	popState
+	popStateNoRax
 	mov rsp, rbp
     pop rbp
 

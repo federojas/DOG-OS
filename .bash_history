@@ -39,3 +39,7 @@ make all
 cd ..
 make all
 exit
+run.sh
+ls
+./run.sh
+exit
