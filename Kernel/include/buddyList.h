@@ -2,15 +2,18 @@
 #define BUDDY_LIST_H
 
 #include <stdlib.h>
+#include <stdint.h>
 
 typedef struct list_t {
-  struct list_t *prev, *next;
+    uint8_t bucket;
+    uint8_t free;
+    struct list_t *prev, *next;
 } list_t;
 
-void list_init(list_t *list);
-void list_push(list_t *list, list_t *entry);
-void list_remove(list_t *entry);
-list_t *list_pop(list_t *list);
-char list_is_empty(list_t *list);
+void listInitialize(list_t *list);
+void listPush(list_t *list, list_t *entry);
+void listRemove(list_t *entry);
+list_t *listPop(list_t *list);
+char listIsEmpty(list_t *list);
 
 #endif

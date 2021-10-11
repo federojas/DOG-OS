@@ -26,6 +26,8 @@ static Header *free_node = NULL; /* start of free list */
 size_t total_units;
 
 void initializeMemoryManager(char * heap_base, size_t heap_size) {
+    if(heap_base == NULL) 
+        return ;
     total_units = (heap_size + sizeof(Header) - 1) / sizeof(Header) + 1;
     free_node = base = (Header *) heap_base;
     free_node->s.size = total_units;
