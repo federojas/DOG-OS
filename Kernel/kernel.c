@@ -60,7 +60,7 @@ int main()
 {
 	load_idt();
 	initializeVideo();
-	initializeMemoryManager(sampleCodeModuleHeapAddress); //, HEAP_MEMORY_SIZE);
+	initializeMemoryManager(sampleCodeModuleHeapAddress, HEAP_MEMORY_SIZE);
 	((EntryPoint)sampleCodeModuleAddress)();
 	return 0;
 }

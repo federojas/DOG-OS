@@ -1,6 +1,9 @@
 #include <stdint.h>
 #include <interrupts.h>
 #include <prints.h>
+#include <stddef.h>
+#include <memoryManager.h>
+#include <processManager.h>
 
 //https://en.wikipedia.org/wiki/Process_control_block
 
@@ -65,41 +68,11 @@ static void idleProcess(int argc, char ** argv) {
     }
 }
 
-void initializeProcessManager() {
-    processes = malloc(sizeof(t_process_list));
-
-    processes->size = 0;
-
-    char *argv[] = {"Initial Idle Process"};
-    newProcess(&idleProcess, 1, argv, 0, 0);
-
+static uint64_t getPID() {
+      return currentPID++;
 }
 
-int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground) {
-
-    if (entryPoint == NULL)
-        return -1;
-
-    t_process_node * newProcess = malloc(sizeof(t_process_node));
-
-    //check malloc
-
-    if (initializeProcessControlBlock(&newProcess->processControlBlock, argv[0], foreground) == -1) {
-        free(newProcess);
-        return -1;
-    }
-
-    char ** arguments = malloc(sizeof (char *) * argc);
-    //check malloc
-
-    getArguments(arguments, argv, argc);
-
-    initializeProcessStackFrame(entryPoint, argc, arguments, newProcess->processControlBlock.rbp);
-
-    return 0;
-}
-
-int initializeProcessControlBlock(t_processControlBlock * PCB, char * name, uint8_t foreground) {
+static int initializeProcessControlBlock(t_processControlBlock * PCB, char * name, uint8_t foreground) {
     strcpy(name, PCB->name);
     PCB->pid = getPID();
     //??
@@ -107,14 +80,10 @@ int initializeProcessControlBlock(t_processControlBlock * PCB, char * name, uint
     return 0;
 }
 
-static uint64_t getPID() {
-      return currentPID++;
-}
-
 static void getArguments(char ** to, char ** from, int count) {
       for (int i = 0; i < count; i++) {
             to[i] = malloc(sizeof(char) * (strlen(from[i]) + 1));
-            //check malloc 
+            //check malloc
             strcpy(to[i], from[i]);
       }
 }
@@ -146,3 +115,42 @@ static void initializeProcessStackFrame(void (*entryPoint)(int, char**), int arg
     stackFrame->ss = 0x0;
     stackFrame->base = 0x0;
 }
+
+void initializeProcessManager() {
+    processes = malloc(sizeof(t_process_list));
+    if(processes == NULL)
+        return ;
+
+    processes->size = 0;
+
+    char *argv[] = {"Initial Idle Process"};
+    newProcess(&idleProcess, 1, argv, 0);
+}
+
+int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground) {
+
+    if (entryPoint == NULL)
+        return -1;
+
+    t_process_node * newProcess = malloc(sizeof(t_process_node));
+
+    if(newProcess == NULL)
+        return -1;
+
+    if (initializeProcessControlBlock(&newProcess->processControlBlock, argv[0], foreground) == -1) {
+        free(newProcess);
+        return -1;
+    }
+
+    char ** arguments = malloc(sizeof (char *) * argc);
+    if(arguments == 0) {
+        return-1;
+    }
+
+    getArguments(arguments, argv, argc);
+
+    initializeProcessStackFrame(entryPoint, argc, arguments, newProcess->processControlBlock.rbp);
+
+    return 0;
+}
+

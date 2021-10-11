@@ -9,5 +9,6 @@ void printIntHex(uint64_t num);
 void printIntBin(uint64_t num);
 int strlen(char *str);
 void printLine();
+void strcpy(char dest[], const char source[]);
 
 #endif
