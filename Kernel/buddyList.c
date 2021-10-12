@@ -21,7 +21,7 @@ void listRemove(list_t *entry) {
 }
 
 list_t *listPop(list_t *list) {
-    list_t * back = list->prev;
+  list_t * back = list->prev;
   if (back == list) return NULL;
   listRemove(back);
   return back;

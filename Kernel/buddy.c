@@ -28,6 +28,7 @@ static void addNodeToBucket(list_t * bucketList, list_t * node, uint32_t bucketL
 static size_t getMinimumSuitableBucket(size_t request);
 static size_t getAvailableBucket(uint8_t minBucketRequired);
 static list_t *getNodeBuddy(list_t *node);
+static list_t *getNodeAddress(list_t *node);
 
 void initializeMemoryManager(char * heap_base, size_t heap_size) {
     if(heap_base == NULL) 
@@ -79,7 +80,24 @@ void *malloc(size_t nbytes) {
 
 
 void free(void *block) {
-    return ;
+    if (block == NULL)
+        return;
+
+    list_t * freeNode = (list_t *)block - 1;
+
+    freeNode->free = 1;
+
+    list_t *freeNodeBuddy = getNodeBuddy(freeNode);
+
+
+    while (freeNode->bucket != buckets_amount - 1 && freeNodeBuddy->bucket == freeNode->bucket && freeNodeBuddy->free) {
+        listRemove(freeNodeBuddy);
+        freeNode = getNodeAddress(freeNode);
+        freeNode->bucket++;
+        freeNodeBuddy = getNodeBuddy(freeNode);
+    }
+
+    listPush(&buckets[freeNode->bucket], freeNode);
 }
 
 static void addNodeToBucket(list_t * bucketList, list_t * node, uint32_t bucketLevel) {
@@ -117,6 +135,17 @@ static list_t *getNodeBuddy(list_t *node) {
     uintptr_t nodeNewOffset = nodeCurrentOffset ^ (1 << (log2(minimum_bucket_size) + bucket) );
 
     return (list_t *)((uintptr_t)base_ptr + nodeNewOffset);
+}
+
+static list_t *getNodeAddress(list_t *node) {
+      uint8_t bucket = node->bucket;
+      uintptr_t mask = (1 << (log2(minimum_bucket_size) + bucket) );
+      mask = ~mask;
+
+      uintptr_t nodeCurrentOffset = (uintptr_t)node - (uintptr_t)base_ptr;
+      uintptr_t nodeNewOffset = nodeCurrentOffset & mask;
+
+      return (list_t *)(nodeNewOffset + (uintptr_t)base_ptr);
 }
 
 
