@@ -10,5 +10,7 @@ void printIntBin(uint64_t num);
 int strlen(char *str);
 void printLine();
 void strcpy(char dest[], const char source[]);
+int log2(uint32_t number);
+int pow(int x, unsigned int y);
 
 #endif
