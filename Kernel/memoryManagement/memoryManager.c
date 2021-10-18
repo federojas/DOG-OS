@@ -1,4 +1,3 @@
-//#define MEMORY_MANAGER_FREE //BORRAR DESPUES, VA EN EL MAKEFILE
 #ifdef MEMORY_MANAGER_FREE
 
 #include <stdint.h>
@@ -142,7 +141,7 @@ void free(void *block)
     /* reset the start of the free list */
     free_node = current_node;
 }
-void memDump(){
+void memoryDump(){
     long long idx=1;
     Header *original,*current;
     original=current=free_node;

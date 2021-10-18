@@ -27,4 +27,5 @@ void doubleToStr(double n, char* res, int afterpoint);
 int pow(int x, unsigned int y);
 void strToDouble(char *numStr, double *result);
 void setFirstChange(int number);
+void *memset(void *b, int c, int len);
 #endif

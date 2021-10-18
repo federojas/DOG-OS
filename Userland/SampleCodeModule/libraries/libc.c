@@ -21,11 +21,11 @@ void setBGC(t_color colour) {
     currentBGC = colour;
 }
 
-void putChar(char c){
+void putChar(char c) {
     _syscall(SYS_WRITE_ID, (uint64_t)&c, 1, currentBGC, currentFTC, 0);
 }
 
-void sendUserData(char *userName, int len){
+void sendUserData(char *userName, int len) {
    _syscall(SYS_WRITE_ID, (uint64_t)userName, len+1, currentBGC, currentFTC, (uint64_t) &len);
 }
 void setFirstChange(int number){
@@ -34,7 +34,7 @@ void setFirstChange(int number){
 }
 
 //https://stackoverflow.com/questions/54352400/implementation-of-printf-function
-void printf(char *str, ...){
+void printf(char *str, ...) {
     va_list args;
     
     char buff[BUFF_LEN] = {0};
@@ -98,8 +98,7 @@ void printf(char *str, ...){
 
 
 //https://stackoverflow.com/questions/26860574/pow-implementation-in-cmath-and-efficient-replacement
-int pow(int x, unsigned int y)
-{
+int pow(int x, unsigned int y) {
     if (y == 0)
         return 1;
     else if ((y % 2) == 0)
@@ -109,8 +108,7 @@ int pow(int x, unsigned int y)
 
 }
 
-static void reverseAUX(char* str, int len)
-{
+static void reverseAUX(char* str, int len) {
     int i = 0, j = len - 1, temp;
     while (i < j) {
         temp = str[i];
@@ -121,8 +119,7 @@ static void reverseAUX(char* str, int len)
     }
 }
 
-static int intToStrAUX(int x, char str[], int d)
-{
+static int intToStrAUX(int x, char str[], int d) {
     int i = 0;
     while (x) {
         str[i++] = (x % 10) + '0';
@@ -141,8 +138,7 @@ static int intToStrAUX(int x, char str[], int d)
 
 // https://www.geeksforgeeks.org/convert-floating-point-number-string/
 // Converts a floating-point/double number to a string.
-void doubleToStr(double n, char* res, int afterpoint)
-{
+void doubleToStr(double n, char* res, int afterpoint) {
     // Extract integer part
     int ipart = (int)n;
   
@@ -178,8 +174,7 @@ void doubleToStr(double n, char* res, int afterpoint)
 
 
 // inspirado en https://iq.opengenus.org/how-printf-and-scanf-function-works-in-c-internally/
-int scanf(char * str, ...)
-{
+int scanf(char * str, ...) {
     buffSize = 0;
     va_list vl;
     int i = 0, j = 0;
@@ -229,19 +224,19 @@ int scanf(char * str, ...)
 }
 
 
-int strlen(const char *s){
+int strlen(const char *s) {
     int i;
     for (i = 0; s[i] != 0; i++);
     return i;
 }
 
-char getChar(){
+char getChar() {
     return _syscall(SYS_READ_ID, 0, 0, 0, 0, 0);
 }
 
 
 //funcion encargada a actualizar el buffer de la shell y de imprimir en pantalla el char en cuestion
-int readText(){
+int readText() {
     int c;
     while((c=getChar()) !='\n'){
         
@@ -276,14 +271,13 @@ int readText(){
     return buffSize++;
 }
 
-void newLine(){
+void newLine() {
     putChar('\n');
 }
 
 
 
-char *strcpy(char *destino, const char *fuente)
-{
+char *strcpy(char *destino, const char *fuente) {
 
     char *aux = destino;
 
@@ -307,14 +301,12 @@ static int isdigit(char ch) {
     return ch >= '0' && ch <= '9';
 }
 
-static int ishexdigit(char ch)
-{
+static int ishexdigit(char ch) {
         return isdigit(ch) || (ch >= 'A' && ch <= 'F') || (ch >= 'a' && ch <= 'f');
 }
 
 //https://www.geeksforgeeks.org/write-your-own-atoi/
-int strToInt(char* str, int * size)
-{
+int strToInt(char* str, int * size) {
     *size = 0;
     // Initialize result
     int res = 0;
@@ -348,8 +340,7 @@ int strToInt(char* str, int * size)
     return sign * res;
 }
 
-int strToHex(const char *str)
-{
+int strToHex(const char *str) {
     int val = 0;      
     while( *str != 0 ) {  
         if( !ishexdigit(*str) ) { 
@@ -398,29 +389,26 @@ void strToDouble(char *numStr, double *result) {
 
 // https://www.techiedelight.com/implement-itoa-function-in-c/
 
-int abs(int num){
+int abs(int num) {
     return num < 0? -num : num;
 }
 
 // function to reverse buffer[i..j]
-char *reverse(char *buffer, int i, int j)
-{
+char *reverse(char *buffer, int i, int j) {
     while (i < j)
         swap(&buffer[i++], &buffer[j--]);
 
     return buffer;
 }
 
-void swap(char *x, char *y)
-{
+void swap(char *x, char *y) {
     char t = *x;
     *x = *y;
     *y = t;
 }
 
 // Iterative function to implement itoa() function in C
-char* intToStr(int value, char* buffer, int base)
-{
+char* intToStr(int value, char* buffer, int base) {
     // invalid input
     if (base < 2 || base > 32) {
         return buffer;
@@ -462,8 +450,7 @@ char* intToStr(int value, char* buffer, int base)
     return reverse(buffer, 0, i - 1);
 }
 
-int strcmp(char string1[], char string2[])
-{
+int strcmp(char string1[], char string2[]) {
     int i = 0;   
     while(string1[i]!=0 && string2[i]!=0){
         if(string1[i] < string2[i])
@@ -477,4 +464,15 @@ int strcmp(char string1[], char string2[])
     if(string1[i]!=0 && string2[i]==0)
         return 1;
     return -1;
+}
+
+void *memset(void *b, int c, int len) {
+      unsigned char *p = b;
+      while (len > 0)
+      {
+            *p = c;
+            p++;
+            len--;
+      }
+      return (b);
 }

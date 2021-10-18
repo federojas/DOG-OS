@@ -1,6 +1,5 @@
 //https://github.com/evanw/buddy-malloc/blob/master/buddy-malloc.c
 
-#define MEMORY_MANAGER_BUDDY //BORRAR DESPUES, VA EN EL MAKEFILE
 #ifdef MEMORY_MANAGER_BUDDY
 
 #include <memoryManager.h>
@@ -137,7 +136,7 @@ static list_t *getNodeBuddy(list_t *node) {
     return (list_t *)((uintptr_t)base_ptr + nodeNewOffset);
 }
 
- void memDump(){
+ void memoryDump(){
     list_t *list, *aux;
     uint32_t idx=0;
     uint32_t spaceAvail=0;

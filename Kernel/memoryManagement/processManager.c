@@ -83,7 +83,9 @@ static int initializeProcessControlBlock(t_processControlBlock * PCB, char * nam
 static void getArguments(char ** to, char ** from, int count) {
       for (int i = 0; i < count; i++) {
             to[i] = malloc(sizeof(char) * (strlen(from[i]) + 1));
-            //check malloc
+            if(to[i] == NULL) {
+                return ;
+            }
             strcpy(to[i], from[i]);
       }
 }
@@ -118,8 +120,9 @@ static void initializeProcessStackFrame(void (*entryPoint)(int, char**), int arg
 
 void initializeProcessManager() {
     processes = malloc(sizeof(t_process_list));
-    if(processes == NULL)
+    if(processes == NULL) {
         return ;
+    }
 
     processes->size = 0;
 
@@ -129,13 +132,16 @@ void initializeProcessManager() {
 
 int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground) {
 
-    if (entryPoint == NULL)
+    if (entryPoint == NULL) {
         return -1;
+    }
+        
 
     t_process_node * newProcess = malloc(sizeof(t_process_node));
-
-    if(newProcess == NULL)
+    if(newProcess == NULL) {
         return -1;
+    }
+        
 
     if (initializeProcessControlBlock(&newProcess->processControlBlock, argv[0], foreground) == -1) {
         free(newProcess);

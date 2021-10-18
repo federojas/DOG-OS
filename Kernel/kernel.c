@@ -26,13 +26,11 @@ static void * const sampleCodeModuleHeapAddress = (void*)0x600000;
 typedef int (*EntryPoint)();
 
 
-void clearBSS(void * bssAddress, uint64_t bssSize)
-{
+void clearBSS(void * bssAddress, uint64_t bssSize) {
 	memset(bssAddress, 0, bssSize);
 }
 
-void * getStackBase()
-{
+void * getStackBase() {
 	return (void*)(
 		(uint64_t)&endOfKernel
 		+ PageSize * 8				//The size of the stack itself, 32KiB
@@ -40,8 +38,7 @@ void * getStackBase()
 	);
 }
 
-void * initializeKernelBinary()
-{
+void * initializeKernelBinary() {
 
 	void * moduleAddresses[] = {
 		sampleCodeModuleAddress,
@@ -56,8 +53,7 @@ void * initializeKernelBinary()
 }
 
 
-int main()
-{
+int main() {
 	load_idt();
 	initializeVideo();
 	initializeMemoryManager(sampleCodeModuleHeapAddress, HEAP_MEMORY_SIZE);
