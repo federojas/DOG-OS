@@ -71,7 +71,7 @@ void getCPUFeatures(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
 		return ;
 	}
 	uint32_t features[4];
-	_syscall(SYS_CPUFEATURES_ID, (uint64_t) features, 0, 0, 0, 0);
+	(void)_syscall(SYS_CPUFEATURES_ID, (uint64_t) features, 0, 0, 0, 0);
 
 	// printf("\nValor de EDX con EAX en 1: %x\n", features[0]);
 	// printf("Valor de ECX con EAX en 1: %x\n", features[1]);
@@ -130,7 +130,7 @@ void getMem(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("\nDump de 32 bytes a partir de la direccion: %s\n\n", argv[0]);
 	uint8_t buffer[BYTES];
 	char print[10];
-	_syscall(SYS_PRINTMEM_ID, memDir, (uint64_t) buffer, BYTES, 0,0);
+	(void)_syscall(SYS_PRINTMEM_ID, memDir, (uint64_t) buffer, BYTES, 0,0);
 	for(int i = 0; i < BYTES; i++) {
 		if(i == 16) {
 			newLine();
@@ -220,7 +220,7 @@ void clear(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	_syscall(SYS_CLEAR_ID,0,0,0,0,0);
+	(void)_syscall(SYS_CLEAR_ID,0,0,0,0,0);
 }
 void exit(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
@@ -230,7 +230,7 @@ void exit(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("\nMuchas gracias por utilizar DOG-OS, esperamos su regreso.\n");
 	printf("\nUsted cerro el TP, el mismo ya no funcionara.\n\n");
 	logo();
-	_syscall(SYS_EXIT_ID,0,0,0,0,0);
+	(void)_syscall(SYS_EXIT_ID,0,0,0,0,0);
 }
 
 //https://patorjk.com/software/taag/#p=display&f=Slant&t=DOG-OS
@@ -261,7 +261,7 @@ void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 		return;
     }
 	char buffer[9];
-	_syscall(SYS_CPUVENDOR_ID,(uint64_t) buffer,0,0,0,0);
+	(void)_syscall(SYS_CPUVENDOR_ID,(uint64_t) buffer,0,0,0,0);
 	printf("\nID de fabricante: %s\n\n", buffer);
 }
 

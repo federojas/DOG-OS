@@ -22,11 +22,11 @@ void setBGC(t_color colour) {
 }
 
 void putChar(char c) {
-    _syscall(SYS_WRITE_ID, (uint64_t)&c, 1, currentBGC, currentFTC, 0);
+    (void)_syscall(SYS_WRITE_ID, (uint64_t)&c, 1, currentBGC, currentFTC, 0);
 }
 
 void sendUserData(char *userName, int len) {
-   _syscall(SYS_WRITE_ID, (uint64_t)userName, len+1, currentBGC, currentFTC, (uint64_t) &len);
+   (void)_syscall(SYS_WRITE_ID, (uint64_t)userName, len+1, currentBGC, currentFTC, (uint64_t) &len);
 }
 void setFirstChange(int number){
     if(number<0 || number>1)return;
@@ -90,7 +90,7 @@ void printf(char *str, ...) {
         strIdx++;
     }
 
-    _syscall(SYS_WRITE_ID, (uint64_t)buff, buffIdx, currentBGC, currentFTC, 0);
+    (void)_syscall(SYS_WRITE_ID, (uint64_t)buff, buffIdx, currentBGC, currentFTC, 0);
     va_end(args);
     return ;
 }
