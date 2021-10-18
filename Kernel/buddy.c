@@ -17,6 +17,8 @@
 #define MAX_BUCKET_COUNT ( MAX_ALLOC_LOG2 - MIN_ALLOC_LOG2 + 1)
 
 
+
+
 //tree levels
 static list_t buckets[MAX_BUCKET_COUNT];
 static size_t maximum_bucket_size;
@@ -136,6 +138,34 @@ static list_t *getNodeBuddy(list_t *node) {
 
     return (list_t *)((uintptr_t)base_ptr + nodeNewOffset);
 }
+
+ void memDump(){
+    list_t *list, *aux;
+    uint32_t idx=0;
+    uint32_t spaceAvail=0;
+
+    printf("\n MEMORY DUMP (buddy)\n");
+    printf("\n----------------------------------------------------------");
+    printf("Buckets with free blocks:\n");
+    
+    for(int i=buckets_amount-1;i>=0;i--){
+        list=&bucketList[i];
+        if(!listIsEmpty(list)){
+            printf("bucket %d\n", i+MIN_ALLOC_LOG2);
+            printf("free buckets of size 2^%d\n", i+MIN_ALLOC_LOG2)
+        }
+        for(aux=list->next, idx=1; aux!=list;idx++, aux=aux->next){
+            //esto no se si despues lo podemos pasar a una funcion si es que necesitamos usarlo en otro lado 
+            print("        Block number: %d\n", idx);
+            print("            state: free\n");
+            spaceAvail+=idx*(1 << (MIN_ALLOC_LOG2+i);  
+        }
+        printf("------------------------------------------------------\n");
+    }
+    printf("Available space: %d\n", spaceAvail);
+    
+    
+ }
 
 static list_t *getNodeAddress(list_t *node) {
       uint8_t bucket = node->bucket;
