@@ -2,6 +2,7 @@
 #include <libc.h>
 #include <commands.h>
 #include <stdint.h>
+#include <memoryTest.h>
 
 static char userName[USER_SIZE] = "DefaultUser";
 static int shellStartup = 1;
@@ -61,7 +62,7 @@ void shellExecute(){
     
     while (1){
         printUser();
-        
+
         userInput[0] = 0;
 
         scanf("%s", userInput);
@@ -70,6 +71,9 @@ void shellExecute(){
 
         if(argc == -1) {
             printf("\nIngreso argumentos de mas.\nLa maxima cantidad de argumentos permitida es: %d.\n\n", MAX_ARGUMENTS);
+        }
+        else if(strcmp("/mem", command) == 0) {
+            testMemory(argc,argv);
         }
         else if(strcmp("/help", command) == 0) {
             help(argc, argv);

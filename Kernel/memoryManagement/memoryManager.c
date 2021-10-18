@@ -79,8 +79,7 @@ void *malloc(size_t nbytes) {
 }
 
 /* free: put block ap in free list */
-void free(void *block)
-{
+void free(void *block) {
     if (block == NULL || (((long)block - (long)base) % sizeof(Header)) != 0) 
         return;
 

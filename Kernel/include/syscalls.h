@@ -5,7 +5,7 @@
 #include <colors.h>
 
 typedef enum {SYS_RTC_ID, SYS_CPUFEATURES_ID, SYS_READ_ID, SYS_WRITE_ID, SYS_INFOREG_ID, 
-SYS_PRINTMEM_ID, SYS_CPUID_ID, SYS_CLEAR_ID, SYS_EXIT_ID, SYS_CPUVENDOR_ID } t_syscall_id;
+SYS_PRINTMEM_ID, SYS_CPUID_ID, SYS_CLEAR_ID, SYS_EXIT_ID, SYS_CPUVENDOR_ID, SYS_MALLOC_ID, SYS_FREE_ID } t_syscall_id;
 
 uint8_t getCurrentTime(uint64_t rtcID);
 uint8_t _getRTCInfo(uint64_t rtcID);
@@ -23,4 +23,7 @@ uint64_t* getRegisters();
 void updateRegisters(uint64_t* rsp);
 void getCPUVendor(char * buffer);
 void cpuVendor(char * buffer);
+void *malloc(size_t nbytes);
+void free(void *block);
+
 #endif

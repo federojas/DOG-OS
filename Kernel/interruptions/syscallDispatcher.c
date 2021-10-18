@@ -2,6 +2,7 @@
 #include <syscalls.h>
 #include <keyboardDriver.h>
 #include <videoDriver.h>
+#include <memoryManager.h>
 
 typedef int (*functionPointer)(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
@@ -51,6 +52,15 @@ static int getCPUVendorWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_
     return 0;
 }
 
+static int mallocWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+   return malloc((size_t) rsi);
+}
+
+static int freeWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+   free((void *) rsi);
+   return 0;
+}
+
 static functionPointer syscall[] = {
     getCurrentTimeWrapper,
     getCPUFeaturesWrapper,
@@ -61,7 +71,9 @@ static functionPointer syscall[] = {
     checkCPUIDWrapper,
     clearScreenWrapper,
     exitWrapper,
-    getCPUVendorWrapper  
+    getCPUVendorWrapper,
+    mallocWrapper,
+    freeWrapper  
 };
 
 uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
