@@ -16,15 +16,13 @@
 
 #define MAX_BUCKET_COUNT ( MAX_ALLOC_LOG2 - MIN_ALLOC_LOG2 + 1)
 
-
-
-
 //tree levels
 static list_t buckets[MAX_BUCKET_COUNT];
 static size_t maximum_bucket_size;
 static list_t * base_ptr;
 static uint8_t buckets_amount;
 static size_t minimum_bucket_size;
+static size_t minmum_bucket_size_log2;
 
 static void addNodeToBucket(list_t * bucketList, list_t * node, uint32_t bucketLevel);
 static size_t getMinimumSuitableBucket(size_t request);
@@ -45,7 +43,7 @@ void initializeMemoryManager(char * heap_base, size_t heap_size) {
         minimum_bucket_size = heap_size / aux;
         buckets_amount = MAX_BUCKET_COUNT;
     }
-        
+    minmum_bucket_size_log2 = log2(minimum_bucket_size);
 
     for (int i = 0; i < buckets_amount; i++) {
         listInitialize(&buckets[i]);
@@ -134,7 +132,7 @@ static size_t getAvailableBucket(uint8_t minBucketRequired) {
 static list_t *getNodeBuddy(list_t *node) {
     uint8_t bucket = node->bucket;
     uintptr_t nodeCurrentOffset = (uintptr_t)node - (uintptr_t)base_ptr;
-    uintptr_t nodeNewOffset = nodeCurrentOffset ^ (1 << (log2(minimum_bucket_size) + bucket) );
+    uintptr_t nodeNewOffset = nodeCurrentOffset ^ (1 << (minmum_bucket_size_log2 + bucket) );
 
     return (list_t *)((uintptr_t)base_ptr + nodeNewOffset);
 }
@@ -149,27 +147,24 @@ static list_t *getNodeBuddy(list_t *node) {
     printf("Buckets with free blocks:\n");
     
     for(int i=buckets_amount-1;i>=0;i--){
-        list=&bucketList[i];
+        list=&buckets[i];
         if(!listIsEmpty(list)){
-            printf("bucket %d\n", i+MIN_ALLOC_LOG2);
-            printf("free buckets of size 2^%d\n", i+MIN_ALLOC_LOG2)
+            printf("bucket %d\n", i+minmum_bucket_size_log2);
+            printf("free buckets of size 2^%d\n", i+minmum_bucket_size_log2);
         }
         for(aux=list->next, idx=1; aux!=list;idx++, aux=aux->next){
-            //esto no se si despues lo podemos pasar a una funcion si es que necesitamos usarlo en otro lado 
-            print("        Block number: %d\n", idx);
-            print("            state: free\n");
-            spaceAvail+=idx*(1 << (MIN_ALLOC_LOG2+i);  
+            printf("        Block number: %d\n", idx);
+            printf("            state: free\n");
+            spaceAvail+=idx*(1 << (minmum_bucket_size_log2+i));  
         }
         printf("------------------------------------------------------\n");
     }
-    printf("Available space: %d\n", spaceAvail);
-    
-    
+    printf("Available space: %d\n", spaceAvail);  
  }
 
 static list_t *getNodeAddress(list_t *node) {
       uint8_t bucket = node->bucket;
-      uintptr_t mask = (1 << (log2(minimum_bucket_size) + bucket) );
+      uintptr_t mask = (1 << (minmum_bucket_size_log2 + bucket) );
       mask = ~mask;
 
       uintptr_t nodeCurrentOffset = (uintptr_t)node - (uintptr_t)base_ptr;

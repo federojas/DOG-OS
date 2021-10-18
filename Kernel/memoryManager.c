@@ -151,8 +151,8 @@ void memDump(){
     printf("-------------------------------------------\n");
     printf("total memory: %d bytes\n", total_units*sizeof(Header));
     if(free_node==NULL){
-        printf("No free blocks available");
-        //return;??
+        printf("No free blocks available\n");
+        return;
     }
     printf("Free blocks:\n");
 
@@ -160,7 +160,7 @@ void memDump(){
         flag=0;
         printf(" Block number %d\n",idx);
         printf(" Base:%x\n", (uint64_t)current);
-        print("        Free units: %d\n", current->s.size);
+        printf(" Free units: %d\n", current->s.size);
 
         current=current->s.ptr;
         idx++;
