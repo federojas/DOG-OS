@@ -7,6 +7,10 @@
 
 //https://en.wikipedia.org/wiki/Process_control_block
 
+#define SIZE_OF_STACK (4 * 1024)
+#define BACKGROUND_PRIORITY_DEFAULT 1
+#define FOREGROUND_PRIORITY_DEFAULT 2
+
 typedef enum { READY, BLOCKED, TERMINATED } t_process_state;
 
 typedef struct {
@@ -17,6 +21,7 @@ typedef struct {
     t_process_state state;
     uint64_t priority;
     char name[30];
+    uint16_t fileDescriptors[2];
     void *rsp;
     void *rbp;
 
@@ -39,6 +44,8 @@ typedef struct {
     uint64_t r13;
     uint64_t r14;
     uint64_t r15;
+    uint64_t gs;
+    uint64_t fs;
 
     uint64_t rip;
     uint64_t rsp;
@@ -59,8 +66,15 @@ typedef struct process_list {
       t_process_node * first;
 } t_process_list;
 
+static void idleProcess(int argc, char ** argv);
+static int initializeProcessControlBlock(t_processControlBlock * PCB, char * name, uint8_t foreground);
+static void getArguments(char ** to, char ** from, int count);
+static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv);
+static void initializeProcessStackFrame(void (*entryPoint)(int, char**), int argc, char** argv, void* rbp);
+
 static t_process_list * processes;
 static uint64_t currentPID = 0;
+static t_process_node * currentProcess;
 
 static void idleProcess(int argc, char ** argv) {
     while(1) {
@@ -72,11 +86,24 @@ static uint64_t getPID() {
       return currentPID++;
 }
 
-static int initializeProcessControlBlock(t_processControlBlock * PCB, char * name, uint8_t foreground) {
+static int initializeProcessControlBlock(t_processControlBlock * PCB, char * name, uint8_t foreground, uint16_t *fd) {
     strcpy(name, PCB->name);
     PCB->pid = getPID();
-    //??
-    //arranca ready? foreground? ni idea
+    PCB->ppid = (currentProcess == NULL ? 0 : currentProcess->processControlBlock.pid);
+    if (foreground > 1 || foreground < 0)
+        return -1;
+    
+    PCB->foreground = (currentProcess == NULL ? foreground : (currentProcess->processControlBlock.foreground ? foreground : 0));
+    PCB->rbp = malloc(SIZE_OF_STACK);
+    PCB->priority = PCB->foreground ? FOREGROUND_PRIORITY_DEFAULT : BACKGROUND_PRIORITY_DEFAULT;
+    PCB->fileDescriptors[0] = (fd ? fd[0] : 0);
+    PCB->fileDescriptors[1] = (fd ? fd[1] : 1);
+
+    if (PCB->rbp == NULL)
+        return -1;
+
+    PCB->rbp = (void *)((char *)PCB->rbp + SIZE_OF_STACK - 1);
+    PCB->rsp = (void *)((t_stackFrame *)PCB->rbp - 1);
     return 0;
 }
 
@@ -88,6 +115,11 @@ static void getArguments(char ** to, char ** from, int count) {
             }
             strcpy(to[i], from[i]);
       }
+}
+
+static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv) {
+      entryPoint(argc, argv);
+      //exit();
 }
 
 static void initializeProcessStackFrame(void (*entryPoint)(int, char**), int argc, char** argv, void* rbp) {
@@ -109,14 +141,18 @@ static void initializeProcessStackFrame(void (*entryPoint)(int, char**), int arg
     stackFrame->r13 = 0x0A;
     stackFrame->r14 = 0x0B;
     stackFrame->r15 = 0x0C;
+    stackFrame->gs = 0x00D;
+    stackFrame->fs = 0x00E;
     
-   // stackFrame->rip = //wrapper lo vemos mas adelante;
+    stackFrame->rip = (uint64_t)wrapper;
     stackFrame->rsp = (uint64_t)(&stackFrame->base);
     stackFrame->cs = 0x8;
     stackFrame->eflags = 0x202;
     stackFrame->ss = 0x0;
     stackFrame->base = 0x0;
 }
+
+
 
 void initializeProcessManager() {
     processes = malloc(sizeof(t_process_list));
@@ -157,6 +193,6 @@ int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t
 
     initializeProcessStackFrame(entryPoint, argc, arguments, newProcess->processControlBlock.rbp);
 
-    return 0;
+    return newProcess->processControlBlock.pid;
 }
 
