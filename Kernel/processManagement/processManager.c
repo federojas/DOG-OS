@@ -196,3 +196,32 @@ int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t
     return newProcess->processControlBlock.pid;
 }
 
+static t_process_node * getProcess(uint64_t pid) {
+    if (currentProcess != NULL && currentProcess->processControlBlock.pid == pid) {
+        return currentProcess;
+    }
+
+    t_process_node * process = currentProcess;
+    while (process != NULL) {
+        if (process->processControlBlock.pid == pid) {
+            return process;
+        }
+        process = process->next_process_node;
+    }
+
+    return NULL;
+}
+
+static uint64_t setState(uint64_t pid, t_process_state state) {
+    t_process_node * process = getProcess(pid);
+}
+
+uint64_t blockProcess(uint64_t pid) {
+    setState(pid, BLOCKED);
+
+    if (pid == currentProcess->processControlBlock.pid) {
+        //timertick
+    }
+
+    return 
+}
