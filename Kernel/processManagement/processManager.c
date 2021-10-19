@@ -67,7 +67,7 @@ typedef struct process_list {
 } t_process_list;
 
 static void idleProcess(int argc, char ** argv);
-static int initializeProcessControlBlock(t_processControlBlock * PCB, char * name, uint8_t foreground);
+static int initializeProcessControlBlock(t_processControlBlock * PCB, char * name, uint8_t foreground, uint16_t *fd);
 static void getArguments(char ** to, char ** from, int count);
 static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv);
 static void initializeProcessStackFrame(void (*entryPoint)(int, char**), int argc, char** argv, void* rbp);
@@ -163,10 +163,10 @@ void initializeProcessManager() {
     processes->size = 0;
 
     char *argv[] = {"Initial Idle Process"};
-    newProcess(&idleProcess, 1, argv, 0);
+    newProcess(&idleProcess, 1, argv, 0, 0);
 }
 
-int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground) {
+int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground, uint16_t * fd) {
 
     if (entryPoint == NULL) {
         return -1;
@@ -179,7 +179,7 @@ int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t
     }
         
 
-    if (initializeProcessControlBlock(&newProcess->processControlBlock, argv[0], foreground) == -1) {
+    if (initializeProcessControlBlock(&newProcess->processControlBlock, argv[0], foreground, fd) == -1) {
         free(newProcess);
         return -1;
     }
