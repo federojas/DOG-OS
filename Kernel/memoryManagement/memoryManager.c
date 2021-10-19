@@ -80,14 +80,15 @@ void *malloc(uint64_t nbytes) {
 
 
 void free(void *block) {
-    printf("llegueMM\n");
-    if (block == NULL || (((long)block - (long)base) % sizeof(Header)) != 0) 
+    if (block == NULL || (((long)block - (long)base) % sizeof(Header)) != 0)  {
         return;
+    }
+        
 
     Header *free_block, *current_node;
     free_block = (Header *)block - 1;              
 
-    if (free_block->s.size < base || free_block >= (base + total_units * sizeof(Header))) {
+    if (free_block < base || free_block >= (base + total_units * sizeof(Header))) {
         return;
     }
 
@@ -96,16 +97,19 @@ void free(void *block) {
     bool external = false;
 
     for (current_node = free_node; !(free_block > current_node && free_block < current_node->s.ptr); current_node = current_node->s.ptr) {
-        if(free_block == current_node || free_block == current_node->s.ptr)
+        if(free_block == current_node || free_block == current_node->s.ptr) {
             return ;
+        }   
         if (current_node >= current_node->s.ptr && (free_block > current_node || free_block < current_node->s.ptr)) {
             external = true;
             break; 
         }
     }
 
-    if (!external && (current_node + current_node->s.size > free_block || free_block + free_block->s.size > current_node->s.ptr))
+    if (!external && (current_node + current_node->s.size > free_block || free_block + free_block->s.size > current_node->s.ptr)) {
             return;
+    }
+            
         
     if (free_block + free_block->s.size == current_node->s.ptr) {
    
@@ -130,7 +134,6 @@ void free(void *block) {
     }
 
     free_node = current_node;
-    printf("finMM\n");
 }
 void memoryDump(){
     long long idx=1;
