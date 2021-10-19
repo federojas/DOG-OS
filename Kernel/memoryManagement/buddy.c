@@ -52,7 +52,7 @@ void initializeMemoryManager(char * heap_base, size_t heap_size) {
 
     addNodeToBucket(&buckets[buckets_amount - 1], base_ptr, buckets_amount - 1);
 }
-void *malloc(size_t nbytes) {
+void *malloc(uint64_t nbytes) {
     
     size_t bytesNeeded = nbytes + sizeof(list_t);
 

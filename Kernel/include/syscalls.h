@@ -23,7 +23,7 @@ uint64_t* getRegisters();
 void updateRegisters(uint64_t* rsp);
 void getCPUVendor(char * buffer);
 void cpuVendor(char * buffer);
-void *malloc(size_t nbytes);
+void *malloc(uint64_t nbytes);
 void free(void *block);
 
 #endif

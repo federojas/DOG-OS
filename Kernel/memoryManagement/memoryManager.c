@@ -5,22 +5,22 @@
 #include <memoryManager.h>
 #include <stdbool.h>
 
-typedef long Align; /* for alignment to long boundary */
+typedef long Align;
 
-typedef union header /* block header */
+typedef union header
 {
     struct
     {
-        union header *ptr; /* next block if on free list */
-        size_t size;       /* size of this block */
+        union header *ptr;
+        size_t size;  
     } s;
 
-    Align x; /* force alignment of blocks */
+    Align x; 
 
 } Header;
 
-static Header * base;      /* empty list to get started */
-static Header *free_node = NULL; /* start of free list */
+static Header * base;     
+static Header *free_node = NULL;
 
 size_t total_units;
 
@@ -33,8 +33,8 @@ void initializeMemoryManager(char * heap_base, size_t heap_size) {
     free_node->s.ptr = free_node;
 }
 
-/* malloc: general-purpose storage allocator */
-void *malloc(size_t nbytes) {
+
+void *malloc(uint64_t nbytes) {
 
     if(nbytes == 0) 
         return 0;
@@ -51,13 +51,13 @@ void *malloc(size_t nbytes) {
     is_allocating = true;
     for (current_node = prevptr->s.ptr; is_allocating; current_node = current_node->s.ptr)
     {
-        if (current_node->s.size >= nunits) /* big enough */
+        if (current_node->s.size >= nunits)
         {
-            if (current_node->s.size == nunits) /* exactly */
+            if (current_node->s.size == nunits)
             {
                 prevptr->s.ptr = current_node->s.ptr;
             }
-            else /* allocate tail end */
+            else
             {
                 current_node->s.size -= nunits;
                 current_node += current_node->s.size;
@@ -66,10 +66,10 @@ void *malloc(size_t nbytes) {
 
             free_node = prevptr;
             result = current_node + 1;
-            is_allocating = false; /* we are done */
+            is_allocating = false; 
         }
 
-        if (current_node == free_node) /* wrapped around free list */
+        if (current_node == free_node)
             return NULL;
 
         prevptr = current_node;
@@ -78,67 +78,59 @@ void *malloc(size_t nbytes) {
     return result;
 }
 
-/* free: put block ap in free list */
+
 void free(void *block) {
+    printf("llegueMM\n");
     if (block == NULL || (((long)block - (long)base) % sizeof(Header)) != 0) 
         return;
 
     Header *free_block, *current_node;
-    free_block = (Header *)block - 1;                 /* point to block header */
+    free_block = (Header *)block - 1;              
 
-    if (free_block->s.size < base || free_block->s.size >= (base + total_units * sizeof(Header))) {
+    if (free_block->s.size < base || free_block >= (base + total_units * sizeof(Header))) {
         return;
     }
 
-    /* the free space is only marked as free, but 'block' still points to it */
-    /* to avoid reusing this address and corrupt our structure set it to '\0' */
     block = NULL;
 
     bool external = false;
 
-    /* look where to insert the free space */
-
-    /* (free_block > p && free_block < p->s.ptr)    => between two nodes */
-    /* (p > p->s.ptr)               => this is the end of the list */
-    /* (p == p->p.str)              => list is one element only */
     for (current_node = free_node; !(free_block > current_node && free_block < current_node->s.ptr); current_node = current_node->s.ptr) {
         if(free_block == current_node || free_block == current_node->s.ptr)
             return ;
-        if (current_node >= current_node->s.ptr && (free_block > current_node || free_block < current_node->s.ptr))
-            /* freed block at start or end of arena */
+        if (current_node >= current_node->s.ptr && (free_block > current_node || free_block < current_node->s.ptr)) {
             external = true;
-            break;
+            break; 
+        }
     }
 
     if (!external && (current_node + current_node->s.size > free_block || free_block + free_block->s.size > current_node->s.ptr))
             return;
         
-    if (free_block + free_block->s.size == current_node->s.ptr) {      /* join to upper nbr */
-    /* the new block fits perfect up to the upper neighbor */
+    if (free_block + free_block->s.size == current_node->s.ptr) {
+   
 
-        /* merging up: adjust the size */
         free_block->s.size += current_node->s.ptr->s.size;
-        /* merging up: point to the second next */
+   
         free_block->s.ptr = current_node->s.ptr->s.ptr;
 
-    } else
-        /* set the upper pointer */
+    } else {
+
         free_block->s.ptr = current_node->s.ptr;
+    }
 
-    if (current_node + current_node->s.size == free_block) {              /* join to lower nbr */
-    /* the new block fits perfect on top of the lower neighbor */
+    if (current_node + current_node->s.size == free_block) {              
 
-        /* merging below: adjust the size */
         current_node->s.size += free_block->s.size;
-        /* merging below: point to the next */
+
         current_node->s.ptr = free_block->s.ptr;
 
-    } else
-        /* set the lower pointer */
+    } else {
         current_node->s.ptr = free_block;
+    }
 
-    /* reset the start of the free list */
     free_node = current_node;
+    printf("finMM\n");
 }
 void memoryDump(){
     long long idx=1;

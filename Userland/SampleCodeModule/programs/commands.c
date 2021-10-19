@@ -240,6 +240,14 @@ void logo() {
 	printf("            / / / / / / / / ________/ / / /\\__ \\ \n");
 	printf("           / /_/ / /_/ / /_/ /_____/ /_/ /___/ /\n");
 	printf("          /_____/\\____/\\____/      \\____//____/\n\n");
+	char * string = _syscall(SYS_MALLOC_ID, 10 ,0,0,0,0);
+	string[0] = 'h';
+	string[1] = 'o';
+	string[2] = 'l';
+	string[3] = 'a';
+	string[4] = 0;
+	printf("%s\n",string);
+	(void)_syscall(SYS_FREE_ID, string,0,0,0,0);
 }
 
 void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], char userName[USER_SIZE]) {
