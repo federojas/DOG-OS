@@ -65,14 +65,19 @@ typedef struct process_list {
   uint32_t size;
   uint32_t readySize;
   t_process_node *first;
+  t_process_node *last;
 } t_process_list;
 
 static void idleProcess(int argc, char ** argv);
 static int initializeProcessControlBlock(t_processControlBlock * PCB, char * name, uint8_t foreground, uint16_t *fd);
 static void getArguments(char ** to, char ** from, int count);
 static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv);
-static void initializeProcessStackFrame(void (*entryPoint)(int, char **),
-                                        int argc, char **argv, void *rbp);
+static void initializeProcessStackFrame(void (*entryPoint)(int, char **), int argc, char **argv, void *rbp);
+static uint64_t setState(uint64_t pid, t_process_state state);
+static void queueProcess(t_process_node * process);
+static t_process_node * dequeueProcess();
+static int queueIsEmpty();
+static t_process_node *getProcess(uint64_t pid);
 
 static t_process_list *processes;
 static uint64_t currentPID = 0;
@@ -84,10 +89,11 @@ static void idleProcess(int argc, char **argv) {
   }
 }
 
-static uint64_t getPID() { return currentPID++; }
+static uint64_t getPID() { 
+    return currentPID++; 
+}
 
-static int initializeProcessControlBlock(t_processControlBlock *PCB, char *name,
-                                         uint8_t foreground, uint16_t *fd) {
+static int initializeProcessControlBlock(t_processControlBlock *PCB, char *name, uint8_t foreground, uint16_t *fd) {
   strcpy(name, PCB->name);
   PCB->pid = getPID();
   PCB->ppid =
@@ -123,13 +129,18 @@ static void getArguments(char **to, char **from, int count) {
   }
 }
 
-static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv) {
-  entryPoint(argc, argv);
-  // exit();
+static void end() {
+      killProcess(currentProcess->processControlBlock.pid);
+      _callTimerTick();
 }
 
-static void initializeProcessStackFrame(void (*entryPoint)(int, char **),
-                                        int argc, char **argv, void *rbp) {
+
+static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv) {
+  entryPoint(argc, argv);
+  end();
+}
+
+static void initializeProcessStackFrame(void (*entryPoint)(int, char **), int argc, char **argv, void *rbp) {
 
   t_stackFrame *stackFrame =
       (t_stackFrame *)rbp - 1; // rbp apunta a un byte despus del principio del
@@ -161,64 +172,6 @@ static void initializeProcessStackFrame(void (*entryPoint)(int, char **),
   stackFrame->base = 0x0;
 }
 
-void initializeProcessManager() {
-  processes = malloc(sizeof(t_process_list));
-  if (processes == NULL) {
-    return;
-  }
-
-  processes->size = 0;
-
-    char *argv[] = {"Initial Idle Process"};
-    newProcess(&idleProcess, 1, argv, 0, 0);
-}
-
-int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground, uint16_t * fd) {
-
-  if (entryPoint == NULL) {
-    return -1;
-  }
-
-  t_process_node *newProcess = malloc(sizeof(t_process_node));
-  if (newProcess == NULL) {
-    return -1;
-  }
-
-    if (initializeProcessControlBlock(&newProcess->processControlBlock, argv[0], foreground, fd) == -1) {
-        free(newProcess);
-        return -1;
-    }
-
-  char **arguments = malloc(sizeof(char *) * argc);
-  if (arguments == 0) {
-    return -1;
-  }
-
-  getArguments(arguments, argv, argc);
-
-  initializeProcessStackFrame(entryPoint, argc, arguments,
-                              newProcess->processControlBlock.rbp);
-
-  return newProcess->processControlBlock.pid;
-}
-
-static t_process_node *getProcess(uint64_t pid) {
-  if (currentProcess != NULL &&
-      currentProcess->processControlBlock.pid == pid) {
-    return currentProcess;
-  }
-
-  t_process_node *process = currentProcess;
-  while (process != NULL) {
-    if (process->processControlBlock.pid == pid) {
-      return process;
-    }
-    process = process->next_process_node;
-  }
-
-  return NULL;
-}
-
 static uint64_t setState(uint64_t pid, t_process_state state) {
   t_process_node *process = getProcess(pid);
 
@@ -243,11 +196,126 @@ static uint64_t setState(uint64_t pid, t_process_state state) {
   return process->processControlBlock.pid;
 }
 
+static void queueProcess(t_process_node * process) {
+  if (queueIsEmpty()) {
+    processes->first = process;
+    processes->last = processes->first;
+  } else {
+    processes->last->next_process_node = process;
+    process->next_process_node = NULL;
+    processes->last = process;
+  }
+
+  if (process->processControlBlock.state == READY) {
+    processes->readySize++;
+  }
+
+  processes->size++;
+}
+
+static t_process_node * dequeueProcess() {
+  if (queueIsEmpty()) {
+    return NULL;
+  } 
+
+  t_process_node * first = processes->first;
+  processes->first = processes->first->next_process_node;
+  processes->size--;
+
+  if (first->processControlBlock.state == READY) {
+    processes->readySize--;
+  }
+
+  return first;
+}
+
+static int queueIsEmpty() {
+  return processes->size == 0;
+}
+
+static t_process_node *getProcess(uint64_t pid) {
+  if (currentProcess != NULL &&
+      currentProcess->processControlBlock.pid == pid) {
+    return currentProcess;
+  }
+
+  t_process_node *process = currentProcess;
+  while (process != NULL) {
+    if (process->processControlBlock.pid == pid) {
+      return process;
+    }
+    process = process->next_process_node;
+  }
+
+  return NULL;
+}
+
+void initializeProcessManager() {
+  processes = malloc(sizeof(t_process_list));
+  if (processes == NULL) {
+    return;
+  }
+
+  processes->size = 0;
+
+    char *argv[] = {"Initial Idle Process"};
+    newProcess(&idleProcess, 1, argv, 0, 0);
+}
+
+
+int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground, uint16_t * fd) {
+
+    if (entryPoint == NULL) {
+    return -1;
+    }
+
+    t_process_node *newProcess = malloc(sizeof(t_process_node));
+    if (newProcess == NULL) {
+    return -1;
+    }
+
+    if (initializeProcessControlBlock(&newProcess->processControlBlock, argv[0], foreground, fd) == -1) {
+        free(newProcess);
+        return -1;
+    }
+
+    char **arguments = malloc(sizeof(char *) * argc);
+    if (arguments == 0) {
+    return -1;
+    }
+
+    getArguments(arguments, argv, argc);
+
+    initializeProcessStackFrame(entryPoint, argc, arguments, newProcess->processControlBlock.rbp);
+
+    newProcess->processControlBlock.state = READY; 
+                        
+    queueProcess(newProcess);
+    if(newProcess->processControlBlock.foreground && newProcess->processControlBlock.ppid) {
+        blockProcess(newProcess->processControlBlock.pid);
+    }  
+
+    return newProcess->processControlBlock.pid;
+}
+
+
+uint64_t killProcess(uint64_t pid) {
+      if (pid <= 2)
+            return -1;
+
+      int resPID = setState(pid, TERMINATED);
+
+      if (pid == currentProcess->processControlBlock.pid)
+            _callTimerTick();
+
+      return resPID;
+}
+
 uint64_t blockProcess(uint64_t pid) {
   int resPID = setState(pid, BLOCKED);
 
   if (pid == currentProcess->processControlBlock.pid) {
-    // timertick
+    _callTimerTick();
   }
 
   return resPID;

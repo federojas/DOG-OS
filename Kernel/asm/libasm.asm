@@ -7,6 +7,7 @@ GLOBAL _getKey
 GLOBAL _hasKey
 GLOBAL _getMem
 GLOBAL _exit
+GLOBAL _callTimerTick
 section .text
 	
 cpuVendor:
@@ -141,6 +142,10 @@ _getMem:
 
 	leave
 	ret
+
+_callTimerTick:
+    int20h
+    ret
 
 _exit:
     jmp $
