@@ -9,8 +9,8 @@ SYS_PRINTMEM_ID, SYS_CPUID_ID, SYS_CLEAR_ID, SYS_EXIT_ID, SYS_CPUVENDOR_ID, SYS_
 
 uint8_t getCurrentTime(uint64_t rtcID);
 uint8_t _getRTCInfo(uint64_t rtcID);
-void sys_write(char * str, uint8_t len, t_color bgColor, t_color ftColor, int usrLen);
-uint64_t sys_read();
+void sysWrite(char * str, uint8_t len, t_color bgColor, t_color ftColor, int usrLen);
+uint64_t sysRead();
 void getCPUFeatures(uint32_t buffer[4]);
 void _checkCPUFeatures(uint32_t buffer[4]); 
 uint8_t _checkCPUID(void);

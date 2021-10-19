@@ -261,14 +261,14 @@ void clearLine(){
 
 void cursor() {
     int changeDetected = 0;
-    if(!changeDetected && ticks_elapsed() % 9  ==0){
+    if(!changeDetected && ticksElapsed() % 9  ==0){
             changeDetected=1;
             printChar('_', WHITE, BLACK, 0);
-            if(ticks_elapsed()%18==0){
+            if(ticksElapsed()%18==0){
                 printChar(' ', WHITE, BLACK, 0);
             }
         }
-        if(changeDetected &&  ticks_elapsed() %6 !=0){
+        if(changeDetected &&  ticksElapsed() %6 !=0){
             changeDetected=0;
         }
 }

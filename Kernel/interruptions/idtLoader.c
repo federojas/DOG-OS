@@ -20,16 +20,16 @@ typedef struct {
 
 DESCR_INT * idt = (DESCR_INT *) 0;	// IDT de 255 entradas
 
-static void setup_IDT_entry (int index, uint64_t offset);
+static void setupIdtEntry (int index, uint64_t offset);
 
-void load_idt() {
+void loadIdt() {
   _cli();
 
-  setup_IDT_entry (0x20, (uint64_t)&_irq00Handler);
-  setup_IDT_entry(0x21, (uint64_t)&_irq01Handler);
-  setup_IDT_entry(0x80, (uint64_t)&_syscallHandler);
-  setup_IDT_entry (0x00, (uint64_t)&_exception0Handler);
-  setup_IDT_entry(0x06, (uint64_t)&_exception6Handler);
+  setupIdtEntry (0x20, (uint64_t)&_irq00Handler);
+  setupIdtEntry(0x21, (uint64_t)&_irq01Handler);
+  setupIdtEntry(0x80, (uint64_t)&_syscallHandler);
+  setupIdtEntry (0x00, (uint64_t)&_exception0Handler);
+  setupIdtEntry(0x06, (uint64_t)&_exception6Handler);
 
 
 	//Teclado y timer habilitados
@@ -39,7 +39,7 @@ void load_idt() {
 	_sti();
 }
 
-static void setup_IDT_entry (int index, uint64_t offset) {
+static void setupIdtEntry (int index, uint64_t offset) {
   idt[index].selector = 0x08;
   idt[index].offset_l = offset & 0xFFFF;
   idt[index].offset_m = (offset >> 16) & 0xFFFF;

@@ -87,19 +87,19 @@ int pow(int x, unsigned int y) {
 void printIntDec(uint64_t num) {
    char buffer[10];
    uintToBase(num, buffer, 10);
-   sys_write(buffer, strlen(buffer), BLACK, WHITE,0);
+   sysWrite(buffer, strlen(buffer), BLACK, WHITE,0);
 }
 
 void printIntHex(uint64_t num) {
     char buffer[10];
     uintToBase(num, buffer, 16);
-    sys_write(buffer, strlen(buffer), BLACK, WHITE,0);
+    sysWrite(buffer, strlen(buffer), BLACK, WHITE,0);
 }
 
 void printIntBin(uint64_t num) {
     char buffer[10];
     uintToBase(num, buffer, 2);
-    sys_write(buffer, strlen(buffer), BLACK, WHITE,0);
+    sysWrite(buffer, strlen(buffer), BLACK, WHITE,0);
 }
 
 int printf(char const *fmt, ...) {
@@ -113,11 +113,11 @@ int printf(char const *fmt, ...) {
 }
 
 void putChar(char c) {
-    sys_write(&c, 1, BLACK, WHITE,0);
+    sysWrite(&c, 1, BLACK, WHITE,0);
 }
 
 void printString(char * string) {
-    sys_write(string, strlen(string), BLACK, WHITE,0);
+    sysWrite(string, strlen(string), BLACK, WHITE,0);
 }
 
 // https://www.techiedelight.com/implement-itoa-function-in-c/
