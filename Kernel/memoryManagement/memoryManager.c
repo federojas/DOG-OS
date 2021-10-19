@@ -140,20 +140,20 @@ void memoryDump(){
     Header *original,*current;
     original=current=free_node;
     int flag=1;
-    printf("\n MEMORY DUMP (mem Manager list)\n");
-    printf("-------------------------------------------\n");
-    printf("total memory: %d bytes\n", total_units*sizeof(Header));
+    printf("\nMEMORY DUMP (Free List Memory Manager)\n");
+    printf("\n-------------------------------------------\n");
+    printf("\nTotal memory: %d bytes\n\n", total_units*sizeof(Header));
     if(free_node==NULL){
-        printf("No free blocks available\n");
+        printf("\nNo free blocks available\n");
         return;
     }
     printf("Free blocks:\n");
 
     while(current!=original||flag){
         flag=0;
-        printf(" Block number %d\n",idx);
-        printf(" Base:%x\n", (uint64_t)current);
-        printf(" Free units: %d\n", current->s.size);
+        printf("    Block number %d\n",idx);
+        printf("    Base:%x\n", (uint64_t)current);
+        printf("    Free units: %d\n", current->s.size);
 
         current=current->s.ptr;
         idx++;

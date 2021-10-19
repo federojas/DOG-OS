@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include <string.h>
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
@@ -7,6 +6,7 @@
 #include <keyboardDriver.h>
 #include <videoDriver.h>
 #include <memoryManager.h>
+#include <processManager.h>
 
 #define HEAP_MEMORY_SIZE 1024 * 1024 * 64 // 64MB
 
@@ -56,7 +56,13 @@ void * initializeKernelBinary() {
 int main() {
 	loadIdt();
 	initializeVideo();
-	initializeMemoryManager(sampleCodeModuleHeapAddress, HEAP_MEMORY_SIZE);
-	((EntryPoint)sampleCodeModuleAddress)();
+	initializeMemoryManager((char *)sampleCodeModuleHeapAddress, HEAP_MEMORY_SIZE);
+	initializeProcessManager();
+	//((EntryPoint)sampleCodeModuleAddress)();
+
+	char *argv[] = {"Shell"};
+    newProcess(sampleCodeModuleAddress, 1, argv, 1, 0);
+    _hlt();
+
 	return 0;
 }

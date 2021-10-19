@@ -24,7 +24,8 @@ typedef struct {
   uint16_t fileDescriptors[2];
   void *rsp;
   void *rbp;
-
+    int argc;
+  char **argv;
 } t_PCB;
 
 typedef struct {
@@ -79,13 +80,14 @@ static t_process_node * dequeueProcess();
 static int queueIsEmpty();
 static t_process_node *getProcess(uint64_t pid);
 
+static uint64_t currentPID = 0;
+static uint64_t cyclesLeft;
 
 static t_process_list *processes;
-static uint64_t currentPID = 0;
 static t_process_node *currentProcess;
 static t_process_node * baseProcess;
 
-static void idle(int argc, char **argv) {
+static void idleProcess(int argc, char **argv) {
   while (1) {
     _hlt();
   }
@@ -143,9 +145,7 @@ static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv) {
 
 static void initializeProcessStackFrame(void (*entryPoint)(int, char **), int argc, char **argv, void *rbp) {
 
-  t_stackFrame *stackFrame =
-      (t_stackFrame *)rbp - 1; // rbp apunta a un byte despus del principio del
-                               // bloque de memoria asignado
+  t_stackFrame *stackFrame = (t_stackFrame *)rbp - 1;
 
   stackFrame->rax = 0x01;
   stackFrame->rbx = 0x02;
@@ -257,27 +257,27 @@ void initializeProcessManager() {
     return;
   }
 
-  processes->first = NULL;
-  processes->last = processes->first;
-  processes->readySize = 0;
-  processes->size = 0;
-
+    processes->first = NULL;
+    processes->last = processes->first;
+    processes->readySize = 0;
+    processes->size = 0;
+        
     char *argv[] = {"Initial Idle Process"};
-    newProcess(&idle, 1, argv, 0, 0);
 
-    idleProcess = dequeueProcess();
+    newProcess(&idleProcess, 1, argv, 0, 0);
+
+    baseProcess = dequeueProcess();
 }
-
 
 int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground, uint16_t * fd) {
 
     if (entryPoint == NULL) {
-    return -1;
+        return -1;
     }
 
     t_process_node *newProcess = malloc(sizeof(t_process_node));
     if (newProcess == NULL) {
-    return -1;
+        return -1;
     }
 
     if (initializeProcessControlBlock(&newProcess->pcb, argv[0], foreground, fd) == -1) {
@@ -287,7 +287,7 @@ int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t
 
     char **arguments = malloc(sizeof(char *) * argc);
     if (arguments == 0) {
-    return -1;
+        return -1;
     }
 
     getArguments(arguments, argv, argc);
@@ -304,6 +304,14 @@ int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t
     return newProcess->pcb.pid;
 }
 
+static void freeProcess(t_process_node * p) {
+  for (int i = 0; i < p->pcb.argc; i++) {
+    free(p->pcb.argv[i]);
+  }
+  free(p->pcb.argv);
+  free((void *)((char *)p->pcb.rbp - SIZE_OF_STACK + 1));
+  free((void *)p);
+}
 
 uint64_t killProcess(uint64_t pid) {
       if (pid <= 2)
@@ -331,20 +339,44 @@ uint64_t readyProcess(uint64_t pid) {
     return setState(pid, READY);
 }
 
-// void * scheduler() {
-//   if (currentProcess) {
-//     if (currentProcess->processControlBlock.state == READY ) {
+void * processManager(void * sp) {
+  if (currentProcess) {
+    if (currentProcess->pcb.state == READY && cyclesLeft > 0) {
+      cyclesLeft--;
+      return sp;
+    }
+    currentProcess->pcb.rsp = sp;
+   
+   //not idle process
+   if (currentProcess->pcb.pid != baseProcess->pcb.pid) {
+     if (currentProcess->pcb.state == TERMINATED) {
+       t_process_node * parent = getProcess(currentProcess->pcb.ppid);
+       if (parent != NULL && currentProcess->pcb.foreground && parent->pcb.state == BLOCKED) {
+         readyProcess(parent->pcb.pid);
+       }
+       freeProcess(currentProcess);
+     } else {
+       queueProcess(currentProcess); //BLOCKED
+     }
+   }
+  }
 
-//     }
+  if (processes->readySize > 0) {
+    currentProcess = dequeueProcess();
+    while (currentProcess->pcb.state != READY) {
+      if (currentProcess->pcb.state == TERMINATED) {
+        freeProcess(currentProcess);
+      } 
+      if (currentProcess->pcb.state == BLOCKED) {
+        queueProcess(currentProcess);
+      }
+      currentProcess = dequeueProcess();
+    }
+  } else {
+    currentProcess = baseProcess;
+  }
 
-    
-//   }
-
-//   if (processes->readySize > 0) {
-
-//   } else {
-//     currentProcess = idleProcess;
-//   }
-
-  
-// }
+  cyclesLeft = currentProcess->pcb.priority;
+   
+  return currentProcess->pcb.rsp;
+}

@@ -21,6 +21,7 @@ EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN syscallSelector
 EXTERN getStackBase
+EXTERN processManager
 
 SECTION .text
 
@@ -40,9 +41,13 @@ SECTION .text
 	push r13
 	push r14
 	push r15
+	push fs
+    push gs
 %endmacro
 
 %macro popState 0
+	pop gs
+	pop fs
 	pop r15
 	pop r14
 	pop r13
@@ -129,7 +134,21 @@ picSlaveMask:
 
 ;8254 Timer (Timer Tick)
 _irq00Handler:
-	irqHandlerMaster 0
+	pushState
+
+	mov rdi, 0
+	mov rsi, rsp
+	call irqDispatcher
+
+	mov rdi,rsp
+	call processManager
+	mov rsp, rax
+
+	mov al, 20h
+	out 20h, al
+
+	popState
+	iretq
 
 ;Keyboard
 _irq01Handler:

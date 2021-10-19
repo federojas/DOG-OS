@@ -14,7 +14,6 @@ void strcpy(char dest[], const char source[]);
 int log2(uint32_t number);
 int pow(int x, unsigned int y);
 int printf(char const *fmt, ...);
-static int scan(char const *fmt, va_list arg);
 void putChar(char c);
 char* intToStr(int value, char* buffer, int base);
 
