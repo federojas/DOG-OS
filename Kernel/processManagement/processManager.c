@@ -68,7 +68,7 @@ typedef struct process_list {
   t_process_node *last;
 } t_process_list;
 
-static void idleProcess(int argc, char ** argv);
+static void idle(int argc, char ** argv);
 static int initializeProcessControlBlock(t_processControlBlock * PCB, char * name, uint8_t foreground, uint16_t *fd);
 static void getArguments(char ** to, char ** from, int count);
 static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv);
@@ -79,11 +79,14 @@ static t_process_node * dequeueProcess();
 static int queueIsEmpty();
 static t_process_node *getProcess(uint64_t pid);
 
+
 static t_process_list *processes;
 static uint64_t currentPID = 0;
 static t_process_node *currentProcess;
+static uint64_t cyclesLeft;
+static t_process_node *idleProcess;
 
-static void idleProcess(int argc, char **argv) {
+static void idle(int argc, char **argv) {
   while (1) {
     _hlt();
   }
@@ -133,7 +136,6 @@ static void end() {
       killProcess(currentProcess->processControlBlock.pid);
       _callTimerTick();
 }
-
 
 static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv) {
   entryPoint(argc, argv);
@@ -256,10 +258,15 @@ void initializeProcessManager() {
     return;
   }
 
+  processes->first = NULL;
+  processes->last = processes->first;
+  processes->readySize = 0;
   processes->size = 0;
 
     char *argv[] = {"Initial Idle Process"};
-    newProcess(&idleProcess, 1, argv, 0, 0);
+    newProcess(&idle, 1, argv, 0, 0);
+
+    idleProcess = dequeueProcess();
 }
 
 
@@ -324,3 +331,21 @@ uint64_t blockProcess(uint64_t pid) {
 uint64_t readyProcess(uint64_t pid) {
     return setState(pid, READY);
 }
+
+// void * scheduler() {
+//   if (currentProcess) {
+//     if (currentProcess->processControlBlock.state == READY ) {
+
+//     }
+
+    
+//   }
+
+//   if (processes->readySize > 0) {
+
+//   } else {
+//     currentProcess = idleProcess;
+//   }
+
+  
+// }
