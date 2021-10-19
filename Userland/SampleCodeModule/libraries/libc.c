@@ -290,7 +290,7 @@ char *strcpy(char *destino, const char *fuente) {
 
     *destino = '\0';
     return aux;
- }
+}
 
 
 

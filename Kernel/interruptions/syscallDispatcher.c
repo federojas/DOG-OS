@@ -10,8 +10,8 @@ static int getCurrentTimeWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint6
     return getCurrentTime((uint8_t) rsi);
 }
 
-static int sys_write_wrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
-    sys_write((char *)(rsi), (uint8_t)(rdx), (t_color)(rcx), (t_color)(r8), (uint64_t) r9);
+static int sysWriteWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    sysWrite((char *)(rsi), (uint8_t)(rdx), (t_color)(rcx), (t_color)(r8), (uint64_t) r9);
     return 0;
 }
 
@@ -20,8 +20,8 @@ static int getCPUFeaturesWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint6
     return 0;
 }
 
-static int sys_read_wrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
-    return sys_read();
+static int sysReadWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    return sysRead();
 }
 
 static int getRegistersWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
@@ -64,8 +64,8 @@ static int freeWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, ui
 static functionPointer syscall[] = {
     getCurrentTimeWrapper,
     getCPUFeaturesWrapper,
-    sys_read_wrapper,
-    sys_write_wrapper,
+    sysReadWrapper,
+    sysWriteWrapper,
     getRegistersWrapper,
     getMemWrapper,
     checkCPUIDWrapper,

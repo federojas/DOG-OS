@@ -21,7 +21,7 @@ void irqDispatcher(uint64_t irq, uint64_t rsp) {
 }
 
 static void int_20() {
-	timer_handler();
+	timerHandler();
 }
 
 static void int_21(uint64_t rsp) {

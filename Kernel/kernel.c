@@ -54,7 +54,7 @@ void * initializeKernelBinary() {
 
 
 int main() {
-	load_idt();
+	loadIdt();
 	initializeVideo();
 	initializeMemoryManager(sampleCodeModuleHeapAddress, HEAP_MEMORY_SIZE);
 	((EntryPoint)sampleCodeModuleAddress)();
