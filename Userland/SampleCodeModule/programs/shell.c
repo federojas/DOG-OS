@@ -7,7 +7,7 @@
 static char userName[USER_SIZE] = "DefaultUser";
 static int shellStartup = 1;
 
-void startShell(){ 
+void startShell(int argc, char **argv){ 
     if(shellStartup)
         //shellWelcomeMessage();
     shellExecute();

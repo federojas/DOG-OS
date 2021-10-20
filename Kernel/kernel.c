@@ -58,10 +58,8 @@ int main() {
 	initializeVideo();
 	initializeMemoryManager((char *)sampleCodeModuleHeapAddress, HEAP_MEMORY_SIZE);
 	initializeProcessManager();
-	//((EntryPoint)sampleCodeModuleAddress)();
-
-	char *argv[] = {"Shell"};
-    newProcess(sampleCodeModuleAddress, 1, argv, 1, 0);
+	char *argv2[] = {"Userland Init"};
+    newProcess(sampleCodeModuleAddress, 1, argv2, FOREGROUND, 0);
     _hlt();
 
 	return 0;

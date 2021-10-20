@@ -6,7 +6,7 @@
 #define MAX_ARGUMENTS 3
 
 void shellWelcomeMessage();
-void startShell();
+void startShell(int argc, char **argv);
 void shellExecute();
 void printUser();
 #endif

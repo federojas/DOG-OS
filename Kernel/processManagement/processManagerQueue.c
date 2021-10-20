@@ -5,7 +5,7 @@ void queueProcess(t_process_list *processes, t_process_node * process) {
     processes->first = process;
     processes->last = processes->first;
   } else {
-    processes->last->next = (t_process_node *)process;
+    processes->last->next = (struct t_process_node *)process;
     process->next = NULL;
     processes->last = process;
   }
@@ -23,7 +23,7 @@ t_process_node * dequeueProcess(t_process_list *processes) {
   } 
 
   t_process_node * first = processes->first;
-  processes->first = (t_process_node *)processes->first->next;
+  processes->first = (struct process_node *)processes->first->next;
   processes->size--;
 
   if (first->pcb.state == READY) {

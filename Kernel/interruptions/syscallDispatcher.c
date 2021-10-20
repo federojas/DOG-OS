@@ -3,6 +3,7 @@
 #include <keyboardDriver.h>
 #include <videoDriver.h>
 #include <memoryManager.h>
+#include <processManager.h> 
 
 typedef int (*functionPointer)(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
@@ -66,6 +67,10 @@ static int memDumpWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8,
     return 0;
 }
 
+static int newProcessWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    return newProcess((void (*)(int, char **)) rsi, (int) rdx, (char **) rcx, (uint8_t) r8, (uint16_t *) r9);
+}
+
 static functionPointer syscall[] = {
     getCurrentTimeWrapper,
     getCPUFeaturesWrapper,
@@ -79,7 +84,8 @@ static functionPointer syscall[] = {
     getCPUVendorWrapper,
     mallocWrapper,
     freeWrapper,
-    memDumpWrapper  
+    memDumpWrapper,
+    newProcessWrapper 
 };
 
 uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
