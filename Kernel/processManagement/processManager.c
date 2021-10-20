@@ -4,29 +4,11 @@
 #include <processManager.h>
 #include <stddef.h>
 #include <stdint.h>
-
-// https://en.wikipedia.org/wiki/Process_control_block
+#include <processManagerQueue.h>
 
 #define SIZE_OF_STACK (4 * 1024)
 #define BACKGROUND_PRIORITY_DEFAULT 1
 #define FOREGROUND_PRIORITY_DEFAULT 2
-
-typedef enum { READY, BLOCKED, TERMINATED } t_state;
-
-typedef struct {
-
-  uint64_t pid;
-  uint64_t ppid;
-  uint8_t foreground;
-  t_state state;
-  uint64_t priority;
-  char name[30];
-  uint16_t fileDescriptors[2];
-  void *rsp;
-  void *rbp;
-    int argc;
-  char **argv;
-} t_PCB;
 
 typedef struct {
 
@@ -57,28 +39,17 @@ typedef struct {
 
 } t_stackFrame;
 
-typedef struct process_node {
-  t_PCB pcb;
-  struct t_process_node *next;
-} t_process_node;
-
-typedef struct process_list {
-  uint32_t size;
-  uint32_t readySize;
-  t_process_node *first;
-  t_process_node *last;
-} t_process_list;
-
 static void idleProcess(int argc, char ** argv);
 static int initializeProcessControlBlock(t_PCB * PCB, char * name, uint8_t foreground, uint16_t *fd);
 static void getArguments(char ** to, char ** from, int count);
 static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv);
 static void initializeProcessStackFrame(void (*entryPoint)(int, char **), int argc, char **argv, void *rbp);
 static uint64_t setState(uint64_t pid, t_state state);
-static void queueProcess(t_process_node * process);
-static t_process_node * dequeueProcess();
-static int queueIsEmpty();
+static void freeProcess(t_process_node * p);
+static uint64_t getPID();
+static void end();
 static t_process_node *getProcess(uint64_t pid);
+
 
 static uint64_t currentPID = 0;
 static uint64_t cyclesLeft;
@@ -197,43 +168,6 @@ static uint64_t setState(uint64_t pid, t_state state) {
   return process->pcb.pid;
 }
 
-static void queueProcess(t_process_node * process) {
-  if (queueIsEmpty()) {
-    processes->first = process;
-    processes->last = processes->first;
-  } else {
-    processes->last->next = process;
-    process->next = NULL;
-    processes->last = process;
-  }
-
-  if (process->pcb.state == READY) {
-    processes->readySize++;
-  }
-
-  processes->size++;
-}
-
-static t_process_node * dequeueProcess() {
-  if (queueIsEmpty()) {
-    return NULL;
-  } 
-
-  t_process_node * first = processes->first;
-  processes->first = processes->first->next;
-  processes->size--;
-
-  if (first->pcb.state == READY) {
-    processes->readySize--;
-  }
-
-  return first;
-}
-
-static int queueIsEmpty() {
-  return processes->size == 0;
-}
-
 static t_process_node *getProcess(uint64_t pid) {
   if (currentProcess != NULL &&
       currentProcess->pcb.pid == pid) {
@@ -245,10 +179,19 @@ static t_process_node *getProcess(uint64_t pid) {
     if (process->pcb.pid == pid) {
       return process;
     }
-    process = process->next;
+    process = (t_process_node *)process->next;
   }
 
   return NULL;
+}
+
+static void freeProcess(t_process_node * p) {
+  for (int i = 0; i < p->pcb.argc; i++) {
+    free(p->pcb.argv[i]);
+  }
+  free(p->pcb.argv);
+  free((void *)((char *)p->pcb.rbp - SIZE_OF_STACK + 1));
+  free((void *)p);
 }
 
 void initializeProcessManager() {
@@ -266,7 +209,7 @@ void initializeProcessManager() {
 
     newProcess(&idleProcess, 1, argv, 0, 0);
 
-    baseProcess = dequeueProcess();
+    baseProcess = dequeueProcess(processes);
 }
 
 int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground, uint16_t * fd) {
@@ -296,21 +239,12 @@ int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t
 
     newProcess->pcb.state = READY; 
                         
-    queueProcess(newProcess);
+    queueProcess(processes, newProcess);
     if(newProcess->pcb.foreground && newProcess->pcb.ppid) {
         blockProcess(newProcess->pcb.pid);
     }  
 
     return newProcess->pcb.pid;
-}
-
-static void freeProcess(t_process_node * p) {
-  for (int i = 0; i < p->pcb.argc; i++) {
-    free(p->pcb.argv[i]);
-  }
-  free(p->pcb.argv);
-  free((void *)((char *)p->pcb.rbp - SIZE_OF_STACK + 1));
-  free((void *)p);
 }
 
 uint64_t killProcess(uint64_t pid) {
@@ -352,25 +286,25 @@ void * processManager(void * sp) {
      if (currentProcess->pcb.state == TERMINATED) {
        t_process_node * parent = getProcess(currentProcess->pcb.ppid);
        if (parent != NULL && currentProcess->pcb.foreground && parent->pcb.state == BLOCKED) {
-         readyProcess(parent->pcb.pid);
+            readyProcess(parent->pcb.pid);
        }
        freeProcess(currentProcess);
      } else {
-       queueProcess(currentProcess); //BLOCKED
+       queueProcess(processes, currentProcess); //BLOCKED
      }
    }
   }
 
   if (processes->readySize > 0) {
-    currentProcess = dequeueProcess();
+    currentProcess = dequeueProcess(processes);
     while (currentProcess->pcb.state != READY) {
       if (currentProcess->pcb.state == TERMINATED) {
         freeProcess(currentProcess);
       } 
       if (currentProcess->pcb.state == BLOCKED) {
-        queueProcess(currentProcess);
+        queueProcess(processes, currentProcess);
       }
-      currentProcess = dequeueProcess();
+      currentProcess = dequeueProcess(processes);
     }
   } else {
     currentProcess = baseProcess;

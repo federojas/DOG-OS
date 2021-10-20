@@ -3,6 +3,8 @@
 #include <keyboardDriver.h>
 #include <syscalls.h>
 
+static int scan(char const *fmt, va_list arg);
+
 void printLine() {
 	newLine();
 }
