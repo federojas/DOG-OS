@@ -4,6 +4,8 @@
 #include <screens.h>
 #include <colors.h>
 #include <lib.h>
+#include <time.h>
+
 unsigned int WIDTH = 1024;
 unsigned int HEIGHT = 768;
 unsigned int PIXEL_SIZE = 3; //bytes por pixel 

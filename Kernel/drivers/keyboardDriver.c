@@ -49,7 +49,7 @@ uint8_t getAction(uint8_t scanCode) {
 }
 static void cleanBufferofScreen(){
     stopCursor();
-    for(int i=0; i<bufferSize;i++){
+    for(int i=0; i<buffSize;i++){
         deleteChar();
     }
     cleanKeyboardBuffer();

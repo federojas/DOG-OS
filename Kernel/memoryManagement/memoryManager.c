@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <memoryManager.h>
 #include <stdbool.h>
+#include <prints.h>
 
 typedef long Align;
 
