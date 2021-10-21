@@ -79,6 +79,11 @@ static int getProcessPIDWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64
     return getProcessPID();
 }
 
+static int processStatusWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    printProcessStatus();
+    return 0;
+}
+
 static functionPointer syscall[] = {
     getCurrentTimeWrapper,
     getCPUFeaturesWrapper,
@@ -95,7 +100,8 @@ static functionPointer syscall[] = {
     memDumpWrapper,
     newProcessWrapper,
     killProcessWrapper,
-    getProcessPIDWrapper 
+    getProcessPIDWrapper, 
+    processStatusWrapper 
 };
 
 uint64_t syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {

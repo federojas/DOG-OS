@@ -120,6 +120,9 @@ void shellExecute(int argc2, char **argv2){
         else if(strcmp("/ftcolour", command) == 0){
             changeColour(argc, argv, 1);
         }
+        else if(strcmp("/ps", command) == 0){
+            ps(argc, argv);
+        }
         else {
             printf("\nComando invalido: use /help\n\n");
         }
