@@ -184,6 +184,10 @@ uint64_t readyProcess(uint64_t pid) {
     return setState(pid, READY);
 }
 
+uint64_t getProcessPID() {
+  return currentProcess ? currentProcess->pcb.pid : -1;
+}
+
 static void idleProcess(int argc, char **argv) {
   while (1) {
     _hlt();

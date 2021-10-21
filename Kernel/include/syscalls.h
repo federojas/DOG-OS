@@ -6,7 +6,7 @@
 
 typedef enum {SYS_RTC_ID, SYS_CPUFEATURES_ID, SYS_READ_ID, SYS_WRITE_ID, SYS_INFOREG_ID, 
 SYS_PRINTMEM_ID, SYS_CPUID_ID, SYS_CLEAR_ID, SYS_EXIT_ID, SYS_CPUVENDOR_ID, SYS_MALLOC_ID,
-SYS_FREE_ID, SYS_MEMDUMP_ID, SYS_CREATE_PROCESS_ID } t_syscall_id;
+SYS_FREE_ID, SYS_MEMDUMP_ID, SYS_NEW_PROCESS_ID, SYS_KILL_PROCESS_ID, SYS_PROCESS_PID_ID } t_syscall_id;
 
 uint8_t getCurrentTime(uint64_t rtcID);
 uint8_t _getRTCInfo(uint64_t rtcID);
@@ -28,6 +28,7 @@ void *malloc(uint64_t nbytes);
 void free(void *block);
 void memoryDump();
 int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground, uint16_t * fd);
-
+int killProcess(uint64_t pid);
+int getProcessPID();
 
 #endif

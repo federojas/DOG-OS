@@ -218,6 +218,13 @@ static int scan(char const *fmt, va_list arg) {
                             printString(buffer);
                             length += strlen(buffer);
                             break;
+                    case 'x':
+                            int_temp = va_arg(arg, int);
+                            intToStr(int_temp, buffer, 16);
+                            printString("0x");
+                            printString(buffer);
+                            length += strlen(buffer);
+                            break;
                   }
             } else {
                   putChar(ch);

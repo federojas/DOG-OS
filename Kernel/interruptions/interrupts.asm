@@ -105,13 +105,11 @@ SECTION .text
 %macro irqHandlerMaster 1
 	pushState
 
-	mov rdi, %1 ; pasaje de parametro
+	mov rdi, %1
 	mov rsi, rsp
 	call irqDispatcher
 
-	; signal pic EOI (End of Interrupt)
-	mov al, 20h
-	out 20h, al
+	call sendEndOfInterrupt
 
 	popState
 	iretq
@@ -122,7 +120,7 @@ SECTION .text
 %macro exceptionHandler 1
 	pushState
 
-	mov rdi, %1 ; pasaje de parametro
+	mov rdi, %1
 	mov rsi, rsp
 	call exceptionDispatcher
 	popState
@@ -134,6 +132,11 @@ SECTION .text
 	mov [rsp], rax
 	
 	iretq
+%endmacro
+
+%macro sendEndOfInterrupt 0
+	mov al, 20h
+	out 20h, al
 %endmacro
 
 _hlt:
@@ -180,8 +183,7 @@ _irq00Handler:
 	call processManager
 	mov rsp, rax
 
-	mov al, 20h
-	out 20h, al
+	sendEndOfInterrupt
 
 	popStateExtra
 	iretq

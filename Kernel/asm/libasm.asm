@@ -14,7 +14,7 @@ cpuVendor:
 	push rbp
 	mov rbp, rsp
 
-    call _checkCPUID ;checks if processor has CPUID support 
+    call _checkCPUID
     cmp rax, 0
     jz .end 
 
@@ -49,7 +49,6 @@ _checkCPUID:
     xor rax, 200000h ; set bit 21, the ID flag, to 1
     push rax ; push this toggled flags register
     popfq ; pop the toggled flags back into the flags register
-    ; EN ESTE PASO EL CPU VA A RESETEAR EL BIT 21 A 0 SI NO TIENE CPUID
     pushfq ; push the flags again
     pop rax ;pop the flags into eax again
     
@@ -69,7 +68,7 @@ _checkCPUFeatures:
     push rbp
 	mov rbp, rsp
 
-    call _checkCPUID ;checks if processor has CPUID support
+    call _checkCPUID
     cmp rax, 0
     jz .end
 
