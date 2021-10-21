@@ -335,14 +335,14 @@ char * fgToBoolStr(int fg) {
 
 void printProcess(t_process_node *p) {
   if (p != NULL)
-    printf("%d          %s      %d  %d    %s      %s\n",
+    printf("%d      %s    %d  %d    %d      %s     %s\n",
           p->pcb.pid, fgToBoolStr((int)p->pcb.foreground) , (uint64_t)p->pcb.rsp,
-          (uint64_t)p->pcb.rbp, stateToStr(p->pcb.state), p->pcb.name);
+          (uint64_t)p->pcb.rbp, p->pcb.priority, stateToStr(p->pcb.state), p->pcb.name);
 }
 
 int printPS() {
   printf(
-      "PID      FOREGROUND      RSP       RBP      STATE      NAME\n");
+      "PID  FOREGROUND   RSP       RBP     PRIORITY  STATE    NAME\n");
 
   if (currentProcess != NULL)
     printProcess(currentProcess);
