@@ -10,7 +10,7 @@ static int shellStartup = 1;
 void startShell(int argc, char **argv){ 
     if(shellStartup)
         //shellWelcomeMessage();
-    shellExecute();
+    shellExecute(0,0);
 }
 
 void shellWelcomeMessage(){
@@ -54,7 +54,7 @@ static int getCommandArgs(char* userInput, char* command, char argv[MAX_ARGUMENT
     sendUserData(userName,len);
     printf(" > ");
 }
-void shellExecute(){
+void shellExecute(int argc2, char **argv2){
     char command[BUFFER_SIZE] = {0};
     char argv[MAX_ARGUMENTS][BUFFER_SIZE];
     char userInput[BUFFER_SIZE] = {0};

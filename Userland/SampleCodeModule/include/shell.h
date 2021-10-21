@@ -7,6 +7,6 @@
 
 void shellWelcomeMessage();
 void startShell(int argc, char **argv);
-void shellExecute();
+void shellExecute(int argc, char **argv2);
 void printUser();
 #endif

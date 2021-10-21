@@ -54,13 +54,13 @@ void * initializeKernelBinary() {
 
 
 int main() {
-	loadIdt();
-	initializeVideo();
 	initializeMemoryManager((char *)sampleCodeModuleHeapAddress, HEAP_MEMORY_SIZE);
+	initializeVideo();
 	initializeProcessManager();
 	char *argv2[] = {"Userland Init"};
     newProcess(sampleCodeModuleAddress, 1, argv2, FOREGROUND, 0);
+	loadIdt();
     _hlt();
-
+	printf("FATAL FAILURE");
 	return 0;
 }

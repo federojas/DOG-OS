@@ -6,37 +6,38 @@
 #include <stdint.h>
 #include <processManagerQueue.h>
 
+static void * const sampleCodeModuleAddress = (void*)0x400000;
+
+
 #define SIZE_OF_STACK (4 * 1024)
 #define BACKGROUND_PRIORITY_DEFAULT 1
 #define FOREGROUND_PRIORITY_DEFAULT 2
 
 typedef struct {
-
-  uint64_t rax;
-  uint64_t rbx;
-  uint64_t rcx;
-  uint64_t rdx;
+  uint64_t gs;
+  uint64_t fs;
+  uint64_t r15;
+  uint64_t r14;
+  uint64_t r13;
+  uint64_t r12;
+  uint64_t r11;
+  uint64_t r10;
+  uint64_t r9;
+  uint64_t r8;
   uint64_t rsi;
   uint64_t rdi;
   uint64_t rbp;
-  uint64_t r8;
-  uint64_t r9;
-  uint64_t r10;
-  uint64_t r11;
-  uint64_t r12;
-  uint64_t r13;
-  uint64_t r14;
-  uint64_t r15;
-  uint64_t gs;
-  uint64_t fs;
+  uint64_t rdx;
+  uint64_t rcx;
+  uint64_t rbx;
+  uint64_t rax;
 
   uint64_t rip;
-  uint64_t rsp;
   uint64_t cs;
   uint64_t eflags;
+  uint64_t rsp;
   uint64_t ss;
   uint64_t base;
-
 } t_stackFrame;
 
 static void idleProcess(int argc, char ** argv);
@@ -55,7 +56,7 @@ static uint64_t currentPID = 0;
 static uint64_t cyclesLeft;
 
 static t_process_list *processes;
-static t_process_node *currentProcess;
+static t_process_node *currentProcess = NULL;
 static t_process_node * baseProcess;
 
 
@@ -78,15 +79,15 @@ void initializeProcessManager() {
 }
 
 void * processManager(void * sp) {
-  if (currentProcess) {
+ 
+  if (currentProcess != NULL) {
     if (currentProcess->pcb.state == READY && cyclesLeft > 0) {
       cyclesLeft--;
       return sp;
     }
 
-  
     currentProcess->pcb.rsp = sp;
-  
+
    if (currentProcess->pcb.pid != baseProcess->pcb.pid) {
      if (currentProcess->pcb.state == TERMINATED) {
        t_process_node * parent = getProcess(currentProcess->pcb.ppid);
@@ -116,7 +117,7 @@ void * processManager(void * sp) {
   }
 
   cyclesLeft = currentProcess->pcb.priority;
-   
+
   return currentProcess->pcb.rsp;
 }
 
@@ -154,18 +155,18 @@ int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t
     if(newProcess->pcb.foreground && newProcess->pcb.ppid) {
         blockProcess(newProcess->pcb.ppid);
     }  
+
     return newProcess->pcb.pid;
 }
 
 uint64_t killProcess(uint64_t pid) {
-      if (pid <= 2)
-            return -1;
 
       int resPID = setState(pid, TERMINATED);
-
-      if (pid == currentProcess->pcb.pid)
-            _callTimerTick();
-
+      
+      if (pid == currentProcess->pcb.pid) {
+        _callTimerTick();
+      }      
+      
       return resPID;
 }
 
@@ -224,15 +225,12 @@ static int initializeProcessControlBlock(t_PCB *PCB, char *name, uint8_t foregro
 static void getArguments(char **to, char **from, int count) {
   for (int i = 0; i < count; i++) {
     to[i] = malloc(sizeof(char) * (strlen(from[i]) + 1));
-    if (to[i] == NULL) {
-      return;
-    }
     strcpy(to[i], from[i]);
   }
 }
 
 static void end() {
-      killProcess(currentProcess->pcb.pid);
+      (void)killProcess(currentProcess->pcb.pid);
       _callTimerTick();
 }
 
@@ -245,33 +243,32 @@ static void initializeProcessStackFrame(void (*entryPoint)(int, char **), int ar
 
   t_stackFrame *stackFrame = (t_stackFrame *)rbp - 1;
 
-  stackFrame->rax = 0x01;
-  stackFrame->rbx = 0x02;
-  stackFrame->rcx = 0x03;
-  stackFrame->rdx = (uint64_t)argv;
-  stackFrame->rbp = 0x04;
-  stackFrame->rdi = (uint64_t)entryPoint;
+  stackFrame->gs = 0x001;
+  stackFrame->fs = 0x002;
+  stackFrame->r15 = 0x003;
+  stackFrame->r14 = 0x004;
+  stackFrame->r13 = 0x005;
+  stackFrame->r12 = 0x006;
+  stackFrame->r11 = 0x007;
+  stackFrame->r10 = 0x008;
+  stackFrame->r9 = 0x009;
+  stackFrame->r8 = 0x00A;
   stackFrame->rsi = (uint64_t)argc;
-  stackFrame->r8 = 0x05;
-  stackFrame->r9 = 0x06;
-  stackFrame->r10 = 0x07;
-  stackFrame->r11 = 0x08;
-  stackFrame->r12 = 0x09;
-  stackFrame->r13 = 0x0A;
-  stackFrame->r14 = 0x0B;
-  stackFrame->r15 = 0x0C;
-  stackFrame->gs = 0x00D;
-  stackFrame->fs = 0x00E;
-
+  stackFrame->rdi = (uint64_t)entryPoint;
+  stackFrame->rbp = 0x00B;
+  stackFrame->rdx = (uint64_t)argv;
+  stackFrame->rcx = 0x00C;
+  stackFrame->rbx = 0x00D;
+  stackFrame->rax = 0x00E;
   stackFrame->rip = (uint64_t)wrapper;
-  stackFrame->rsp = (uint64_t)(&stackFrame->base);
-  stackFrame->cs = 0x8;
+  stackFrame->cs = 0x008;
   stackFrame->eflags = 0x202;
-  stackFrame->ss = 0x0;
-  stackFrame->base = 0x0;
+  stackFrame->rsp = (uint64_t)(&stackFrame->base);
+  stackFrame->ss = 0x000;
+  stackFrame->base = 0x000;
 }
 
-static uint64_t setState(uint64_t pid, t_state state) {
+static uint64_t setState(uint64_t pid, t_state newState) {
   t_process_node *process = getProcess(pid);
  
   if (process == NULL || process->pcb.state == TERMINATED) {
@@ -279,19 +276,19 @@ static uint64_t setState(uint64_t pid, t_state state) {
   }
 
   if (process == currentProcess) {
-    process->pcb.state = state;
+    process->pcb.state = newState;
     return process->pcb.pid;
   }
 
-  if (process->pcb.state != READY && state == READY) {
+  if (process->pcb.state != READY && newState == READY) {
     processes->readySize++;
   }
 
-  if (process->pcb.state == READY && state != READY) {
+  if (process->pcb.state == READY && newState != READY) {
     processes->readySize--;
   }
 
-  process->pcb.state = state;
+  process->pcb.state = newState;
 
   return process->pcb.pid;
 }

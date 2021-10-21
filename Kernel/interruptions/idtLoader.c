@@ -25,17 +25,17 @@ static void setupIdtEntry (int index, uint64_t offset);
 void loadIdt() {
   _cli();
 
-  setupIdtEntry (0x20, (uint64_t)&_irq00Handler);
+  
   setupIdtEntry(0x21, (uint64_t)&_irq01Handler);
   setupIdtEntry(0x80, (uint64_t)&_syscallHandler);
   setupIdtEntry (0x00, (uint64_t)&_exception0Handler);
   setupIdtEntry(0x06, (uint64_t)&_exception6Handler);
 
-
 	//Teclado y timer habilitados
 	picMasterMask(0xFC); 
 	picSlaveMask(0xFF);
-        
+
+  setupIdtEntry (0x20, (uint64_t)&_irq00Handler);   
 	_sti();
 }
 

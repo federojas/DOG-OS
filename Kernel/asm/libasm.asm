@@ -144,7 +144,7 @@ _getMem:
 	ret
 
 _callTimerTick:
-    int20h
+    int 20h
     ret
 
 _exit:
