@@ -1,5 +1,5 @@
 #include <memoryTest.h>
-#include <syscalls.h>
+#include <userSyscalls.h>
 #include <stdlib.h>
 
 #define MAX_BLOCKS 128

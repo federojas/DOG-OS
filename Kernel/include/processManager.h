@@ -11,6 +11,6 @@ uint64_t blockProcess(uint64_t pid);
 uint64_t readyProcess(uint64_t pid);
 void _callTimerTick();
 void * processManager(void * sp);
-int printPS();
+void printProcessStatus();
 
 #endif

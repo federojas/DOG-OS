@@ -1,7 +1,7 @@
 #include <commands.h>
 #include <stdint.h>
 #include <libc.h>
-#include <syscalls.h>
+#include <userSyscalls.h>
 #include <RTCID.h>
 #include <infoReg.h>
 
@@ -316,11 +316,6 @@ void changeColour(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], int ft) {
 	}
 }
 
-
-void ps(int argc, char **argv) {
-	_syscall(SYS_PS, 0, 0, 0, 0, 0);
-}
-
 void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 0) {
 		printf("\nCantidad invalida de argumentos.\n\n");
@@ -346,7 +341,5 @@ void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("\n/dog : Imprime DOG-OS logo\n");
 	printf("\n/ftcolour : Cambia el color del texto.\nPase el color como argumento usando la tabla de colores.\n\n");
 	printf("\n/bgcolour : Cambia el color del fondo del texto.\nPase el color como argumento usando la tabla de colores.\n\n");
-	printf("\n/ps : Lista el estado de los procesos.\n\n"); 
 	printf("\n/exit : Finaliza la ejecucion.\n\n");
-	
 }

@@ -1,5 +1,5 @@
 #include <libc.h>
-#include <syscalls.h>
+#include <userSyscalls.h>
 #include <stdarg.h>
 #include <shell.h>
 

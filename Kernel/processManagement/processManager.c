@@ -51,6 +51,9 @@ static void freeProcess(t_process_node *p);
 static uint64_t getPID();
 static void end();
 static t_process_node *getProcess(uint64_t pid);
+static void printProcess(t_process_node *p);
+static char * fgToBoolStr(int fg);
+static char *stateToStr(t_state state);
 
 static uint64_t currentPID = 0;
 static uint64_t cyclesLeft;
@@ -196,6 +199,20 @@ static void idleProcess(int argc, char **argv) {
 
 static uint64_t getPID() { return currentPID++; }
 
+void printProcessStatus() {
+  printf(
+      "PID      FOREGROUND      RSP       RBP      STATE      NAME\n");
+
+  if (currentProcess != NULL)
+    printProcess(currentProcess);
+
+  t_process_node *curr = processes->first;
+  while (curr) {
+    printProcess(curr);
+    curr = curr->next;
+  }
+}
+
 static int initializeProcessControlBlock(t_PCB *PCB, char *name,
                                          uint8_t foreground, uint16_t *fd) {
   strcpy(PCB->name, name);
@@ -320,7 +337,7 @@ static void freeProcess(t_process_node *p) {
   free((void *)p);
 }
 
-char *stateToStr(t_state state) {
+static char *stateToStr(t_state state) {
   switch (state) {
   case READY:
     return "READY";
@@ -333,29 +350,14 @@ char *stateToStr(t_state state) {
   };
 }
 
-char * fgToBoolStr(int fg) {
+static char * fgToBoolStr(int fg) {
   return fg > 0 ? "TRUE" : "FALSE";
 }
 
-void printProcess(t_process_node *p) {
+static void printProcess(t_process_node *p) {
   if (p != NULL)
     printf("%d          %s      %d  %d    %s      %s\n",
           p->pcb.pid, fgToBoolStr((int)p->pcb.foreground) , (uint64_t)p->pcb.rsp,
           (uint64_t)p->pcb.rbp, stateToStr(p->pcb.state), p->pcb.name);
 }
 
-int printPS() {
-  printf(
-      "PID      FOREGROUND      RSP       RBP      STATE      NAME\n");
-
-  if (currentProcess != NULL)
-    printProcess(currentProcess);
-
-  t_process_node *curr = processes->first;
-  while (curr) {
-    printProcess(curr);
-    curr = curr->next;
-  }
-
-  return 0;
-}

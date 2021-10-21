@@ -109,7 +109,7 @@ SECTION .text
 	mov rsi, rsp
 	call irqDispatcher
 
-	call sendEndOfInterrupt
+	sendEndOfInterrupt
 
 	popState
 	iretq

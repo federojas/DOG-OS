@@ -43,3 +43,6 @@ run.sh
 ls
 ./run.sh
 exit
+ls
+exit
+exit

@@ -1,6 +1,6 @@
 /* sampleCodeModule.c */
 #include <shell.h>
-#include <syscalls.h>
+#include <userSyscalls.h>
 #include <libc.h>
 
 int main(){
