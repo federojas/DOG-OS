@@ -200,8 +200,8 @@ static void idleProcess(int argc, char **argv) {
 static uint64_t getPID() { return currentPID++; }
 
 void printProcessStatus() {
-  printf(
-      "PID      FOREGROUND      RSP       RBP      STATE      NAME\n");
+    printf(
+      "PID  FOREGROUND   RSP       RBP     PRIORITY  STATE    NAME\n");
 
   if (currentProcess != NULL)
     printProcess(currentProcess);
@@ -211,6 +211,8 @@ void printProcessStatus() {
     printProcess(curr);
     curr = curr->next;
   }
+
+  return 0;
 }
 
 static int initializeProcessControlBlock(t_PCB *PCB, char *name,
@@ -356,8 +358,7 @@ static char * fgToBoolStr(int fg) {
 
 static void printProcess(t_process_node *p) {
   if (p != NULL)
-    printf("%d          %s      %d  %d    %s      %s\n",
+    printf("%d      %s    %x  %x    %d      %s     %s\n",
           p->pcb.pid, fgToBoolStr((int)p->pcb.foreground) , (uint64_t)p->pcb.rsp,
-          (uint64_t)p->pcb.rbp, stateToStr(p->pcb.state), p->pcb.name);
+          (uint64_t)p->pcb.rbp, p->pcb.priority, stateToStr(p->pcb.state), p->pcb.name);
 }
-
