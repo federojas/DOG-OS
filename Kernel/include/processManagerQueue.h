@@ -9,8 +9,8 @@ typedef enum { READY, BLOCKED, TERMINATED } t_state;
 
 typedef struct {
 
-  uint64_t pid;
-  uint64_t ppid;
+  int pid;
+  int ppid;
   uint8_t foreground;
   t_state state;
   uint64_t priority;
@@ -18,7 +18,7 @@ typedef struct {
   uint16_t fileDescriptors[2];
   void *rsp;
   void *rbp;
-    int argc;
+  int argc;
   char **argv;
 } t_PCB;
 

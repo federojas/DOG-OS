@@ -13,7 +13,7 @@ int getProcessPID() {
 }
 
 void printProcessStatus() {
-    (void)_syscall(SYS_PROCESS_PID_ID, 0, 0, 0, 0, 0);
+    (void)_syscall(SYS_PROCESS_STATUS_ID, 0, 0, 0, 0, 0);
 }
 
 int blockProcess(uint64_t pid) {
@@ -42,4 +42,8 @@ void * malloc(uint64_t size) {
 
 void free(void * address) {
     (void)_syscall(SYS_FREE_ID, (uint64_t) address, 0, 0, 0, 0);
+}
+
+void testingPrintProcessQueue() {
+    (void)_syscall(SYS_TEST_PRINT_PROCESS_QUEUE_ID, 0, 0, 0, 0, 0);
 }

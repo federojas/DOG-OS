@@ -3,7 +3,7 @@
 
 #define MAX_PROCESSES 10
 
-enum State {ERROR, RUNNING, WAITING, KILLED};
+enum State {RUNNING, WAITING, KILLED};
 
 typedef struct P_rq{
   uint32_t pid;
@@ -59,16 +59,15 @@ void testProcesses(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
             break;
         }
       }
-
-      // Randomly unblocks processes
-      for(rq = 0; rq < MAX_PROCESSES; rq++)
-        if (p_rqs[rq].state == WAITING && GetUniform(2) % 2){
-          if(unblockProcess(p_rqs[rq].pid) == -1){           
+      for(rq = 0; rq < MAX_PROCESSES; rq++) {
+        if (p_rqs[rq].state == WAITING && GetUniform(2) % 2) {
+          if(unblockProcess(p_rqs[rq].pid) == -1) {           
             printf("Error unblocking process\n");   
             return;
           }
           p_rqs[rq].state = RUNNING; 
         }
+      }  
     } 
   }
 }

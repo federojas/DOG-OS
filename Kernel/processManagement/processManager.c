@@ -126,7 +126,7 @@ void *processManager(void *sp) {
 
 int newProcess(void (*entryPoint)(int, char **), int argc, char **argv,
                uint8_t foreground, uint16_t *fd) {
-
+                 
   if (entryPoint == NULL) {
     return -1;
   }
@@ -160,12 +160,10 @@ int newProcess(void (*entryPoint)(int, char **), int argc, char **argv,
   if (newProcess->pcb.foreground && newProcess->pcb.ppid) {
     blockProcess(newProcess->pcb.ppid);
   }
-
   return newProcess->pcb.pid;
 }
 
-uint64_t killProcess(uint64_t pid) {
-
+int killProcess(uint64_t pid) {
   int resPID = setState(pid, TERMINATED);
 
   if (pid == currentProcess->pcb.pid) {
@@ -175,7 +173,7 @@ uint64_t killProcess(uint64_t pid) {
   return resPID;
 }
 
-uint64_t blockProcess(uint64_t pid) {
+int blockProcess(uint64_t pid) {
   int resPID = setState(pid, BLOCKED);
 
   if (pid == currentProcess->pcb.pid) {
@@ -185,15 +183,15 @@ uint64_t blockProcess(uint64_t pid) {
   return resPID;
 }
 
-uint64_t readyProcess(uint64_t pid) { return setState(pid, READY); }
+int readyProcess(uint64_t pid) { return setState(pid, READY); }
 
-uint64_t getProcessPID() {
+int getProcessPID() {
   return currentProcess ? currentProcess->pcb.pid : -1;
 }
 
 void printProcessStatus() {
     printf(
-      "PID  FOREGROUND   RSP       RBP     PRIORITY  STATE    NAME\n");
+      " PID | FOREGROUND | RSP | RBP | PRIORITY | STATE | NAME\n\n");
 
   if (currentProcess != NULL)
     printProcess(currentProcess);
@@ -210,9 +208,8 @@ void yield() {
   _callTimerTick();
 }
 
-uint64_t setState(uint64_t pid, t_state newState) {
+int setState(uint64_t pid, t_state newState) {
   t_process_node *process = getProcess(pid);
-
   if (process == NULL || process->pcb.state == TERMINATED) {
     return -1;
   }
@@ -254,6 +251,9 @@ static void idleProcess(int argc, char **argv) {
   }
 }
 
+void printProcessQueueWrapper() {
+  printProcessQueue(processes);
+}
 static uint64_t getPID() { return currentPID++; }
 
 static int initializeProcessControlBlock(t_PCB *PCB, char *name,
@@ -337,14 +337,13 @@ static t_process_node *getProcess(uint64_t pid) {
     return currentProcess;
   }
 
-  t_process_node *process = currentProcess;
+  t_process_node *process = processes->first;
   while (process != NULL) {
     if (process->pcb.pid == pid) {
       return process;
     }
     process = (t_process_node *)process->next;
   }
-
   return NULL;
 }
 
@@ -365,7 +364,7 @@ static char *stateToStr(t_state state) {
   case BLOCKED:
     return "BLOCKED";
   default:
-    return "D";
+    return "TERMINATED";
     break;
   };
 }
@@ -376,7 +375,7 @@ static char * fgToBoolStr(int fg) {
 
 static void printProcess(t_process_node *p) {
   if (p != NULL)
-    printf("%d      %s    %x  %x    %d      %s     %s\n",
+    printf("%d | %s | %x | %x | %d | %s | %s\n",
           p->pcb.pid, fgToBoolStr((int)p->pcb.foreground) , (uint64_t)p->pcb.rsp,
           (uint64_t)p->pcb.rbp, p->pcb.priority, stateToStr(p->pcb.state), p->pcb.name);
 }

@@ -41,7 +41,19 @@ int queueIsEmpty(t_process_list *processes) {
 void printProcessQueue(t_process_list * processes) {
   t_process_node * node = processes->first;
   while(node != NULL) {
-    printf("%s\n", node->pcb.name);
+    printf("Process name: %s\nProcess pid: %d\n",node->pcb.name, node->pcb.pid);
+    printf("Process state: ");
+    switch(node->pcb.state) {
+      case 0 : 
+        printf("READY\n\n");
+        break;
+      case 1 :
+        printf("BLOCKED\n\n");
+        break;
+      case 2 :
+        printf("TERMINATED\n\n");
+        break;
+    }
     node = node->next;
   }
 }

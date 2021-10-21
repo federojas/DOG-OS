@@ -1,5 +1,7 @@
 #include <stdint.h>
 #include <testUtil.h>
+#include <libc.h>
+#include <userSyscalls.h>
 
 static uint32_t m_z = 362436069;
 static uint32_t m_w = 521288629;
@@ -28,6 +30,9 @@ uint8_t memcheck(void *start, uint8_t value, uint32_t size){
 
 void idleProcess() {
   while(1){
-    
   }
+}
+
+void sleep(int time) {
+  for(int i = 0; i < time; i++);
 }
