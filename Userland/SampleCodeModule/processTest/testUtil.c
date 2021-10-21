@@ -25,3 +25,9 @@ uint8_t memcheck(void *start, uint8_t value, uint32_t size){
 
   return 1;
 }
+
+void idleProcess() {
+  while(1){
+    
+  }
+}

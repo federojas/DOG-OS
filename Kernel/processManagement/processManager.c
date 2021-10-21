@@ -11,6 +11,7 @@ static void *const sampleCodeModuleAddress = (void *)0x400000;
 #define SIZE_OF_STACK (4 * 1024)
 #define BACKGROUND_PRIORITY_DEFAULT 1
 #define FOREGROUND_PRIORITY_DEFAULT 2
+#define MAX_PRIORITY 50
 
 typedef struct {
   uint64_t gs;
@@ -46,7 +47,6 @@ static void getArguments(char **to, char **from, int count);
 static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv);
 static void initializeProcessStackFrame(void (*entryPoint)(int, char **),
                                         int argc, char **argv, void *rbp);
-static uint64_t setState(uint64_t pid, t_state state);
 static void freeProcess(t_process_node *p);
 static uint64_t getPID();
 static void end();
@@ -191,14 +191,6 @@ uint64_t getProcessPID() {
   return currentProcess ? currentProcess->pcb.pid : -1;
 }
 
-static void idleProcess(int argc, char **argv) {
-  while (1) {
-    _hlt();
-  }
-}
-
-static uint64_t getPID() { return currentPID++; }
-
 void printProcessStatus() {
     printf(
       "PID  FOREGROUND   RSP       RBP     PRIORITY  STATE    NAME\n");
@@ -211,9 +203,58 @@ void printProcessStatus() {
     printProcess(curr);
     curr = curr->next;
   }
-
-  return 0;
 }
+
+void yield() {
+  cyclesLeft = 0;
+  _callTimerTick();
+}
+
+uint64_t setState(uint64_t pid, t_state newState) {
+  t_process_node *process = getProcess(pid);
+
+  if (process == NULL || process->pcb.state == TERMINATED) {
+    return -1;
+  }
+
+  if (process == currentProcess) {
+    process->pcb.state = newState;
+    return process->pcb.pid;
+  }
+
+  if (process->pcb.state != READY && newState == READY) {
+    processes->readySize++;
+  }
+
+  if (process->pcb.state == READY && newState != READY) {
+    processes->readySize--;
+  }
+
+  process->pcb.state = newState;
+
+  return process->pcb.pid;
+}
+
+void setPriority(uint64_t pid, int newPriority) {
+
+      if (newPriority < 0)
+            newPriority = 0;
+      if (newPriority > MAX_PRIORITY)
+            newPriority = MAX_PRIORITY;
+
+      t_process_node *p = getProcess(pid);
+
+      if (p != NULL)
+            p->pcb.priority = newPriority;
+}
+
+static void idleProcess(int argc, char **argv) {
+  while (1) {
+    _hlt();
+  }
+}
+
+static uint64_t getPID() { return currentPID++; }
 
 static int initializeProcessControlBlock(t_PCB *PCB, char *name,
                                          uint8_t foreground, uint16_t *fd) {
@@ -289,30 +330,7 @@ static void initializeProcessStackFrame(void (*entryPoint)(int, char **),
   stackFrame->base = 0x000;
 }
 
-static uint64_t setState(uint64_t pid, t_state newState) {
-  t_process_node *process = getProcess(pid);
 
-  if (process == NULL || process->pcb.state == TERMINATED) {
-    return -1;
-  }
-
-  if (process == currentProcess) {
-    process->pcb.state = newState;
-    return process->pcb.pid;
-  }
-
-  if (process->pcb.state != READY && newState == READY) {
-    processes->readySize++;
-  }
-
-  if (process->pcb.state == READY && newState != READY) {
-    processes->readySize--;
-  }
-
-  process->pcb.state = newState;
-
-  return process->pcb.pid;
-}
 
 static t_process_node *getProcess(uint64_t pid) {
   if (currentProcess != NULL && currentProcess->pcb.pid == pid) {

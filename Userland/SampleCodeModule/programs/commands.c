@@ -107,7 +107,7 @@ void getInfoReg(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	uint64_t* registers = (uint64_t*) _syscall(SYS_INFOREG_ID, 0, 0, 0, 0, 0);
+	uint64_t* registers = (uint64_t *) _syscall(SYS_INFOREG_ID, 0, 0, 0, 0, 0);
 	newLine();
 	for (int i = 0; i < REGISTER_AMOUNT; i++) {
 		printf("%s", registerNames[i]);

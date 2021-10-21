@@ -5,6 +5,6 @@
 
 int main(){
 	char *argv[] = {"Shell"};
-    newProcess(shellExecute, 1, argv, BACKGROUND, 0);
+    newProcess(shellExecute, 1, argv, BACKGROUND, NULL);
 	return 0;
 }

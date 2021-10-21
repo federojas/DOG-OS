@@ -23,7 +23,7 @@ void testMemory(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 
     while(rq < MAX_BLOCKS && total < MAX_MEMORY){
       mm_rqs[rq].size = GetUniform(MAX_MEMORY - total - 1) + 1;
-      mm_rqs[rq].address = (void *)_syscall(SYS_MALLOC_ID, (uint64_t) mm_rqs[rq].size, 0, 0, 0, 0);
+      mm_rqs[rq].address = malloc((uint64_t) mm_rqs[rq].size);
       if(mm_rqs[rq].address == NULL) {
         printf("No memory left\n");
         return ;
@@ -33,16 +33,22 @@ void testMemory(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
     }
     uint32_t i;
     for (i = 0; i < rq; i++)
-      if (mm_rqs[i].address != NULL)
+      if (mm_rqs[i].address != NULL) {
         memset(mm_rqs[i].address, i, mm_rqs[i].size); 
+      }
+        
 
     for (i = 0; i < rq; i++)
       if (mm_rqs[i].address != NULL)
-        if(!memcheck(mm_rqs[i].address, i, mm_rqs[i].size))
+        if(!memcheck(mm_rqs[i].address, i, mm_rqs[i].size)) {
           printf("ERROR!\n");
+        }
+          
 
     for (i = 0; i < rq; i++)
-      if (mm_rqs[i].address != NULL)
-        (void)_syscall(SYS_FREE_ID, (uint64_t) mm_rqs[i].address, 0, 0, 0, 0);
+      if (mm_rqs[i].address != NULL) {
+        free(mm_rqs[i].address);
+      }
+      
   } 
 }

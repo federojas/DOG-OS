@@ -476,11 +476,3 @@ void *memset(void *b, int c, int len) {
       }
       return (b);
 }
-
-void * malloc(uint64_t qty) {
-    return (void *)_syscall(SYS_MALLOC_ID, qty, 0, 0, 0, 0);
-}
-
-void free(void * memory) {
-    (void)_syscall(SYS_FREE_ID, (uint64_t)memory, 0, 0, 0, 0);
-}

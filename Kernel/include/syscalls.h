@@ -23,9 +23,5 @@ void cpuVendor(char * buffer);
 void *malloc(uint64_t nbytes);
 void free(void *block);
 void memoryDump();
-int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground, uint16_t * fd);
-uint64_t killProcess(uint64_t pid);
-int getProcessPID();
-void printProcessStatus();
 
 #endif

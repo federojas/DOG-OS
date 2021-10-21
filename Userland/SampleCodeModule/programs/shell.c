@@ -3,6 +3,7 @@
 #include <commands.h>
 #include <stdint.h>
 #include <memoryTest.h>
+#include <processTest.h>
 
 static char userName[USER_SIZE] = "DefaultUser";
 static int shellStartup = 1;
@@ -74,6 +75,9 @@ void shellExecute(int argc2, char **argv2){
         }
         else if(strcmp("/mem", command) == 0) {
             testMemory(argc,argv);
+        }
+        else if(strcmp("/proc", command) == 0) {
+            testProcesses(argc,argv);
         }
         else if(strcmp("/help", command) == 0) {
             help(argc, argv);
