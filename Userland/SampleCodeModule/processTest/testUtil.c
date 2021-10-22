@@ -28,11 +28,15 @@ uint8_t memcheck(void *start, uint8_t value, uint32_t size){
   return 1;
 }
 
-void idleProcess() {
+void idleProcess(){
+   int pid = getProcessPID();
   while(1){
+    printf("%d ", pid);
+    busyWait(MAJOR_WAIT);
   }
 }
 
-void sleep(int time) {
-  for(int i = 0; i < time; i++);
+void busyWait(int time) {
+  uint64_t i;
+  for (i = 0; i < time; i++);
 }

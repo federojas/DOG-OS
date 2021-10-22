@@ -18,7 +18,7 @@ void testProcesses(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
 
   while (1){
 
-    for(rq = 0; rq < MAX_PROCESSES; rq++){
+    for(rq = 0; rq < MAX_PROCESSES; rq++) {
 
       char * argv[] = {"Idle Process"};
       p_rqs[rq].pid = newProcess(&idleProcess, 1, argv, BACKGROUND, NULL); 
@@ -31,11 +31,10 @@ void testProcesses(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
       }
     }
 
-    while (alive > 0){
-
+    while (alive > 0) {
+      
       for(rq = 0; rq < MAX_PROCESSES; rq++){
         action = GetUniform(2) % 2; 
-
         switch(action){
           case 0:
             if (p_rqs[rq].state == RUNNING || p_rqs[rq].state == WAITING){
@@ -45,6 +44,7 @@ void testProcesses(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
               }
               p_rqs[rq].state = KILLED; 
               alive--;
+              busyWait(MAJOR_WAIT);
             }
             break;
 
@@ -66,8 +66,8 @@ void testProcesses(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
             return;
           }
           p_rqs[rq].state = RUNNING; 
-        }
-      }  
+        }  
+      }
     } 
   }
 }

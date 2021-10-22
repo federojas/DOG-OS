@@ -44,6 +44,6 @@ void free(void * address) {
     (void)_syscall(SYS_FREE_ID, (uint64_t) address, 0, 0, 0, 0);
 }
 
-void testingPrintProcessQueue() {
-    (void)_syscall(SYS_TEST_PRINT_PROCESS_QUEUE_ID, 0, 0, 0, 0, 0);
+void testPrintProcess() {
+    (void)_syscall(SYS_TEST_PRINT_PROCESS_ID, 0, 0, 0, 0, 0);
 }

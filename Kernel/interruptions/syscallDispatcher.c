@@ -107,8 +107,8 @@ static int readyProcessWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_
     return readyProcess(rsi);
 }
 
-static int testPrintProcessQueueWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
-    printProcessQueueWrapper();
+static int testPrintProcessWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    printCurrentProcess();
     return 0;
 }
 
@@ -135,7 +135,7 @@ static functionPointer syscall[] = {
     yieldWrapper,
     setPriorityWrapper,
     readyProcessWrapper,
-    testPrintProcessQueueWrapper
+    testPrintProcessWrapper
 };
 
 int syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {

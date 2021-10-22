@@ -37,6 +37,5 @@ typedef struct t_process_list {
 t_process_node * dequeueProcess(t_process_list *processes);
 int queueIsEmpty(t_process_list *processes);
 void queueProcess(t_process_list *processes, t_process_node * process);
-void printProcessQueue(t_process_list * processes);
 
 #endif

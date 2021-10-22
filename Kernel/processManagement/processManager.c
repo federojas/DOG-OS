@@ -191,7 +191,7 @@ int getProcessPID() {
 
 void printProcessStatus() {
     printf(
-      " PID | FOREGROUND | RSP | RBP | PRIORITY | STATE | NAME\n\n");
+      "\nPROCESSES STATUS\n\n");
 
   if (currentProcess != NULL)
     printProcess(currentProcess);
@@ -200,6 +200,13 @@ void printProcessStatus() {
   while (curr) {
     printProcess(curr);
     curr = curr->next;
+  }
+}
+
+void printCurrentProcess() {
+  printf("\nPROCESS STATUS\n\n");
+  if (currentProcess != NULL) {
+    printProcess(currentProcess);
   }
 }
 
@@ -251,9 +258,6 @@ static void idleProcess(int argc, char **argv) {
   }
 }
 
-void printProcessQueueWrapper() {
-  printProcessQueue(processes);
-}
 static uint64_t getPID() { return currentPID++; }
 
 static int initializeProcessControlBlock(t_PCB *PCB, char *name,
@@ -373,9 +377,10 @@ static char * fgToBoolStr(int fg) {
   return fg > 0 ? "TRUE" : "FALSE";
 }
 
-static void printProcess(t_process_node *p) {
-  if (p != NULL)
-    printf("%d | %s | %x | %x | %d | %s | %s\n",
-          p->pcb.pid, fgToBoolStr((int)p->pcb.foreground) , (uint64_t)p->pcb.rsp,
-          (uint64_t)p->pcb.rbp, p->pcb.priority, stateToStr(p->pcb.state), p->pcb.name);
+static void printProcess(t_process_node *process) {
+  if (process != NULL)
+  printf("Name: %s\nPID: %d\nPPID: %d\nForeground: %s\nRSP: %x\nRBP: %x\nPriority: %d\nState: %s\n\n", 
+  process->pcb.name, process->pcb.pid, 
+  process->pcb.ppid, fgToBoolStr((int)process->pcb.foreground) , (uint64_t)process->pcb.rsp,
+  (uint64_t)process->pcb.rbp, process->pcb.priority, stateToStr(process->pcb.state));
 }

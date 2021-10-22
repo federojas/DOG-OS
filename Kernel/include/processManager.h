@@ -18,6 +18,6 @@ void yield();
 int setState(uint64_t pid, t_state newState);
 int getProcessPID();
 void setPriority(uint64_t pid, int newPriority);
-void printProcessQueueWrapper();
+void printCurrentProcess();
 
 #endif
