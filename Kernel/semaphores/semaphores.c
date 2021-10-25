@@ -1,7 +1,7 @@
 
 #include <semaphores.h>
 #include <memoryManager.h>
-
+#include <processManager.h>
 t_semaphore * semaphores;
 
 static t_semaphore * getSemaphore(uint32_t id);
@@ -67,5 +67,21 @@ int semWait(uint32_t id) {
     if ((sem = getSemaphore(id)) == NULL) {
         return -1;
     }
+    
+    acquire(&(sem->lock));
+    if (sem->value > 0) {
+        sem->value -= 1;
+        release(&(sem->lock));
+    } else {    
+        // if (sem->value == 0) {
+        //     sem->value--;
+        // }
+        int currentPID = getProcessPID();
 
+        sem->blockedProcesses[sem->blockedProcessesAmount++] = currentPID;
+
+        release(&(sem->lock));
+        blockProcess(currentPID);
+    }
+    return 0;
 }
