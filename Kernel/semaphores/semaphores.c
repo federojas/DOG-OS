@@ -24,6 +24,30 @@ int semOpen(uint32_t id, uint64_t initialValue) {
     return id;
 }
 
+int semWait(uint32_t id) {
+    t_semaphore * sem;
+    if ((sem = getSemaphore(id)) == NULL) {
+        return -1;
+    }
+    
+    acquire(&(sem->lock));
+    if (sem->value > 0) {
+        sem->value -= 1;
+        release(&(sem->lock));
+    } else {    
+        // if (sem->value == 0) {
+        //     sem->value--;
+        // }
+        int currentPID = getProcessPID();
+
+        sem->blockedProcesses[sem->blockedProcessesAmount++] = currentPID;
+
+        release(&(sem->lock));
+        blockProcess(currentPID);
+    }
+    return 0;
+}
+
 static t_semaphore * createSemaphore(uint32_t id, uint64_t initialValue) {
     
         t_semaphore * newSem = malloc(sizeof(t_semaphore));
@@ -62,26 +86,3 @@ static t_semaphore * getSemaphore(uint32_t id) {
     return NULL;
 }
 
-int semWait(uint32_t id) {
-    t_semaphore * sem;
-    if ((sem = getSemaphore(id)) == NULL) {
-        return -1;
-    }
-    
-    acquire(&(sem->lock));
-    if (sem->value > 0) {
-        sem->value -= 1;
-        release(&(sem->lock));
-    } else {    
-        // if (sem->value == 0) {
-        //     sem->value--;
-        // }
-        int currentPID = getProcessPID();
-
-        sem->blockedProcesses[sem->blockedProcessesAmount++] = currentPID;
-
-        release(&(sem->lock));
-        blockProcess(currentPID);
-    }
-    return 0;
-}
