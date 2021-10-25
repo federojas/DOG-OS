@@ -154,6 +154,11 @@ _sti:
 	sti
 	ret
 
+_xchg:
+	mov rax, rsi
+	xchg [rdi], eax		; put eax in [rdi] and [rdi] in eax
+	ret
+
 picMasterMask:
 	push rbp
     mov rbp, rsp

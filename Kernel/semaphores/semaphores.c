@@ -61,3 +61,11 @@ static t_semaphore * getSemaphore(uint32_t id) {
     }
     return NULL;
 }
+
+int semWait(uint32_t id) {
+    t_semaphore * sem;
+    if ((sem = getSemaphore(id)) == NULL) {
+        return -1;
+    }
+
+}
