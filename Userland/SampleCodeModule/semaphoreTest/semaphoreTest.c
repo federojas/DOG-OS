@@ -1,28 +1,9 @@
 #include <stdint.h>
-#include <stdio.h>
+#include <testUtil.h>
+#include <userSyscalls.h>
 
-// uint64_t my_create_process(char * name){
-//   return 0;
-// }
-
-// uint64_t my_sem_open(char *sem_id, uint64_t initialValue){
-//   return 0;
-// }
-
-// uint64_t my_sem_wait(char *sem_id){
-//   return 0;
-// }
-
-// uint64_t my_sem_post(char *sem_id){
-//   return 0;
-// }
-
-// uint64_t my_sem_close(char *sem_id){
-//   return 0;
-// }
-
-// #define TOTAL_PAIR_PROCESSES 2
-// #define SEM_ID "sem"
+#define TOTAL_PAIR_PROCESSES 2
+#define SEM_ID 55
 
 // int64_t global;  //shared memory
 

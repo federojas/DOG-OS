@@ -23,5 +23,4 @@ void cpuVendor(char * buffer);
 void *malloc(uint64_t nbytes);
 void free(void *block);
 void memoryDump();
-
 #endif

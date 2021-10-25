@@ -3,8 +3,10 @@
 #include <keyboardDriver.h>
 #include <videoDriver.h>
 #include <memoryManager.h>
+#include <semaphores.h>
 #include <processManager.h> 
 #include <processManagerQueue.h>
+
 
 typedef int (*functionPointer)(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
@@ -112,6 +114,22 @@ static int testPrintProcessWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uin
     return 0;
 }
 
+static int semOpenWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    return semOpen((uint32_t) rsi, rdx);
+}
+
+static int semPostWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    return semPost((uint32_t) rsi);
+}
+
+static int semWaitWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    return semWait((uint32_t) rsi);
+}
+
+static int semCloseWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    return semClose((uint32_t) rsi);
+}
+
 static functionPointer syscall[] = {
     getCurrentTimeWrapper,
     getCPUFeaturesWrapper,
@@ -135,7 +153,11 @@ static functionPointer syscall[] = {
     yieldWrapper,
     setPriorityWrapper,
     readyProcessWrapper,
-    testPrintProcessWrapper
+    testPrintProcessWrapper, 
+    semOpenWrapper,
+    semPostWrapper,
+    semWaitWrapper,
+    semCloseWrapper
 };
 
 int syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {

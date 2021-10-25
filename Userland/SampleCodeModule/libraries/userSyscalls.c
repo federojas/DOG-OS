@@ -47,3 +47,19 @@ void free(void * address) {
 void testPrintProcess() {
     (void)_syscall(SYS_TEST_PRINT_PROCESS_ID, 0, 0, 0, 0, 0);
 }
+
+int semOpen(uint32_t id, uint64_t initialValue) {
+    return _syscall(SYS_SEM_OPEN_ID, (uint64_t) id, initialValue, 0, 0, 0);
+}
+
+int semWait(uint32_t id) {
+    return _syscall(SYS_SEM_WAIT_ID, (uint64_t) id, 0, 0, 0, 0);
+}
+
+int semPost(uint32_t id) {
+    return _syscall(SYS_SEM_POST_ID, (uint64_t) id, 0, 0, 0, 0);
+}
+
+int semClose(uint32_t id) {
+    return _syscall(SYS_SEM_CLOSE_ID, (uint64_t) id, 0, 0, 0, 0);
+}
