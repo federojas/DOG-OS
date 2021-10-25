@@ -2,11 +2,14 @@
 #include <memoryManager.h>
 #include <processManager.h>
 #include <semaphores.h>
+
 t_semaphore *semaphores;
 
 static t_semaphore *getSemaphore(uint32_t id);
 static t_semaphore *createSemaphore(uint32_t id, uint64_t initialValue);
 static void addSemaphoreToList(t_semaphore *newSem);
+static void unblockSemProcess(t_semaphore * sem);
+static void removeSemaphore(t_semaphore * sem);
 
 int semOpen(uint32_t id, uint64_t initialValue) {
 
@@ -32,16 +35,11 @@ int semWait(uint32_t id) {
 
   acquire(&(sem->lock));
   if (sem->value > 0) {
-    sem->value -= 1;
+    sem->value--;
     release(&(sem->lock));
   } else {
-    // if (sem->value == 0) {
-    //     sem->value--;
-    // }
     int currentPID = getProcessPID();
-
     sem->blockedProcesses[sem->blockedProcessesAmount++] = currentPID;
-
     release(&(sem->lock));
     blockProcess(currentPID);
   }
@@ -56,12 +54,7 @@ int semPost(uint32_t id) {
 
   acquire(&(sem->lock));
   if (sem->blockedProcessesAmount > 0) {
-    int readyPID = sem->blockedProcesses[0];
-    for (int i = 0; i < sem->blockedProcessesAmount - 1; i++) {
-      sem->blockedProcesses[i] = sem->blockedProcesses[i + 1];
-    }
-    sem->blockedProcessesAmount--;
-    readyProcess(readyPID);
+    unblockSemProcess(sem);
   } else {
     sem->value++;
   }
@@ -71,28 +64,33 @@ int semPost(uint32_t id) {
 }
 
 int semClose(uint32_t id) {
-  t_semaphore *sem;
-  if ((sem = getSemaphore(id)) == NULL) {
-    return -1;
-  }
+    t_semaphore *sem;
+    if ((sem = getSemaphore(id)) == NULL) {
+        return -1;
+    }
 
-  if (sem->listeningProcesses > 0)
-    sem->listeningProcesses--;
+    if (sem->listeningProcesses > 0) {
+        sem->listeningProcesses--;
+    }
 
     if (sem->listeningProcesses == 0) {
-        t_semaphore * aux = semaphores;
-        if (sem == aux) {
-            semaphores = aux->next;
-        } else {
-            while (aux->next != sem) {
-                aux = aux->next;
-            }
-            aux->next = sem->next;
-        }
-        free(sem);
+        removeSemaphore(sem);
     }
 
     return 0;
+}
+
+static void removeSemaphore(t_semaphore * sem) {
+    t_semaphore * semListAux = semaphores;
+    if (sem == semListAux) {
+        semaphores = semListAux->next;
+    } else {
+        while (semListAux->next != sem) {
+            semListAux = semListAux->next;
+        }
+        semListAux->next = sem->next;
+    }
+    free(sem);
 }
 
 static t_semaphore *createSemaphore(uint32_t id, uint64_t initialValue) {
@@ -133,3 +131,11 @@ static t_semaphore *getSemaphore(uint32_t id) {
   return NULL;
 }
 
+static void unblockSemProcess(t_semaphore * sem) {
+    int readyPID = sem->blockedProcesses[0];
+    for (int i = 0; i < sem->blockedProcessesAmount - 1; i++) {
+      sem->blockedProcesses[i] = sem->blockedProcesses[i + 1];
+    }
+    sem->blockedProcessesAmount--;
+    readyProcess(readyPID);
+}
