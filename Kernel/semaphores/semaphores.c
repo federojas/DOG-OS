@@ -2,6 +2,7 @@
 #include <memoryManager.h>
 #include <processManager.h>
 #include <semaphores.h>
+#include <lib.h> 
 
 t_semaphore *semaphores;
 
@@ -17,6 +18,9 @@ int semOpen(uint32_t id, uint64_t initialValue) {
 
   if (semaphore == NULL) {
     semaphore = createSemaphore(id, initialValue);
+    if(semaphore == NULL) {
+      return -1;
+    }
   }
 
   if (semaphore->listeningProcesses >= MAX_BLOCKED_PROCESSES) {
@@ -96,15 +100,14 @@ static void removeSemaphore(t_semaphore * sem) {
 static t_semaphore *createSemaphore(uint32_t id, uint64_t initialValue) {
 
   t_semaphore *newSem = malloc(sizeof(t_semaphore));
-  if (newSem == NULL) {
-    return -1;
+  if (newSem != NULL) {
+    newSem->id = id;
+    newSem->value = initialValue;
+    newSem->blockedProcessesAmount = 0;
+    newSem->listeningProcesses = 0;
+    newSem->next = NULL;
+    addSemaphoreToList(newSem);
   }
-  newSem->id = id;
-  newSem->value = initialValue;
-  newSem->blockedProcessesAmount = 0;
-  newSem->listeningProcesses = 0;
-  newSem->next = NULL;
-  addSemaphoreToList(newSem);
   return newSem;
 }
 

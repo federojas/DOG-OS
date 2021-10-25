@@ -5,6 +5,7 @@
 #include <memoryTest.h>
 #include <processTest.h>
 #include <priorityTest.h>
+#include <semaphoreTest.h>
 
 static char userName[USER_SIZE] = "DefaultUser";
 static int shellStartup = 1;
@@ -82,6 +83,12 @@ void shellExecute(int argc2, char **argv2){
         }
         else if(strcmp("/prio", command) == 0) {
             testPriority(argc,argv);
+        }
+        else if(strcmp("/sem", command) == 0) {
+            testSync(argc,argv);
+        }
+        else if(strcmp("/nosem", command) == 0) {
+            testNoSync(argc,argv);
         }
         else if(strcmp("/help", command) == 0) {
             help(argc, argv);

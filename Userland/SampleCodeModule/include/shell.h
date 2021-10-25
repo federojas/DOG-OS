@@ -3,7 +3,7 @@
 
 #define USER_SIZE 25
 #define BUFFER_SIZE 100
-#define MAX_ARGUMENTS 3
+#define MAX_ARGUMENTS 5
 
 void shellWelcomeMessage();
 void startShell(int argc, char **argv);
