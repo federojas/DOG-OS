@@ -13,6 +13,7 @@ typedef struct t_semaphore {
     uint16_t blockedProcessesAmount;
     uint16_t listeningProcesses;
     struct t_semaphore * next;
+    int lock;
 } t_semaphore;
 
 int semOpen(uint32_t id, uint64_t initialValue);
