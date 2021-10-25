@@ -107,3 +107,28 @@ int semPost(uint32_t id) {
   release(&(sem->lock));
   return 0;
 }
+
+int semClose(uint32_t id) {
+  t_semaphore *sem;
+  if ((sem = getSemaphore(id)) == NULL) {
+    return -1;
+  }
+
+  if (sem->listeningProcesses > 0)
+    sem->listeningProcesses--;
+
+    if (sem->listeningProcesses == 0) {
+        t_semaphore * aux = semaphores;
+        if (sem == aux) {
+            semaphores = aux->next;
+        } else {
+            while (aux->next != sem) {
+                aux = aux->next;
+            }
+            aux->next = sem->next;
+        }
+        free(sem);
+    }
+
+    return 0;
+}
