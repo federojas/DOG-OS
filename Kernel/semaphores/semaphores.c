@@ -31,7 +31,7 @@ static t_semaphore * createSemaphore(uint32_t id, uint64_t initialValue) {
             return -1;
         }
         newSem->id = id;
-        newSem->semaphoreValue = initialValue;
+        newSem->value = initialValue;
         newSem->blockedProcessesAmount = 0;
         newSem->listeningProcesses = 0;
         newSem->next = NULL;

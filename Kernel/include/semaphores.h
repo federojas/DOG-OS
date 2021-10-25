@@ -8,7 +8,7 @@
 
 typedef struct t_semaphore {
     uint32_t id;
-    uint64_t semaphoreValue;
+    uint64_t value;
     int blockedProcesses[MAX_BLOCKED_PROCESSES];
     uint16_t blockedProcessesAmount;
     uint16_t listeningProcesses;
