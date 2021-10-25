@@ -2,6 +2,7 @@
 #define LIBC_H
 
 #include <colors.h>
+#include <stdint.h>
 
 void setBGC(t_color colour);
 void setFTC(t_color colour);
@@ -27,5 +28,5 @@ void doubleToStr(double n, char* res, int afterpoint);
 int pow(int x, unsigned int y);
 void strToDouble(char *numStr, double *result);
 void setFirstChange(int number);
-void *memset(void *b, int c, int len);
+void * memset(void * destination, int32_t c, uint64_t length);
 #endif

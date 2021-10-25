@@ -466,13 +466,13 @@ int strcmp(char string1[], char string2[]) {
     return -1;
 }
 
-void *memset(void *b, int c, int len) {
-      unsigned char *p = b;
-      while (len > 0)
-      {
-            *p = c;
-            p++;
-            len--;
-      }
-      return (b);
+//catedra
+void * memset(void * destination, int32_t c, uint64_t length) {
+	uint8_t chr = (uint8_t)c;
+	char * dst = (char*)destination;
+
+	while(length--)
+		dst[length] = chr;
+
+	return destination;
 }
