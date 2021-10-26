@@ -142,8 +142,7 @@ static list_t *getNodeBuddy(list_t *node) {
     uint32_t spaceAvailable=0;
 
     printf("\nMEMORY DUMP (Buddy Memory Manager)\n");
-    printf("\n----------------------------------------------------------\n");
-    printf("\nBuckets with free blocks:\n");
+    printf("\nBuckets with free blocks:\n\n");
     
     for(int i=buckets_amount-1;i>=0;i--){
         list=&buckets[i];
@@ -152,10 +151,9 @@ static list_t *getNodeBuddy(list_t *node) {
             printf("    Free blocks of size 2^%d\n", i+minmum_bucket_size_log2);
             for(aux=list->next, idx=1; aux!=list;idx++, aux=aux->next){
                 printf("        Block number: %d\n", idx);
-                printf("        State: free\n");
+                printf("        State: free\n\n");
                 spaceAvailable+=idx*(1 << (minmum_bucket_size_log2+i));  
             }
-        printf("\n------------------------------------------------------\n");
         }
     }
     printf("\nAvailable space: %d\n\n", spaceAvailable);  

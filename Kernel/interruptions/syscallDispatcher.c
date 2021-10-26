@@ -109,11 +109,6 @@ static int readyProcessWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_
     return readyProcess(rsi);
 }
 
-static int testPrintProcessWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
-    printCurrentProcess();
-    return 0;
-}
-
 static int semOpenWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
     return semOpen((uint32_t) rsi, rdx);
 }
@@ -158,7 +153,6 @@ static functionPointer syscall[] = {
     yieldWrapper,
     setPriorityWrapper,
     readyProcessWrapper,
-    testPrintProcessWrapper, 
     semOpenWrapper,
     semPostWrapper,
     semWaitWrapper,

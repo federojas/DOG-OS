@@ -4,6 +4,10 @@
 #include <userSyscalls.h>
 #include <RTCID.h>
 #include <infoReg.h>
+#include <memoryTest.h>
+#include <semaphoreTest.h>
+#include <processTest.h>
+#include <priorityTest.h>
 
 #define YEAR 20 //Debe escribir aca los digitos de su año (excepto los ultimos dos)
 #define BYTES 32 //Cantidad de bytes para el mem dump
@@ -306,6 +310,124 @@ void changeBgColour(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 			printf("\nEl codigo de color que ingreso es invalido. Use /help.\n\n");
 			break;
 	}
+}
+
+void memStatusWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 0) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	memStatus();
+}
+
+void semStatusWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 0) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	semStatus();
+}
+
+void processStatusWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 0) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	processStatus();
+}
+
+void killProcessWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 1) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	int pid = strToInt(argv[0], 0);
+	if(pid < 3) {
+		printf("\nDETENGASE AHI, el PID debe ser mayor a 2. No tolerare mi destruccion.\n\n");
+		return ;
+	}
+	killProcess(pid);
+}
+
+void setPriorityWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 2) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	int pid = strToInt(argv[0], 0);
+	int priority = strToInt(argv[1], 0);
+	if(pid < 2) {
+		printf("\nDETENGASE AHI, el PID debe ser mayor a 2. No tolerare mi destruccion.\n\n");
+		return ;
+	}
+	setPriority(pid, priority);
+}
+
+
+void blockProcessWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 1) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	int pid = strToInt(argv[0], 0);
+	if(pid < 2) {
+		printf("\nDETENGASE AHI, el PID debe ser mayor a 2. No tolerare mi destruccion.\n\n");
+		return ;
+	}
+	blockProcess(pid);
+}
+
+void unblockProcessWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 1) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	int pid = strToInt(argv[0], 0);
+	if(pid < 2) {
+		printf("\nDETENGASE AHI, el PID debe ser mayor a 2. No tolerare mi destruccion.\n\n");
+		return ;
+	}
+	unblockProcess(pid);
+}
+
+void testNoSyncWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 0) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	testNoSync();
+}
+
+void testSyncWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 0) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	testSync();
+}
+
+void testProcessesWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 0) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	testProcesses();
+}
+
+void testPriorityWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 0) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	testPriority();
+}
+
+void testMemoryWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 0) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	testMemory();
 }
 
 

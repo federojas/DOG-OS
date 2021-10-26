@@ -142,19 +142,18 @@ void memoryDump(){
     original=current=free_node;
     int flag=1;
     printf("\nMEMORY DUMP (Free List Memory Manager)\n");
-    printf("\n-------------------------------------------\n");
     printf("\nTotal memory: %d bytes\n\n", total_units*sizeof(Header));
     if(free_node==NULL){
         printf("\nNo free blocks available\n");
         return;
     }
-    printf("Free blocks:\n");
+    printf("Free blocks:\n\n");
 
     while(current!=original||flag){
         flag=0;
         printf("    Block number %d\n",idx);
         printf("    Base:%x\n", (uint64_t)current);
-        printf("    Free units: %d\n", current->s.size);
+        printf("    Free units: %d\n\n", current->s.size);
 
         current=current->s.ptr;
         idx++;
@@ -163,44 +162,3 @@ void memoryDump(){
 }
 
 #endif
-
-
-//naive 
-
-// #define BLOCK_SIZE 4
-// #define MEMORY_SIZE 1024
-
-// char *current;
-// size_t size_available = MEMORY_SIZE;
-
-// void initializeMemoryManager(void *const heap_base)
-// {
-//     current = heap_base;
-// }
-
-// int calculate_block_qty(size_t size)
-// {
-//     return (size + BLOCK_SIZE - 1) / BLOCK_SIZE;
-// }
-
-// void *alloc(size_t size)
-// {
-//     char *tmp;
-
-//     if (size == 0)
-//     {
-//         return NULL;
-//     }
-
-//     size_t block_qty = calculate_block_qty(size);
-
-//     if (block_qty * BLOCK_SIZE > size_available)
-//     {
-//         return NULL;
-//     }
-
-//     size_available -= block_qty * BLOCK_SIZE;
-//     tmp = current;
-//     current += block_qty * BLOCK_SIZE;
-//     return tmp;
-// }

@@ -5,6 +5,6 @@
 #include <testUtil.h>
 #include <shell.h>
 
-void testMemory(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void testMemory();
 
 #endif

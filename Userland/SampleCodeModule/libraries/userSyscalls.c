@@ -12,7 +12,7 @@ int getProcessPID() {
     return _syscall(SYS_PROCESS_PID_ID, 0, 0, 0, 0, 0);
 }
 
-void printProcessStatus() {
+void processStatus() {
     (void)_syscall(SYS_PROCESS_STATUS_ID, 0, 0, 0, 0, 0);
 }
 
@@ -44,10 +44,6 @@ void free(void * address) {
     (void)_syscall(SYS_FREE_ID, (uint64_t) address, 0, 0, 0, 0);
 }
 
-void testPrintProcess() {
-    (void)_syscall(SYS_TEST_PRINT_PROCESS_ID, 0, 0, 0, 0, 0);
-}
-
 int semOpen(uint32_t id, uint64_t initialValue) {
     return _syscall(SYS_SEM_OPEN_ID, (uint64_t) id, initialValue, 0, 0, 0);
 }
@@ -66,4 +62,8 @@ int semClose(uint32_t id) {
 
 void semStatus() {
     (void)_syscall(SYS_SEM_STATUS_ID, 0, 0, 0, 0, 0);
+}
+
+void memStatus() {
+    (void)_syscall(SYS_MEMORY_STATUS_ID, 0, 0, 0, 0, 0);
 }

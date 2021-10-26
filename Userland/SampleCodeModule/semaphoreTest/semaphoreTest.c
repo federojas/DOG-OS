@@ -17,9 +17,9 @@ void slowInc(int64_t *p, int64_t inc){
 
 void inc(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
 
-  uint64_t sem = strToInt(argv[1], strlen(argv[1]) );
-  uint64_t value = strToInt(argv[2], strlen(argv[2]) );
-  uint64_t N = strToInt(argv[3], strlen(argv[3]));
+  uint64_t sem = strToInt(argv[1],0);
+  uint64_t value = strToInt(argv[2],0);
+  uint64_t N = strToInt(argv[3],0);
   uint64_t i;
 
   if (sem && semOpen(SEM_ID, 1) == -1){
@@ -44,7 +44,7 @@ void inc(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
   printf("Final value: %d\n", global);
 }
 
-void testSync(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
+void testSync(){
   uint64_t i;
 
   global = 0;
@@ -59,7 +59,7 @@ void testSync(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
   }
 }
 
-void testNoSync(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
+void testNoSync(){
   uint64_t i;
 
   global = 0;

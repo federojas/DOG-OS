@@ -4,7 +4,7 @@
 #define USER_SIZE 25
 #define BUFFER_SIZE 100
 #define MAX_ARGUMENTS 5
-#define COMMAND_COUNT 20
+#define COMMAND_COUNT 32
 
 void startShell(int argc, char **argv);
 void printUser();

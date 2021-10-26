@@ -9,7 +9,7 @@ typedef struct MM_rq{
   uint32_t size;
 }mm_rq;
 
-void testMemory(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+void testMemory() {
   mm_rq mm_rqs[MAX_BLOCKS];
   uint8_t rq;
   uint32_t total;

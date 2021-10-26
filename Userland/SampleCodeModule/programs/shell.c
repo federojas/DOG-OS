@@ -19,11 +19,6 @@ static void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 
 static t_command commands[COMMAND_COUNT] = {
     {&help, "/help", "Listado de comandos"},
-    {&testMemory, "/memtest", "Testeo de memory manager"},
-    {&testProcesses, "/proctest", "Testeo de process manager"},
-    {&testPriority, "/priotest", "Testeo de prioridad de process manager"},
-    {&testSync, "/semtest", "Testeo de semaforos con uso"},
-    {&testNoSync, "/nosemtest", "Testeo de semaforos sin uso"},
     {&clear, "/clear", "Limpia la pantalla actual"},
     {&changeUser, "/user", "Cambia el nombre de usuario, ingrese el nombre como un solo argumento"},
     {&getInfoReg, "/inforeg", "Estado de todos los resgitros, use ctrl + r para capturar los mismos"},
@@ -37,10 +32,23 @@ static t_command commands[COMMAND_COUNT] = {
     {&getRoots, "/roots", "Calculo de raices de una funcion cuadratica"},
     {&logo, "/dog", "Imprime DOG-OS logo"},
     {&changeBgColour, "/bgcolour", "Cambia el color del fondo del texto"},
-    {&changeFtColour, "/ftcolour", "Cambia el color del texto"},   
+    {&changeFtColour, "/ftcolour", "Cambia el color del texto"},  
+    {&testMemoryWrapper, "/memtest", "Testeo de memory manager"},
+    {&testProcessesWrapper, "/proctest", "Testeo de process manager"},
+    {&testPriorityWrapper, "/priotest", "Testeo de prioridad de process manager"},
+    {&testSyncWrapper, "/semtest", "Testeo de semaforos con uso"},
+    {&testNoSyncWrapper, "/nosemtest", "Testeo de semaforos sin uso"},
+    {&memStatusWrapper, "/mem", "Imprime el estado de la memoria"},
+    {&semStatusWrapper, "/sem", "Imprime el estado de los semaforos"},
+    {&killProcessWrapper, "/kill", "Imprime el estado de la memoria"},
+    {&processStatusWrapper, "/ps", "Imprime el estado de los procesos"},
+    {&setPriorityWrapper, "/nice", "Cambia la prioridad de un proceso"},
+    {&blockProcessWrapper, "/block", "Cambia el estado de un proceso a bloqueado"},
+    {&unblockProcessWrapper, "/unblock", "Cambia el estado de un proceso a listo"},
 };
 
 static t_shell shellData;
+
 void startShell(int argc, char **argv){ 
     shellWelcomeMessage();
     initializeShell();
@@ -74,7 +82,7 @@ static void shellExecute() {
     char userInput[BUFFER_SIZE] = {0};
     int argc = 0;
     
-    while (1){
+    while (1) {
         printUser();
 
         userInput[0] = 0;
@@ -105,8 +113,6 @@ static int getCommandIdx(char * command) {
     }
     return -1;
 }
-
-
 
 static int getCommandArgs(char* userInput, char* command, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
     int argc = 0;
@@ -168,4 +174,7 @@ static void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	for(int i = 0; i < COMMAND_COUNT; i++) {
         printf("%s : %s\n", shellData.commands[i].name, shellData.commands[i].description);
     }
+
+    //DAGOS EL TP PIDE UN APARTADO PARA LOS TESTS (PARA QUE SEAN MAS FACILES DE ENCONTRAR)
+
 }

@@ -4,7 +4,7 @@
 
 #define TOTAL_PROCESSES 3
 
-void testPriority(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
+void testPriority(){
   uint64_t pids[TOTAL_PROCESSES];
   uint64_t i;
 

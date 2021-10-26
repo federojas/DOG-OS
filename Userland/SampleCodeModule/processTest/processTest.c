@@ -10,7 +10,7 @@ typedef struct P_rq{
   enum State state;
 }p_rq;
 
-void testProcesses(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
+void testProcesses(){
   p_rq p_rqs[MAX_PROCESSES];
   uint8_t rq;
   uint8_t alive = 0;
