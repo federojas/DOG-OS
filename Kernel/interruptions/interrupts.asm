@@ -125,15 +125,6 @@ SECTION .text
 	mov rdi, %1
 	mov rsi, rsp
 	call exceptionDispatcher
-	popState
- 
-	call getStackBase
-	mov [rsp + 3*8], rax ;seteamos rsp a base del stack
-
-	mov rax, 0x400000
-	mov [rsp], rax
-	
-	iretq
 %endmacro
 
 %macro sendEndOfInterrupt 0

@@ -61,6 +61,6 @@ int main() {
     newProcess(sampleCodeModuleAddress, 1, argv2, FOREGROUND, 0);
 	loadIdt();
     _hlt();
-	printf("FATAL FAILURE");
+	printf("\nFATAL FAILURE\n");
 	return 0;
 }

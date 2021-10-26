@@ -2,6 +2,7 @@
 #include <colors.h>
 #include <infoReg.h>
 #include <syscalls.h>
+#include <processManager.h>
 
 #define ZERO_EXCEPTION_ID 0
 #define INVOP_EXCEPTION_ID 6
@@ -22,7 +23,7 @@ void exceptionDispatcher(int exception, uint64_t rsp) {
 		break;
 	}
 	printRegs((uint64_t *)rsp);
-	return ;
+	killProcess(getProcessPID());
 }
 
 static void zeroDivision() {

@@ -122,6 +122,7 @@ void putCharInBuffer(char c){
         }    
     }
 }
+
 char getChar(){
     char c=0;
     c=removeCharFromBuffer();
