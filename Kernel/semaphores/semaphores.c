@@ -127,6 +127,7 @@ static t_semaphore *createSemaphore(uint32_t id, uint64_t initialValue) {
     newSem->value = initialValue;
     newSem->blockedProcessesAmount = 0;
     newSem->listeningProcesses = 0;
+    newSem->lock = 0;
     newSem->next = NULL;
     addSemaphoreToList(newSem);
   }
