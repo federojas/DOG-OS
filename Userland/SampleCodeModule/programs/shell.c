@@ -45,6 +45,8 @@ static t_command commands[COMMAND_COUNT] = {
     {&setPriorityWrapper, "/nice", "Cambia la prioridad de un proceso"},
     {&blockProcessWrapper, "/block", "Cambia el estado de un proceso a bloqueado"},
     {&unblockProcessWrapper, "/unblock", "Cambia el estado de un proceso a listo"},
+    {&cat, "/cat", "Imprime el texto ingresado por la shell"},
+    {&loop, "/loop", "Imprime un saludo cada 3 segundos"},
 };
 
 static t_shell shellData;

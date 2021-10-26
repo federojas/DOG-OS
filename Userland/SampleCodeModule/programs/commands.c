@@ -430,4 +430,31 @@ void testMemoryWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	testMemory();
 }
 
+void cat(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc < 1) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	int argvIndex = 0;
+	while(argc) {
+		printf("%s ", argv[argvIndex++]);
+		argc--;
+	}
+	printf("\n");
+}
+
+void loop(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 0) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	int pid = getProcessPID();
+	uint32_t timeToWake;
+	while(1) {
+		timeToWake = getSecondsElapsed() + 3;
+		printf("El proceso %d dice hola.\n", pid);
+    	while(getSecondsElapsed() < timeToWake);
+	}
+}
+
 

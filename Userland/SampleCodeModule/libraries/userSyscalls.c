@@ -67,3 +67,7 @@ void semStatus() {
 void memStatus() {
     (void)_syscall(SYS_MEMORY_STATUS_ID, 0, 0, 0, 0, 0);
 }
+
+int getSecondsElapsed() {
+    return _syscall(SYS_SEC_ELAPSED_ID, 0, 0, 0, 0, 0);
+}

@@ -30,4 +30,6 @@ void testNoSyncWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 void testProcessesWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 void testMemoryWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 void unblockProcessWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void cat(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+void loop(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 #endif
