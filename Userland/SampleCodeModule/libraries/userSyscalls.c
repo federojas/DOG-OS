@@ -63,3 +63,7 @@ int semPost(uint32_t id) {
 int semClose(uint32_t id) {
     return _syscall(SYS_SEM_CLOSE_ID, (uint64_t) id, 0, 0, 0, 0);
 }
+
+void semStatus() {
+    (void)_syscall(SYS_SEM_STATUS_ID, 0, 0, 0, 0, 0);
+}

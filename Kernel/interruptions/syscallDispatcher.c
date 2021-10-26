@@ -130,6 +130,11 @@ static int semCloseWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8
     return semClose((uint32_t) rsi);
 }
 
+static int semStatusWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    semStatus();
+    return 0;
+}
+
 static functionPointer syscall[] = {
     getCurrentTimeWrapper,
     getCPUFeaturesWrapper,
@@ -157,7 +162,8 @@ static functionPointer syscall[] = {
     semOpenWrapper,
     semPostWrapper,
     semWaitWrapper,
-    semCloseWrapper
+    semCloseWrapper,
+    semStatusWrapper
 };
 
 int syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
