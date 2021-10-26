@@ -6,23 +6,107 @@
 #include <processTest.h>
 #include <priorityTest.h>
 #include <semaphoreTest.h>
+#include <userSyscalls.h>
 
-static char userName[USER_SIZE] = "DefaultUser";
-static int shellStartup = 1;
+static int getCommandArgs(char* userInput, char* command, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+static void shellWelcomeMessage();
+static void shellExecute();
+static int getCommandIdx(char * command);
+static void initializeShell();
+static void initializeCommands();
+static void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+static void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 
+static t_command commands[COMMAND_COUNT] = {
+    {&help, "/help", "Listado de comandos"},
+    {&testMemory, "/memtest", "Testeo de memory manager"},
+    {&testProcesses, "/proctest", "Testeo de process manager"},
+    {&testPriority, "/priotest", "Testeo de prioridad de process manager"},
+    {&testSync, "/semtest", "Testeo de semaforos con uso"},
+    {&testNoSync, "/nosemtest", "Testeo de semaforos sin uso"},
+    {&clear, "/clear", "Limpia la pantalla actual"},
+    {&changeUser, "/user", "Cambia el nombre de usuario, ingrese el nombre como un solo argumento"},
+    {&getInfoReg, "/inforeg", "Estado de todos los resgitros, use ctrl + r para capturar los mismos"},
+    {&getCPUFeatures, "/cpufeatures", "Caracteristicas del CPU"},
+    {&exit, "/exit", "Finaliza la ejecucion"},
+    {&opCode, "/opcode", "Excepcion opcode invalido"},
+    {&getCurrentDayTime, "/date&time", "Fecha y hora actual"},
+    {&getMem, "/printmem", "Volcado de memoria de 32 bytes a partir de\ndireccion de memoria en hexa ingresada como argumento."},
+    {&divZero, "/divzero", "Excepcion division por cero"},
+    {&getCPUVendor, "/cpuvendor", "ID de fabricante del CPU"},
+    {&getRoots, "/roots", "Calculo de raices de una funcion cuadratica"},
+    {&logo, "/dog", "Imprime DOG-OS logo"},
+    {&changeBgColour, "/bgcolour", "Cambia el color del fondo del texto"},
+    {&changeFtColour, "/ftcolour", "Cambia el color del texto"},   
+};
+
+static t_shell shellData;
 void startShell(int argc, char **argv){ 
-    if(shellStartup)
-        //shellWelcomeMessage();
-    shellExecute(0,0);
+    shellWelcomeMessage();
+    initializeShell();
+    shellExecute();
 }
 
-void shellWelcomeMessage(){
-    printf("\n                 Le damos la bienvenida a\n\n");
-    logo();
-    printf("\n         Arquitectura de Computadoras --- 1C 2021\n\n");
-    printf("\n  Utilice el comando /help para obtener un manual de usuario.\n\n\n\n");
-    shellStartup = 0;
+void printUser() {
+    int len=strlen(shellData.userName);
+    len+=4;
+    printf("$ ");
+    sendUserData(shellData.userName, len);
+    printf(" > ");
 }
+
+static void initializeShell() {
+    strcpy(shellData.userName, "DefaultUser");
+    initializeCommands();
+}
+
+static void initializeCommands() {
+    for(int i = 0; i < COMMAND_COUNT; i++) {
+        shellData.commands[i].commandFn = commands[i].commandFn;
+        shellData.commands[i].name = commands[i].name;
+        shellData.commands[i].description = commands[i].description;
+    }
+}
+
+static void shellExecute() {
+    char command[BUFFER_SIZE] = {0};
+    char argv[MAX_ARGUMENTS][BUFFER_SIZE];
+    char userInput[BUFFER_SIZE] = {0};
+    int argc = 0;
+    
+    while (1){
+        printUser();
+
+        userInput[0] = 0;
+
+        scanf("%s", userInput);
+        
+        argc = getCommandArgs(userInput, command, argv);
+
+        if(argc == -1) {
+            printf("\nIngreso argumentos de mas.\nLa maxima cantidad de argumentos permitida es: %d.\n\n", MAX_ARGUMENTS);
+        } 
+        int commandIdx = getCommandIdx(command);
+
+        if(commandIdx >= 0) {
+            shellData.commands[commandIdx].commandFn(argc, argv);     
+        } else {
+            printf("\nComando invalido: use /help\n\n");
+        }
+    }
+    return ;
+}
+
+static int getCommandIdx(char * command) {
+    for(int i = 0; i < COMMAND_COUNT; i++) {
+        if ((strcmp(shellData.commands[i].name, command)) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
 
 static int getCommandArgs(char* userInput, char* command, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
     int argc = 0;
@@ -50,94 +134,38 @@ static int getCommandArgs(char* userInput, char* command, char argv[MAX_ARGUMENT
         return -1;
     return argc;
 }
- void printUser(){
-    int len=strlen(userName);
-    len+=4;
-    printf("$ ");
-    sendUserData(userName,len);
-    printf(" > ");
+
+static void shellWelcomeMessage() {
+    printf("\n                 Le damos la bienvenida a\n\n");
+    logo(0,0);
+    printf("\n         Sistemas Operativos --- 2C 2021\n\n");
+    printf("\n  Utilice el comando /help para obtener un manual de usuario.\n\n\n\n");
 }
-void shellExecute(int argc2, char **argv2){
-    char command[BUFFER_SIZE] = {0};
-    char argv[MAX_ARGUMENTS][BUFFER_SIZE];
-    char userInput[BUFFER_SIZE] = {0};
-    int argc = 0;
-    
-    while (1){
-        printUser();
 
-        userInput[0] = 0;
-
-        scanf("%s", userInput);
-        
-        argc = getCommandArgs(userInput, command, argv);
-
-        if(argc == -1) {
-            printf("\nIngreso argumentos de mas.\nLa maxima cantidad de argumentos permitida es: %d.\n\n", MAX_ARGUMENTS);
-        }
-        else if(strcmp("/mem", command) == 0) {
-            testMemory(argc,argv);
-        }
-        else if(strcmp("/proc", command) == 0) {
-            testProcesses(argc,argv);
-        }
-        else if(strcmp("/prio", command) == 0) {
-            testPriority(argc,argv);
-        }
-        else if(strcmp("/sem", command) == 0) {
-            testSync(argc,argv);
-        }
-        else if(strcmp("/nosem", command) == 0) {
-            testNoSync(argc,argv);
-        }
-        else if(strcmp("/help", command) == 0) {
-            help(argc, argv);
-        }
-        else if(strcmp("/inforeg", command) == 0) {
-            getInfoReg(argc, argv);
-        }
-        else if(strcmp("/cpufeatures", command) == 0) {
-            getCPUFeatures(argc, argv);
-        }
-        else if(strcmp("/clear", command) == 0) {
-            clear(argc, argv);
-        }
-        else if(strcmp("/exit", command) == 0) {
-            exit(argc, argv);
-        } 
-        else if(strcmp("/opcode", command) == 0) {
-            opCode(argc, argv);
-        } 
-        else if(strcmp("/date&time", command) == 0) {
-            getCurrentDayTime(argc, argv);
-        }
-        else if(strcmp("/printmem", command) == 0) {
-            getMem(argc, argv);
-        }
-        else if(strcmp("/divzero", command) == 0) {
-            divZero(argc, argv);
-        }
-        else if(strcmp("/user", command) == 0) {
-            changeUser(argc, argv, userName);
-        }
-        else if(strcmp("/cpuvendor", command) == 0) {
-            getCPUVendor(argc, argv);
-        }
-        else if(strcmp("/roots", command) == 0) {
-            getRoots(argc, argv);
-        }
-        else if(strcmp("/dog", command) == 0) {
-            logo();
-        }
-        else if(strcmp("/bgcolour", command) == 0){
-            changeColour(argc, argv, 0);
-        }
-        else if(strcmp("/ftcolour", command) == 0){
-            changeColour(argc, argv, 1);
-        }
-        else {
-            printf("\nComando invalido: use /help\n\n");
-        }
+static void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 1) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
     }
-    return ;
+	if(strlen(argv[0]) > USER_SIZE - 1) {
+		printf("\nEl nombre de usuario puede tener un maximo de %d caracteres.\n\n", USER_SIZE - 1);
+		return;
+	}
+	strcpy(shellData.userName, argv[0]);
+	setFirstChange(1);
+}
+
+static void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 0) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	printf("\nUse ctrl + tab para cambiar de pantalla.\n");	
+	printf("\nTabla de colores: \n");
+	printf("\nBLANCO | NEGRO | ROJO | VERDE | AZUL\n");
+	printf("  1    |   2   |  3   |   4   |  5\n");
+	printf("\nLista de comandos: \n");
+	for(int i = 0; i < COMMAND_COUNT; i++) {
+        printf("%s : %s\n", shellData.commands[i].name, shellData.commands[i].description);
+    }
 }

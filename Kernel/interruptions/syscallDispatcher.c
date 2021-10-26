@@ -15,7 +15,7 @@ static int getCurrentTimeWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint6
 }
 
 static int sysWriteWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
-    sysWrite((char *)(rsi), (uint8_t)(rdx), (t_color)(rcx), (t_color)(r8), (uint64_t) r9);
+    sysWrite((char *)(rsi), (uint8_t)(rdx), (t_color)(rcx), (t_color)(r8), (int) r9);
     return 0;
 }
 

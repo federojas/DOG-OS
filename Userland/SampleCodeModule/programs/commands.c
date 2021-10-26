@@ -229,30 +229,17 @@ void exit(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
     }
 	printf("\nMuchas gracias por utilizar DOG-OS, esperamos su regreso.\n");
 	printf("\nUsted cerro el TP, el mismo ya no funcionara.\n\n");
-	logo();
+	logo(0,0);
 	(void)_syscall(SYS_EXIT_ID,0,0,0,0,0);
 }
 
 //https://patorjk.com/software/taag/#p=display&f=Slant&t=DOG-OS
-void logo() {
+void logo(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("              ____  ____  ______      ____  _____\n");
 	printf("             / __ \\/ __ \\/ ____/     / __ \\/ ___/\n");
 	printf("            / / / / / / / / ________/ / / /\\__ \\ \n");
 	printf("           / /_/ / /_/ / /_/ /_____/ /_/ /___/ /\n");
 	printf("          /_____/\\____/\\____/      \\____//____/\n\n");
-}
-
-void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], char userName[USER_SIZE]) {
-	if (argc != 1) {
-		printf("\nCantidad invalida de argumentos.\n\n");
-		return;
-    }
-	if(strlen(argv[0]) > USER_SIZE - 1) {
-		printf("\nEl nombre de usuario puede tener un maximo de %d caracteres.\n\n", USER_SIZE - 1);
-		return;
-	}
-	strcpy(userName, argv[0]);
-	setFirstChange(1);
 }
 
 void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
@@ -265,81 +252,60 @@ void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("\nID de fabricante: %s\n\n", buffer);
 }
 
-void changeColour(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE], int ft) {
+void changeFtColour(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	int aux = strToInt(argv[0], 0);
-	if(ft == 1) {
-		switch(aux){
-			case 1:
-				setFTC(WHITE);
-				break;
-			case 2:
-				setFTC(BLACK);
-				break;
-			case 3:
-				setFTC(RED);
-				break;
-			case 4:
-				setFTC(GREEN);
-				break;
-			case 5:
-				setFTC(BLUE);
-				break;
-			default:
-				printf("\nEl codigo de color que ingreso es invalido. Use /help.\n\n");
-				break;
-		}
-	} else {
-		switch(aux){
-			case 1:
-				setBGC(WHITE);
-				break;
-			case 2:
-				setBGC(BLACK);
-				break;
-			case 3:
-				setBGC(RED);
-				break;
-			case 4:
-				setBGC(GREEN);
-				break;
-			case 5:
-				setBGC(BLUE);
-				break;
-			default:
-				printf("\nEl codigo de color que ingreso es invalido. Use /help.\n\n");
-				break;
-		}
+	switch(aux){
+		case 1:
+			setFTC(WHITE);
+			break;
+		case 2:
+			setFTC(BLACK);
+			break;
+		case 3:
+			setFTC(RED);
+			break;
+		case 4:
+			setFTC(GREEN);
+			break;
+		case 5:
+			setFTC(BLUE);
+			break;
+		default:
+			printf("\nEl codigo de color que ingreso es invalido. Use /help.\n\n");
+			break;
 	}
 }
 
-void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void changeBgColour(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	printf("\nUse ctrl + tab para cambiar de pantalla.\n");	
-	printf("\nTabla de colores: \n");
-	printf("\nBLANCO | NEGRO | ROJO | VERDE | AZUL\n");
-	printf("  1    |   2   |  3   |   4   |  5\n");
-	printf("\nLista de comandos: \n");
-	printf("\n/help : Listado de comandos\n");
-	printf("\n/clear : Limpia la pantalla actual\n");
-	printf("\n/user : Cambia el nombre de usuario.\nIngrese el nombre como un solo argumento.\n");
-    printf("\n/inforeg : Estado de todos los resgitros.\nUse ctrl + r para capturar los mismos.\n");
-    printf("\n/cpufeatures : Caracteristicas del CPU\n");
-	printf("\n/date&time : Fecha y hora actual\n");
-	printf("\n/printmem : Volcado de memoria de 32 bytes a partir de\ndireccion de memoria en hexa ingresada como argumento.\n");
-	//printf("La direccion debe estar comprendida en el rango: 0 - %x\n", LAST_MEM_POSITION - 32); CHEQUEO MAXMEM
-	printf("\n/divzero : Excepcion division por cero\n");
-	printf("\n/opcode : Excepcion opcode invalido\n");
-	printf("\n/cpuvendor : ID de fabricante del CPU\n");
-	printf("\n/roots : Calculo de raices de una funcion cuadratica.\nIngrese los 3 valores de la misma como argumentos.\n");
-	printf("\n/dog : Imprime DOG-OS logo\n");
-	printf("\n/ftcolour : Cambia el color del texto.\nPase el color como argumento usando la tabla de colores.\n\n");
-	printf("\n/bgcolour : Cambia el color del fondo del texto.\nPase el color como argumento usando la tabla de colores.\n\n");
-	printf("\n/exit : Finaliza la ejecucion.\n\n");
+	int aux = strToInt(argv[0], 0);
+	switch(aux){
+		case 1:
+			setBGC(WHITE);
+			break;
+		case 2:
+			setBGC(BLACK);
+			break;
+		case 3:
+			setBGC(RED);
+			break;
+		case 4:
+			setBGC(GREEN);
+			break;
+		case 5:
+			setBGC(BLUE);
+			break;
+		default:
+			printf("\nEl codigo de color que ingreso es invalido. Use /help.\n\n");
+			break;
+	}
 }
+
+
