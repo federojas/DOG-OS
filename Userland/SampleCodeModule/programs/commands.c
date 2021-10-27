@@ -8,6 +8,8 @@
 #include <semaphoreTest.h>
 #include <processTest.h>
 #include <priorityTest.h>
+#include <shell.h>
+
 
 #define YEAR 20 //Debe escribir aca los digitos de su año (excepto los ultimos dos)
 #define BYTES 32 //Cantidad de bytes para el mem dump
@@ -451,15 +453,13 @@ void testMemoryWrapper(int argc, char ** argv) {
 }
 
 void cat(int argc, char ** argv) {
-	if (argc < 1) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	int argvIndex = 0;
-	while(argc) {
-		printf("%s ", argv[argvIndex++]);
-		argc--;
-	}
+	char * userInput[BUFFER_SIZE];
+	scanf("%s", userInput);
+	printf("%s", userInput);
 	printf("\n");
 }
 
