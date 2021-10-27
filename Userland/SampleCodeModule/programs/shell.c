@@ -54,6 +54,7 @@ static t_command commands[COMMAND_COUNT] = {
     {&cat, "/cat", "Imprime el texto ingresado luego de ejecutar el comando"},
     {&loop, "/loop", "Imprime un saludo cada 3 segundos"},
     {&pipeStatusWrapper, "/pipe", "Imprime el estado de los pipes"},
+    {&filter,"/filter","filtro de vocales"},
   // limite
     {&testMemoryWrapper, "/memtest", "Testeo de memory manager"},
     {&testProcessesWrapper, "/proctest", "Testeo de process manager"},
@@ -61,7 +62,7 @@ static t_command commands[COMMAND_COUNT] = {
      "Testeo de prioridad process manager"},
     {&testSyncWrapper, "/semtest", "Testeo de semaforos con uso"},
     {&testNoSyncWrapper, "/nosemtest", "Testeo de semaforos sin uso"},
-    {&filter,"/filter","filtro de vocales"}
+    
 };
 
 
