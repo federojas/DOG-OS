@@ -233,22 +233,32 @@ static int getCommandIdx(char *command) {
 }
 
 void printRow(char *str1, char *str2, int firstRow) {
-    printf("|");
-    printCol(str1, C1_WIDTH);
-    printCol(str2, C2_WIDTH);
-    if (firstRow)
-        printf("\n");
+  printf("|");
+  printCol(str1, C1_WIDTH);
+  printCol(str2, C2_WIDTH);
+  if (firstRow)
+    printf("\n");
 }
 
 void printCol(char *str, int width) {
-    int done = 0;
-    printf(" ");
-    for (int i = 0; i < width; i++) {
-        if (!done) {
-            if (str[i])
-                printf("%c", str[i]);
-            else
-                done = 1;
-        }
+  int done = 0;
+  printf(" ");
+  for (int i = 0; i < width; i++) {
+    if (!done) {
+      if (str[i])
+        printf("%c", str[i]);
+      else
+        done = 1;
     }
+    if (done) {
+      printf(" ");
+    }
+  }
+  if (done)
+    printf(" |");
+  else {
+    printf(" |\n");
+    printRow(" ", str + width, 0);
+  }
 }
+
