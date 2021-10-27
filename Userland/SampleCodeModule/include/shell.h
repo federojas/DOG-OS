@@ -3,9 +3,9 @@
 
 #define USER_SIZE 25
 #define BUFFER_SIZE 100
-#define MAX_ARGUMENTS 20
-#define COMMAND_COUNT 33
-
+#define MAX_ARGUMENTS 5
+#define COMMAND_COUNT 26
+#define TEST_COMMMAND_COUNT 5
 void startShell(int argc, char **argv);
 void printUser();
 
@@ -18,5 +18,6 @@ typedef struct t_command {
 typedef struct t_shell {
     char userName[USER_SIZE]; 
     t_command commands[COMMAND_COUNT];
+    t_command testCommands[TEST_COMMMAND_COUNT];
 } t_shell;
 #endif
