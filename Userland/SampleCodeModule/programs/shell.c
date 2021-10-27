@@ -51,7 +51,7 @@ static t_command commands[COMMAND_COUNT] = {
     {&setPriorityWrapper, "/nice", "Cambia la prioridad de un proceso"},
     {&blockProcessWrapper, "/block", "Bloquea un proceso"},
     {&unblockProcessWrapper, "/unblock", "Desbloquea un proceso"},
-    {&cat, "/cat", "Imprime el texto ingresado"},
+    {&cat, "/cat", "Imprime el texto ingresado luego de ejecutar el comando"},
     {&loop, "/loop", "Imprime un saludo cada 3 segundos"},
     {&pipeStatusWrapper, "/pipe", "Imprime el estado de los pipes"},
   // limite
