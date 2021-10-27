@@ -6,6 +6,12 @@
 #define MAX_ARGUMENTS 5
 #define COMMAND_COUNT 26
 #define TEST_COMMMAND_COUNT 5
+
+#define C1_WIDTH 13
+#define C2_WIDTH 38
+#define HELP_MAIN 0
+#define HELP_TEST 1
+
 void startShell(int argc, char **argv);
 void printUser();
 
