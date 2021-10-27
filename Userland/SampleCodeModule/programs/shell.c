@@ -52,17 +52,16 @@ static t_command commands[COMMAND_COUNT] = {
     {&unblockProcessWrapper, "/unblock", "Desbloquea un proceso"},
     {&cat, "/cat", "Imprime el texto ingresado"},
     {&loop, "/loop", "Imprime un saludo cada 3 segundos"},
-    {&helptest, "/helptest", "Informacion acerca de los tests"},
-};
-
-static t_command testCommands[TEST_COMMMAND_COUNT] = {
-    {&testMemoryWrapper, "/memtest", "Testeo de memory manager"},
+  // limite
+        {&testMemoryWrapper, "/memtest", "Testeo de memory manager"},
     {&testProcessesWrapper, "/proctest", "Testeo de process manager"},
     {&testPriorityWrapper, "/priotest",
-     "Testeo de prioridad de process manager"},
+     "Testeo de prioridad process manager"},
     {&testSyncWrapper, "/semtest", "Testeo de semaforos con uso"},
     {&testNoSyncWrapper, "/nosemtest", "Testeo de semaforos sin uso"},
 };
+
+
 
 static t_shell shellData;
 
@@ -90,11 +89,6 @@ static void initializeCommands() {
     shellData.commands[i].commandFn = commands[i].commandFn;
     shellData.commands[i].name = commands[i].name;
     shellData.commands[i].description = commands[i].description;
-  }
-  for (int j = 0; j < TEST_COMMMAND_COUNT; j++) {
-      shellData.testCommands[j].commandFn = testCommands[j].commandFn;
-          shellData.testCommands[j].name = testCommands[j].name;
-    shellData.testCommands[j].description = testCommands[j].description;
   }
 }
 
@@ -183,7 +177,7 @@ static void printHelpTable() {
   printDivider();
   printRow("Comando", "Descripcion", 1);
   printDivider();
-  for (int i = 0; i < COMMAND_COUNT-1 ; i++) {
+  for (int i = 0; i < TEST_COMMAND_START-2 ; i++) {
     printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
   printDivider();
@@ -193,9 +187,11 @@ static void printHelpTestTable() {
   printDivider();
   printRow("Comando", "Descripcion del test", 1);
   printDivider();
-  for (int i = 0; i < TEST_COMMMAND_COUNT ; i++) {
-    printRow(shellData.testCommands[i].name, shellData.testCommands[i].description, 1);
+  for (int i = TEST_COMMAND_START-2; i < COMMAND_COUNT-2; i++) {
+  printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
+    
+  
   printDivider();
 }
 
@@ -212,7 +208,7 @@ static void help(int argc, char ** argv) {
   printf("  1    |   2   |  3   |   4   |  5\n");
 
   printHelpTable();
-  
+  printHelpTestTable();
 }
 
 static void helptest(int argc, char ** argv) {
