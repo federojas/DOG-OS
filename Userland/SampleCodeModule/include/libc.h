@@ -29,4 +29,5 @@ int pow(int x, unsigned int y);
 void strToDouble(char *numStr, double *result);
 void setFirstChange(int number);
 void * memset(void * destination, int32_t c, uint64_t length);
+int isVowel(char c);
 #endif

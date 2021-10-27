@@ -433,7 +433,21 @@ void testProcessesWrapper(int argc, char ** argv) {
     }
 	testProcesses();
 }
-
+void filter(int argc, char **argv){
+	if(argc!=2){
+		printf("\n Cantidad invalida de argumentos.\n\n");
+		return;
+	}
+	char *str=argv[1];
+	int i=0;
+	while(str[i]!=0){
+		if(!isVowel(str[i])){
+			putChar(str[i]);
+		}
+		i++;
+	}
+	putChar('\n');
+}
 void testPriorityWrapper(int argc, char ** argv) {
 	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");

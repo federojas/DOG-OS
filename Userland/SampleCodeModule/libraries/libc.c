@@ -21,6 +21,14 @@ void setBGC(t_color colour) {
     currentBGC = colour;
 }
 
+int isVowel(char c){
+	if(c>='A' && c<='Z'){
+		//uppercase
+		return (c=='A'||c=='E'||c=='I'||c=='O'||c=='U');
+	}
+	return (c=='a'||c =='e'||c =='i'||c=='o'||c=='u');
+}
+
 void putChar(char c) {
     (void)_syscall(SYS_WRITE_ID, (uint64_t)&c, 1, currentBGC, currentFTC, 0);
 }
