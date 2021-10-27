@@ -32,4 +32,5 @@ void testMemoryWrapper(int argc, char ** argv);
 void unblockProcessWrapper(int argc, char ** argv);
 void cat(int argc, char ** argv);
 void loop(int argc, char ** argv);
+void pipeStatusWrapper(int argc, char ** argv);
 #endif

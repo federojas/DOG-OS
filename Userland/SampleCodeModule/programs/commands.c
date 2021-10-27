@@ -477,4 +477,11 @@ void loop(int argc, char ** argv) {
 	}
 }
 
+void pipeStatusWrapper(int argc, char ** argv) {
+	if (argc != 1) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	pipeStatus();
+}
 

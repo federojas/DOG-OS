@@ -7,6 +7,7 @@
 #include <processManager.h> 
 #include <processManagerQueue.h>
 #include <time.h>
+#include <pipes.h>
 
 
 typedef int (*functionPointer)(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
@@ -135,6 +136,11 @@ static int getSecondsElapsedWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, ui
     return secondsElapsed();
 }
 
+static int pipeStatusWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    pipeStatus();
+    return 0;
+}
+
 
 static functionPointer syscall[] = {
     getCurrentTimeWrapper,
@@ -164,7 +170,8 @@ static functionPointer syscall[] = {
     semWaitWrapper,
     semCloseWrapper,
     semStatusWrapper,
-    getSecondsElapsedWrapper
+    getSecondsElapsedWrapper,
+    pipeStatusWrapper
 };
 
 int syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {

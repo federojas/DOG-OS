@@ -53,6 +53,7 @@ static t_command commands[COMMAND_COUNT] = {
     {&unblockProcessWrapper, "/unblock", "Desbloquea un proceso"},
     {&cat, "/cat", "Imprime el texto ingresado"},
     {&loop, "/loop", "Imprime un saludo cada 3 segundos"},
+    {&pipeStatusWrapper, "/pipe", "Imprime el estado de los pipes"},
   // limite
     {&testMemoryWrapper, "/memtest", "Testeo de memory manager"},
     {&testProcessesWrapper, "/proctest", "Testeo de process manager"},
