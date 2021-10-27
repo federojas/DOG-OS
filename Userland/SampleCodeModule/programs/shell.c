@@ -11,15 +11,17 @@
 static int getCommandArgs(char* userInput, char * argv[MAX_ARGUMENTS]);
 static void shellWelcomeMessage();
 static void shellExecute();
-static int getCommandIdx(char *command, int *commandType);
 static void initializeShell();
 static void initializeCommands();
+static int getCommandIdx(char *command);
 static void changeUser(int argc, char ** argv);
 static void help(int argc, char ** argv);
-static void helpTest(int argc, char ** argv);
-void printRow(char *str1, char *str2, int firstRow);
-void printCol(char *str, int width);
-void printDivider();
+static void helptest(int argc, char ** argv);
+static void printHelpTable();
+static void printHelpTestTable();
+static void printRow(char *str1, char *str2, int firstRow);
+static void printCol(char *str, int width);
+static void printDivider();
 
 static t_command commands[COMMAND_COUNT] = {
     {&help, "/help", "Listado de comandos"},
@@ -50,7 +52,7 @@ static t_command commands[COMMAND_COUNT] = {
     {&unblockProcessWrapper, "/unblock", "Desbloquea un proceso"},
     {&cat, "/cat", "Imprime el texto ingresado"},
     {&loop, "/loop", "Imprime un saludo cada 3 segundos"},
-    {&helpTest, "/helpTest", "Informacion acerca de los tests"},
+    {&helptest, "/helptest", "Informacion acerca de los tests"},
 };
 
 static t_command testCommands[TEST_COMMMAND_COUNT] = {
@@ -122,18 +124,6 @@ static void shellExecute() {
             printf("\nComando invalido: use /help\n\n");
         }
     }
-    int *commandType = 0;
-    int commandIdx = getCommandIdx(command, commandType); 
-
-    if (commandIdx >= 0) {
-      if (*commandType == HELP_MAIN) shellData.commands[commandIdx].commandFn(argc, argv);
-      else if (*commandType == HELP_TEST) shellData.testCommands[commandIdx].commandFn(argc, argv);
-      
-    } else {
-      printf("\nComando invalido: use /help\n\n");
-    }
-  }
-  return;
 }
 
 static int getCommandArgs(char* userInput, char ** argv) {
@@ -179,24 +169,7 @@ static void changeUser(int argc, char ** argv) {
 	setFirstChange(1);
 }
 
-static void help(int argc, char ** argv) {
-	if (argc != 1) {
-		printf("\nCantidad invalida de argumentos.\n\n");
-		return;
-    }
-    if (done) {
-      printf(" ");
-    }
-  }
-  if (done)
-    printf(" |");
-  else {
-    printf(" |\n");
-    printRow(" ", str + width, 0);
-  }
-}
-
-void printDivider() {
+static void printDivider() {
   printf("+");
   for (int i = 0; i < C1_WIDTH+2; i++)
     printf("-");
@@ -206,7 +179,7 @@ void printDivider() {
   printf("+\n");
 }
 
-void printHelpTable() {
+static void printHelpTable() {
   printDivider();
   printRow("Comando", "Descripcion", 1);
   printDivider();
@@ -216,7 +189,7 @@ void printHelpTable() {
   printDivider();
 }
 
-void printHelpTestTable() {
+static void printHelpTestTable() {
   printDivider();
   printRow("Comando", "Descripcion del test", 1);
   printDivider();
@@ -227,24 +200,55 @@ void printHelpTestTable() {
 }
 
 
-static void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-  if (argc != 0) {
+static void help(int argc, char ** argv) {
+  if (argc != 1) {
     printf("\nCantidad invalida de argumentos.\n\n");
     return;
   }
+  
+  printf("\nUse ctrl + tab para cambiar de pantalla.\n");
+  printf("\nTabla de colores: \n");
+  printf("\nBLANCO | NEGRO | ROJO | VERDE | AZUL\n");
+  printf("  1    |   2   |  3   |   4   |  5\n");
+
   printHelpTable();
-  //   printf("\nUse ctrl + tab para cambiar de pantalla.\n");
-  //   printf("\nTabla de colores: \n");
-  //   printf("\nBLANCO | NEGRO | ROJO | VERDE | AZUL\n");
-  //   printf("  1    |   2   |  3   |   4   |  5\n");
-  //   printf("\nLista de comandos: \n");
   
 }
 
-static void helpTest(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-    if (argc != 0) {
+static void helptest(int argc, char ** argv) {
+    if (argc != 1) {
     printf("\nCantidad invalida de argumentos.\n\n");
     return;
   }
   printHelpTestTable();
+}
+
+static int getCommandIdx(char *command) {
+    for(int i = 0; i < COMMAND_COUNT; i++) {
+        if ((strcmp(shellData.commands[i].name, command)) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void printRow(char *str1, char *str2, int firstRow) {
+    printf("|");
+    printCol(str1, C1_WIDTH);
+    printCol(str2, C2_WIDTH);
+    if (firstRow)
+        printf("\n");
+}
+
+void printCol(char *str, int width) {
+    int done = 0;
+    printf(" ");
+    for (int i = 0; i < width; i++) {
+        if (!done) {
+            if (str[i])
+                printf("%c", str[i]);
+            else
+                done = 1;
+        }
+    }
 }

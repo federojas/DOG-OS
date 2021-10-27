@@ -9,8 +9,6 @@
 
 #define C1_WIDTH 13
 #define C2_WIDTH 38
-#define HELP_MAIN 0
-#define HELP_TEST 1
 
 void startShell(int argc, char **argv);
 void printUser();
