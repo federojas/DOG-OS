@@ -21,6 +21,7 @@ static void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 static void helpTest(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 void printRow(char *str1, char *str2, int firstRow);
 void printCol(char *str, int width);
+void printDivider();
 
 static t_command commands[COMMAND_COUNT] = {
     {&help, "/help", "Listado de comandos"},
@@ -228,24 +229,34 @@ void printCol(char *str, int width) {
   }
 }
 
+void printDivider() {
+  printf("+");
+  for (int i = 0; i < C1_WIDTH+2; i++)
+    printf("-");
+  printf("+");
+  for (int j = 0; j < C2_WIDTH+2; j++)
+   printf("-");
+  printf("+\n");
+}
+
 void printHelpTable() {
-printf("+---------------+----------------------------------------+\n");
+  printDivider();
   printRow("Comando", "Descripcion", 1);
-  printf("+---------------+----------------------------------------+\n");
+  printDivider();
   for (int i = 0; i < COMMAND_COUNT-1 ; i++) {
     printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
-  printf("+---------------+----------------------------------------+\n");
+  printDivider();
 }
 
 void printHelpTestTable() {
-printf("+---------------+----------------------------------------+\n");
+  printDivider();
   printRow("Comando", "Descripcion del test", 1);
-  printf("+---------------+----------------------------------------+\n");
+  printDivider();
   for (int i = 0; i < TEST_COMMMAND_COUNT ; i++) {
     printRow(shellData.testCommands[i].name, shellData.testCommands[i].description, 1);
   }
-  printf("+---------------+----------------------------------------+\n");
+  printDivider();
 }
 
 
