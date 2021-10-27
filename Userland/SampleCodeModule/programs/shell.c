@@ -211,14 +211,6 @@ static void help(int argc, char ** argv) {
   printHelpTestTable();
 }
 
-static void helptest(int argc, char ** argv) {
-    if (argc != 1) {
-    printf("\nCantidad invalida de argumentos.\n\n");
-    return;
-  }
-  printHelpTestTable();
-}
-
 static int getCommandIdx(char *command) {
     for(int i = 0; i < COMMAND_COUNT; i++) {
         if ((strcmp(shellData.commands[i].name, command)) == 0) {
