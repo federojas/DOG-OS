@@ -166,7 +166,7 @@ static void printHelpTable() {
   printDivider();
   printRow("Comando", "Descripcion", 1);
   printDivider();
-  for (int i = 0; i < TEST_COMMAND_START-2 ; i++) {
+  for (int i = 0; i < TEST_COMMAND_START ; i++) {
     printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
   printDivider();
@@ -176,7 +176,7 @@ static void printHelpTestTable() {
   printDivider();
   printRow("Comando", "Descripcion del test", 1);
   printDivider();
-  for (int i = TEST_COMMAND_START-2; i < COMMAND_COUNT-2; i++) {
+  for (int i = TEST_COMMAND_START; i < COMMAND_COUNT; i++) {
   printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
     
