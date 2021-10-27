@@ -8,14 +8,12 @@
 #include <stdint.h>
 #include <userSyscalls.h>
 
-#define C1_WIDTH 13
-#define C2_WIDTH 38
 
 static int getCommandArgs(char *userInput, char *command,
                           char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
 static void shellWelcomeMessage();
 static void shellExecute();
-static int getCommandIdx(char *command);
+static int getCommandIdx(char *command, int *commandType);
 static void initializeShell();
 static void initializeCommands();
 static void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
@@ -119,10 +117,13 @@ static void shellExecute() {
              "permitida es: %d.\n\n",
              MAX_ARGUMENTS);
     }
-    int commandIdx = getCommandIdx(command);
+    int *commandType = 0;
+    int commandIdx = getCommandIdx(command, commandType); 
 
     if (commandIdx >= 0) {
-      shellData.commands[commandIdx].commandFn(argc, argv);
+      if (*commandType == HELP_MAIN) shellData.commands[commandIdx].commandFn(argc, argv);
+      else if (*commandType == HELP_TEST) shellData.testCommands[commandIdx].commandFn(argc, argv);
+      
     } else {
       printf("\nComando invalido: use /help\n\n");
     }
@@ -130,10 +131,17 @@ static void shellExecute() {
   return;
 }
 
-static int getCommandIdx(char *command) {
+static int getCommandIdx(char *command, int * commandType) {
   for (int i = 0; i < COMMAND_COUNT; i++) {
     if ((strcmp(shellData.commands[i].name, command)) == 0) {
+      *commandType = HELP_MAIN;
       return i;
+    }
+  }
+  for (int j = 0; j < TEST_COMMMAND_COUNT; j++) {
+    if ((strcmp(shellData.testCommands[j].name, command)) == 0) {
+      *commandType = HELP_TEST;
+      return j;
     }
   }
   return -1;
