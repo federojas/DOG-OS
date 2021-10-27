@@ -3,21 +3,24 @@
 #include <interrupts.h>
 #include <videoDriver.h>
 #include <syscalls.h>
+#include <semaphores.h>
+#include <processManager.h>
+
 #define PRESS 1
 #define RELEASE 2
 #define ERROR -1
-
 #define BUFF_LEN 30
-static int buffSize=0; //cantidad de elementos del buffer
-static int ridx=0; //posicion de escritura
-static int widx=0; //posicion de lectura
-
 #define LEFT_SHIFT 0x2A
 #define RIGHT_SHIFT 0x36
 #define CAPS_LOCK 0x3A
 #define CTRL 0x1D
+#define KEYBOARD_SEM_ID 10
 
 static char buffer[BUFF_LEN]={0};
+
+static int buffSize=0; //cantidad de elementos del buffer
+static int ridx=0; //posicion de escritura
+static int widx=0; //posicion de lectura
 
 static int shift = 0;
 static int ctrl = 0;
@@ -86,6 +89,8 @@ void keyboardHandler(uint64_t rsp) {
                         putCharInBuffer('\t');
                     } else if(ctrl && charTable[scanCode][0] == 'r') {
                         updateRegisters((uint64_t*) rsp);
+                    } else if(ctrl && charTable[scanCode][0] == 'c') {
+                        killCurrentFGProcess();
                     }
                     else if((shift && !capsLock) || (shift && capsLock && !(charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z')) || (!shift && capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') ) {
                         putCharInBuffer(charTable[scanCode][1]);
@@ -105,12 +110,13 @@ void keyboardHandler(uint64_t rsp) {
     }
 }
 void putCharInBuffer(char c){
+    semPost(KEYBOARD_SEM_ID);
     if(c!=0){
         buffer[widx]=c;
 
         widx++;
         if(widx == BUFF_LEN){
-            widx=0; //si llegue al tope del buffer vuelvo al inicio, esto va a hacer que se vaya pisando el buffer pero que no haya overflow de teclas
+            widx=0;
         }
         if(buffSize<BUFF_LEN){
             buffSize++;
@@ -125,6 +131,7 @@ void putCharInBuffer(char c){
 
 char getChar(){
     char c=0;
+    semWait(KEYBOARD_SEM_ID);
     c=removeCharFromBuffer();
     if(c=='\b'){
         removeCharFromBuffer();
@@ -132,7 +139,7 @@ char getChar(){
     while(c==-1){
         cursor();
         _hlt();
-         c=removeCharFromBuffer();
+        c=removeCharFromBuffer();
     }
     stopCursor();
     return c;
@@ -142,7 +149,7 @@ char removeCharFromBuffer(){
     if(buffSize<=0)
         return -1;
     int c= buffer[ridx]; 
-    ridx=(ridx +1)%BUFF_LEN; //mas rapido que ir preguntando si el indice alcanzo el maximo, y de esta manera recorremos ciclicamente el buffer
+    ridx=(ridx +1)%BUFF_LEN;
     if(buffSize!=0)
     buffSize--;
     return c;
@@ -159,3 +166,9 @@ uint64_t dumpBuffer(char *dest, int size){
     return i;
 }
 
+int initializeKeyboard() {
+    if(semOpen(KEYBOARD_SEM_ID, 0) == -1) {
+        return -1;
+    }
+    return 0;
+}

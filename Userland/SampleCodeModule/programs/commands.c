@@ -15,8 +15,8 @@
 //#define LAST_MEM_POSITION 536870911 //512MB mem que se le pasa en run.sh
 
 //returns current date and time
-void getCurrentDayTime(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void getCurrentDayTime(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
 	}
@@ -62,8 +62,8 @@ static void printFeature(uint8_t feature, const char * string){
     }
 }
 
-void getCPUFeatures(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
-	if (argc != 0) {
+void getCPUFeatures(int argc, char ** argv){
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
 	}
@@ -106,8 +106,8 @@ void getCPUFeatures(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]){
 	newLine();
 }
 
-void getInfoReg(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void getInfoReg(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
@@ -120,8 +120,8 @@ void getInfoReg(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	newLine();
 }
 
-void getMem(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 1) {
+void getMem(int argc, char ** argv) {
+	if (argc != 2) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
@@ -146,8 +146,8 @@ void getMem(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	newLine();
 }
 
-void divZero(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void divZero(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
@@ -157,16 +157,16 @@ void divZero(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 }
 
 // https://mudongliang.github.io/x86/html/file_module_x86_id_318.html
-void opCode(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void opCode(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	_opcodeExp();
 }
 
-void getRoots(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 3) {
+void getRoots(int argc, char ** argv) {
+	if (argc != 4) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
@@ -219,26 +219,30 @@ void getRoots(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("\nLas raices son: %s y %s\n\n", res1, res2);
 }
 
-void clear(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void clear(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	(void)_syscall(SYS_CLEAR_ID,0,0,0,0,0);
 }
-void exit(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void exit(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	printf("\nMuchas gracias por utilizar DOG-OS, esperamos su regreso.\n");
 	printf("\nUsted cerro el TP, el mismo ya no funcionara.\n\n");
-	logo(0,0);
+	logo(1,0);
 	(void)_syscall(SYS_EXIT_ID,0,0,0,0,0);
 }
 
 //https://patorjk.com/software/taag/#p=display&f=Slant&t=DOG-OS
-void logo(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+void logo(int argc, char ** argv) {
+	if (argc != 1) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
 	printf("              ____  ____  ______      ____  _____\n");
 	printf("             / __ \\/ __ \\/ ____/     / __ \\/ ___/\n");
 	printf("            / / / / / / / / ________/ / / /\\__ \\ \n");
@@ -246,8 +250,8 @@ void logo(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("          /_____/\\____/\\____/      \\____//____/\n\n");
 }
 
-void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void getCPUVendor(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
@@ -256,8 +260,8 @@ void getCPUVendor(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("\nID de fabricante: %s\n\n", buffer);
 }
 
-void changeFtColour(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 1) {
+void changeFtColour(int argc, char ** argv) {
+	if (argc != 2) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
@@ -284,8 +288,8 @@ void changeFtColour(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	}
 }
 
-void changeBgColour(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 1) {
+void changeBgColour(int argc, char ** argv) {
+	if (argc != 2) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
@@ -312,125 +316,142 @@ void changeBgColour(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	}
 }
 
-void memStatusWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void memStatusWrapper(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	memStatus();
 }
 
-void semStatusWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void semStatusWrapper(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	semStatus();
 }
 
-void processStatusWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void processStatusWrapper(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	processStatus();
 }
 
-void killProcessWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 1) {
-		printf("\nCantidad invalida de argumentos.\n\n");
-		return;
-    }
-	int pid = strToInt(argv[0], 0);
-	if(pid < 3) {
-		printf("\nDETENGASE AHI, el PID debe ser mayor a 2. No tolerare mi destruccion.\n\n");
-		return ;
-	}
-	killProcess(pid);
-}
-
-void setPriorityWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+void killProcessWrapper(int argc, char ** argv) {
 	if (argc != 2) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	int pid = strToInt(argv[0], 0);
-	int priority = strToInt(argv[1], 0);
+	char userInput[2] = {0};
 	if(pid < 2) {
-		printf("\nDETENGASE AHI, el PID debe ser mayor a 2. No tolerare mi destruccion.\n\n");
-		return ;
+		printf("\nUsted va a matar a un proceso clave para el sistema.\nSi quiere continuar presione y.\n\n");
+		scanf("%c", userInput);
+		if(userInput[0] != 'y'){
+			return ;
+		}
+	}
+	killProcess(pid);
+}
+
+void setPriorityWrapper(int argc, char ** argv) {
+	if (argc != 3) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	int pid = strToInt(argv[0], 0);
+	int priority = strToInt(argv[1], 0);
+	char userInput[2] = {0};
+	if(pid < 2) {
+		printf("\nUsted va a cambiar la prioridad de un proceso clave para el sistema.\nSi quiere continuar presione y.\n\n");
+		scanf("%c", userInput);
+		if(userInput[0] != 'y'){
+			return ;
+		}
 	}
 	setPriority(pid, priority);
 }
 
 
-void blockProcessWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 1) {
+void blockProcessWrapper(int argc, char ** argv) {
+	if (argc != 2) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	int pid = strToInt(argv[0], 0);
+	char userInput[2] = {0};
 	if(pid < 2) {
-		printf("\nDETENGASE AHI, el PID debe ser mayor a 2. No tolerare mi destruccion.\n\n");
-		return ;
+		printf("\nUsted va a bloquear un proceso clave para el sistema.\nSi quiere continuar presione y.\n\n");
+		scanf("%c", userInput);
+		if(userInput[0] != 'y'){
+			return ;
+		}
 	}
 	blockProcess(pid);
 }
 
-void unblockProcessWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 1) {
+void unblockProcessWrapper(int argc, char ** argv) {
+	if (argc != 2) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	int pid = strToInt(argv[0], 0);
+	char userInput[2] = {0};
 	if(pid < 2) {
-		printf("\nDETENGASE AHI, el PID debe ser mayor a 2. No tolerare mi destruccion.\n\n");
-		return ;
+		printf("\nUsted va a desbloquear un proceso clave para el sistema.\nSi quiere continuar presione y.\n\n");
+		scanf("%c", userInput);
+		userInput[1] = 0;
+		if(userInput[0] != 'y'){
+			return ;
+		}
 	}
 	unblockProcess(pid);
 }
 
-void testNoSyncWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void testNoSyncWrapper(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	testNoSync();
 }
 
-void testSyncWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void testSyncWrapper(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	testSync();
 }
 
-void testProcessesWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void testProcessesWrapper(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	testProcesses();
 }
 
-void testPriorityWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void testPriorityWrapper(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	testPriority();
 }
 
-void testMemoryWrapper(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void testMemoryWrapper(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
 	testMemory();
 }
 
-void cat(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+void cat(int argc, char ** argv) {
 	if (argc < 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
@@ -443,8 +464,8 @@ void cat(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	printf("\n");
 }
 
-void loop(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+void loop(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }

@@ -5,6 +5,7 @@
 #include <processManagerQueue.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <videoDriver.h>
 
 static void *const sampleCodeModuleAddress = (void *)0x400000;
 
@@ -75,7 +76,7 @@ void initializeProcessManager() {
 
   char *argv[] = {"Initial Idle Process"};
 
-  newProcess(&idleProcess, 1, argv, BACKGROUND, 0);
+  newProcess(&idleProcess, 1, argv, FOREGROUND, 0);
 
   baseProcess = dequeueProcess(processes);
 }
@@ -141,7 +142,7 @@ int newProcess(void (*entryPoint)(int, char **), int argc, char **argv,
     free(newProcess);
     return -1;
   }
-
+  
   char **arguments = malloc(sizeof(char *) * argc);
   if (arguments == 0) {
     return -1;
@@ -190,16 +191,15 @@ int getProcessPID() {
 }
 
 void printProcessStatus() {
-    printf(
-      "\nPROCESSES STATUS\n\n");
+    printf("\nPROCESSES STATUS\n\n");
 
   if (currentProcess != NULL)
     printProcess(currentProcess);
 
-  t_process_node *curr = processes->first;
-  while (curr) {
-    printProcess(curr);
-    curr = curr->next;
+  t_process_node *toPrint = processes->first;
+  while (toPrint) {
+    printProcess(toPrint);
+    toPrint = toPrint->next;
   }
 }
 
@@ -252,8 +252,15 @@ void setPriority(uint64_t pid, int newPriority) {
             p->pcb.priority = newPriority;
 }
 
+void killCurrentFGProcess() {
+  if(currentProcess != NULL && currentProcess->pcb.foreground && currentProcess->pcb.state == READY) {
+    killProcess(currentProcess->pcb.pid);
+  }
+}
+
 static void idleProcess(int argc, char **argv) {
   while (1) {
+    cursor();
     _hlt();
   }
 }
@@ -333,8 +340,6 @@ static void initializeProcessStackFrame(void (*entryPoint)(int, char **),
   stackFrame->ss = 0x000;
   stackFrame->base = 0x000;
 }
-
-
 
 static t_process_node *getProcess(uint64_t pid) {
   if (currentProcess != NULL && currentProcess->pcb.pid == pid) {

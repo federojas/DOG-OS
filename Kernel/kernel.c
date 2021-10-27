@@ -56,6 +56,7 @@ void * initializeKernelBinary() {
 int main() {
 	initializeMemoryManager((char *)sampleCodeModuleHeapAddress, HEAP_MEMORY_SIZE);
 	initializeVideo();
+	initializeKeyboard();
 	initializeProcessManager();
 	char *argv2[] = {"Userland Init"};
     newProcess(sampleCodeModuleAddress, 1, argv2, FOREGROUND, 0);

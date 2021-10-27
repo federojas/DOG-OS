@@ -8,14 +8,14 @@
 #include <semaphoreTest.h>
 #include <userSyscalls.h>
 
-static int getCommandArgs(char* userInput, char* command, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+static int getCommandArgs(char* userInput, char * argv[MAX_ARGUMENTS]);
 static void shellWelcomeMessage();
 static void shellExecute();
 static int getCommandIdx(char * command);
 static void initializeShell();
 static void initializeCommands();
-static void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
-static void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]);
+static void changeUser(int argc, char ** argv);
+static void help(int argc, char ** argv);
 
 static t_command commands[COMMAND_COUNT] = {
     {&help, "/help", "Listado de comandos"},
@@ -79,27 +79,27 @@ static void initializeCommands() {
 }
 
 static void shellExecute() {
-    char command[BUFFER_SIZE] = {0};
-    char argv[MAX_ARGUMENTS][BUFFER_SIZE];
     char userInput[BUFFER_SIZE] = {0};
     int argc = 0;
     
     while (1) {
         printUser();
 
+        argc = 0;
         userInput[0] = 0;
+        char * argv [MAX_ARGUMENTS] = {0};
 
         scanf("%s", userInput);
         
-        argc = getCommandArgs(userInput, command, argv);
-
+        argc = getCommandArgs(userInput, argv);
+        
         if(argc == -1) {
             printf("\nIngreso argumentos de mas.\nLa maxima cantidad de argumentos permitida es: %d.\n\n", MAX_ARGUMENTS);
         } 
-        int commandIdx = getCommandIdx(command);
-
+        int commandIdx = getCommandIdx(argv[0]);
+        
         if(commandIdx >= 0) {
-            shellData.commands[commandIdx].commandFn(argc, argv);     
+            newProcess((void (*)(int, char**))shellData.commands[commandIdx].commandFn, argc, (char **)argv, FOREGROUND, NULL);     
         } else {
             printf("\nComando invalido: use /help\n\n");
         }
@@ -116,42 +116,38 @@ static int getCommandIdx(char * command) {
     return -1;
 }
 
-static int getCommandArgs(char* userInput, char* command, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
+static int getCommandArgs(char* userInput, char ** argv) {
     int argc = 0;
-    int i = 0;
-    for(i = 0; userInput[i] != 0 && userInput[i] != ' '; i++) {
-        command[i] = userInput[i];
-    }
-    command[i] = 0;
-    int argIdx = 0;
 
-    for(int j = 0; j < MAX_ARGUMENTS; j++) {
-            argv[j][0] = 0;
+    if (*userInput != ' ' && *userInput != '\0') {
+        argv[argc++] = userInput;
     }
-
-    while(userInput[i] != 0 && argc < MAX_ARGUMENTS) {
-        i++;
-        argIdx = 0;
-        for(; userInput[i] != ' ' && userInput[i] != 0; i++, argIdx++) {
-           argv[argc][argIdx] = userInput[i];
+            
+  
+    while(*userInput != 0) {
+        if(*userInput == ' ') {
+            *userInput = 0;
+            if( (*(userInput + 1) != ' ') &&  (*(userInput + 1) != 0)) {
+                if(argc >= MAX_ARGUMENTS) {
+                    return -1;
+                }
+                argv[argc++] = userInput + 1;
+            }
         }
-        argv[argc][argIdx] = 0;
-        argc++;
+        userInput++;
     }
-    if(argc == MAX_ARGUMENTS && userInput[i] != 0)
-        return -1;
     return argc;
 }
 
 static void shellWelcomeMessage() {
     printf("\n                 Le damos la bienvenida a\n\n");
-    logo(0,0);
+    logo(1,0);
     printf("\n         Sistemas Operativos --- 2C 2021\n\n");
     printf("\n  Utilice el comando /help para obtener un manual de usuario.\n\n\n\n");
 }
 
-static void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 1) {
+static void changeUser(int argc, char ** argv) {
+	if (argc != 2) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
@@ -163,8 +159,8 @@ static void changeUser(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
 	setFirstChange(1);
 }
 
-static void help(int argc, char argv[MAX_ARGUMENTS][BUFFER_SIZE]) {
-	if (argc != 0) {
+static void help(int argc, char ** argv) {
+	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }

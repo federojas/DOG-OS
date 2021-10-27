@@ -10,7 +10,7 @@ void startShell(int argc, char **argv);
 void printUser();
 
 typedef struct t_command {
-    void (*commandFn)(int, char[MAX_ARGUMENTS][BUFFER_SIZE] );
+    void (*commandFn)(int, char ** );
     char * name;
     char * description;
 } t_command;
