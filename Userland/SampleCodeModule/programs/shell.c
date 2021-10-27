@@ -8,6 +8,8 @@
 #include <stdint.h>
 #include <userSyscalls.h>
 
+#define USERLAND_INIT_PID 1
+
 static int getCommandArgs(char* userInput, char * argv[MAX_ARGUMENTS]);
 static void shellWelcomeMessage();
 static void shellExecute();
@@ -16,7 +18,6 @@ static void initializeCommands();
 static int getCommandIdx(char *command);
 static void changeUser(int argc, char ** argv);
 static void help(int argc, char ** argv);
-static void helptest(int argc, char ** argv);
 static void printHelpTable();
 static void printHelpTestTable();
 static void printRow(char *str1, char *str2, int firstRow);
@@ -53,7 +54,7 @@ static t_command commands[COMMAND_COUNT] = {
     {&cat, "/cat", "Imprime el texto ingresado"},
     {&loop, "/loop", "Imprime un saludo cada 3 segundos"},
   // limite
-        {&testMemoryWrapper, "/memtest", "Testeo de memory manager"},
+    {&testMemoryWrapper, "/memtest", "Testeo de memory manager"},
     {&testProcessesWrapper, "/proctest", "Testeo de process manager"},
     {&testPriorityWrapper, "/priotest",
      "Testeo de prioridad process manager"},
@@ -68,6 +69,7 @@ static t_shell shellData;
 void startShell(int argc, char **argv) {
   shellWelcomeMessage();
   initializeShell();
+  killProcess(USERLAND_INIT_PID);
   shellExecute();
 }
 
@@ -150,19 +152,6 @@ static void shellWelcomeMessage() {
     printf("\n  Utilice el comando /help para obtener un manual de usuario.\n\n\n\n");
 }
 
-static void changeUser(int argc, char ** argv) {
-	if (argc != 2) {
-		printf("\nCantidad invalida de argumentos.\n\n");
-		return;
-    }
-	if(strlen(argv[0]) > USER_SIZE - 1) {
-		printf("\nEl nombre de usuario puede tener un maximo de %d caracteres.\n\n", USER_SIZE - 1);
-		return;
-	}
-	strcpy(shellData.userName, argv[0]);
-	setFirstChange(1);
-}
-
 static void printDivider() {
   printf("+");
   for (int i = 0; i < C1_WIDTH+2; i++)
@@ -193,22 +182,6 @@ static void printHelpTestTable() {
     
   
   printDivider();
-}
-
-
-static void help(int argc, char ** argv) {
-  if (argc != 1) {
-    printf("\nCantidad invalida de argumentos.\n\n");
-    return;
-  }
-  
-  printf("\nUse ctrl + tab para cambiar de pantalla.\n");
-  printf("\nTabla de colores: \n");
-  printf("\nBLANCO | NEGRO | ROJO | VERDE | AZUL\n");
-  printf("  1    |   2   |  3   |   4   |  5\n");
-
-  printHelpTable();
-  printHelpTestTable();
 }
 
 static int getCommandIdx(char *command) {
@@ -250,3 +223,30 @@ void printCol(char *str, int width) {
   }
 }
 
+static void help(int argc, char ** argv) {
+  if (argc != 1) {
+    printf("\nCantidad invalida de argumentos.\n\n");
+    return;
+  }
+  
+  printf("\nUse ctrl + tab para cambiar de pantalla.\n");
+  printf("Use ctrl + c para terminar el proceso actual.\n");
+  printf("\nBLANCO | NEGRO | ROJO | VERDE | AZUL\n");
+  printf("  1    |   2   |  3   |   4   |  5\n");
+
+  printHelpTable();
+  printHelpTestTable();
+}
+
+static void changeUser(int argc, char ** argv) {
+	if (argc != 2) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	if(strlen(argv[1]) > USER_SIZE - 1) {
+		printf("\nEl nombre de usuario puede tener un maximo de %d caracteres.\n\n", USER_SIZE - 1);
+		return;
+	}
+	strcpy(shellData.userName, argv[1]);
+	setFirstChange(1);
+}

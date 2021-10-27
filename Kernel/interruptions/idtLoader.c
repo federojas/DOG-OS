@@ -25,7 +25,6 @@ static void setupIdtEntry (int index, uint64_t offset);
 void loadIdt() {
   _cli();
 
-  
   setupIdtEntry(0x21, (uint64_t)&_irq01Handler);
   setupIdtEntry(0x80, (uint64_t)&_syscallHandler);
   setupIdtEntry (0x00, (uint64_t)&_exception0Handler);

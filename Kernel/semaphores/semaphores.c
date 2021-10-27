@@ -43,10 +43,10 @@ int semWait(uint32_t id) {
     sem->value--;
     release(&(sem->lock));
   } else {
-    int currentPID = getProcessPID();
-    sem->blockedProcesses[sem->blockedProcessesAmount++] = currentPID;
-    release(&(sem->lock));
-    blockProcess(currentPID);
+      int currentPID = getProcessPID();
+      sem->blockedProcesses[sem->blockedProcessesAmount++] = currentPID;
+      release(&(sem->lock));
+      blockProcess(currentPID);
   }
   return 0;
 }

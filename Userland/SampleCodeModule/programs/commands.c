@@ -12,9 +12,8 @@
 #define YEAR 20 //Debe escribir aca los digitos de su año (excepto los ultimos dos)
 #define BYTES 32 //Cantidad de bytes para el mem dump
 #define FLOAT_PRECISION 8 //Precision para los puntos flotantes
-//#define LAST_MEM_POSITION 536870911 //512MB mem que se le pasa en run.sh
+#define WAIT_SECONDS_LOOP 3
 
-//returns current date and time
 void getCurrentDayTime(int argc, char ** argv) {
 	if (argc != 1) {
 		printf("\nCantidad invalida de argumentos.\n\n");
@@ -125,13 +124,13 @@ void getMem(int argc, char ** argv) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	uint64_t memDir = strToHex(argv[0]);
-	if(memDir == -1 /* || memDir + 32 > LAST_MEM_POSITION */ ) {
+	uint64_t memDir = strToHex(argv[1]);
+	if(memDir == -1) {
 		printf("\nEl argumento ingresado es invalido. Use /help.\n\n");
         return;
 	}
 
-	printf("\nDump de 32 bytes a partir de la direccion: %s\n\n", argv[0]);
+	printf("\nDump de 32 bytes a partir de la direccion: %s\n\n", argv[1]);
 	uint8_t buffer[BYTES];
 	char print[10];
 	(void)_syscall(SYS_PRINTMEM_ID, memDir, (uint64_t) buffer, BYTES, 0,0);
@@ -175,9 +174,9 @@ void getRoots(int argc, char ** argv) {
 	double b;
 	double c;
 
-	strToDouble(argv[0], &a);
-	strToDouble(argv[1], &b);
-	strToDouble(argv[2], &c);
+	strToDouble(argv[1], &a);
+	strToDouble(argv[2], &b);
+	strToDouble(argv[3], &c);
 
 	double min = 1.0;
 	min /= pow(10, FLOAT_PRECISION);
@@ -265,7 +264,7 @@ void changeFtColour(int argc, char ** argv) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	int aux = strToInt(argv[0], 0);
+	int aux = strToInt(argv[1], 0);
 	switch(aux){
 		case 1:
 			setFTC(WHITE);
@@ -293,7 +292,7 @@ void changeBgColour(int argc, char ** argv) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	int aux = strToInt(argv[0], 0);
+	int aux = strToInt(argv[1], 0);
 	switch(aux){
 		case 1:
 			setBGC(WHITE);
@@ -345,7 +344,7 @@ void killProcessWrapper(int argc, char ** argv) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	int pid = strToInt(argv[0], 0);
+	int pid = strToInt(argv[1], 0);
 	char userInput[2] = {0};
 	if(pid < 2) {
 		printf("\nUsted va a matar a un proceso clave para el sistema.\nSi quiere continuar presione y.\n\n");
@@ -362,8 +361,8 @@ void setPriorityWrapper(int argc, char ** argv) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	int pid = strToInt(argv[0], 0);
-	int priority = strToInt(argv[1], 0);
+	int pid = strToInt(argv[1], 0);
+	int priority = strToInt(argv[2], 0);
 	char userInput[2] = {0};
 	if(pid < 2) {
 		printf("\nUsted va a cambiar la prioridad de un proceso clave para el sistema.\nSi quiere continuar presione y.\n\n");
@@ -381,7 +380,7 @@ void blockProcessWrapper(int argc, char ** argv) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	int pid = strToInt(argv[0], 0);
+	int pid = strToInt(argv[1], 0);
 	char userInput[2] = {0};
 	if(pid < 2) {
 		printf("\nUsted va a bloquear un proceso clave para el sistema.\nSi quiere continuar presione y.\n\n");
@@ -398,7 +397,7 @@ void unblockProcessWrapper(int argc, char ** argv) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	int pid = strToInt(argv[0], 0);
+	int pid = strToInt(argv[1], 0);
 	char userInput[2] = {0};
 	if(pid < 2) {
 		printf("\nUsted va a desbloquear un proceso clave para el sistema.\nSi quiere continuar presione y.\n\n");
@@ -472,8 +471,8 @@ void loop(int argc, char ** argv) {
 	int pid = getProcessPID();
 	uint32_t timeToWake;
 	while(1) {
-		timeToWake = getSecondsElapsed() + 3;
-		printf("El proceso %d dice hola.\n", pid);
+		timeToWake = getSecondsElapsed() + WAIT_SECONDS_LOOP;
+		printf("El proceso %d dice hola. Imprimiendo devuelta en %d segundos.\n", pid, WAIT_SECONDS_LOOP);
     	while(getSecondsElapsed() < timeToWake);
 	}
 }

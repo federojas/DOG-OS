@@ -109,7 +109,7 @@ void keyboardHandler(uint64_t rsp) {
         }
     }
 }
-void putCharInBuffer(char c){
+void putCharInBuffer(char c) {
     semPost(KEYBOARD_SEM_ID);
     if(c!=0){
         buffer[widx]=c;
@@ -129,7 +129,7 @@ void putCharInBuffer(char c){
     }
 }
 
-char getChar(){
+char getChar() {
     char c=0;
     semWait(KEYBOARD_SEM_ID);
     c=removeCharFromBuffer();

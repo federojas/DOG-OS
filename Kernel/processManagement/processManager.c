@@ -201,6 +201,7 @@ void printProcessStatus() {
     printProcess(toPrint);
     toPrint = toPrint->next;
   }
+  printProcess(baseProcess);
 }
 
 void printCurrentProcess() {
