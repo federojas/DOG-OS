@@ -28,7 +28,7 @@ static struct argp_option options[] = {
 };
 
 /* Our argp parser. */
-static struct argp argp = { options, parseOpt, args_doc, doc };
+static struct argp argp = { options, parse_opt, args_doc, doc };
 
 
 int main(int argc, char *argv[]) {
@@ -60,7 +60,7 @@ int buildImage(array_t fileArray, char *output_file) {
 
 	//First, write the kernel
 	FILE *source = fopen(fileArray.array[0], "r");
-	writeFile(target, source);
+	write_file(target, source);
 
 	//Write how many extra binaries we got.
 	int extraBinaries = fileArray.length - 1;
@@ -72,10 +72,10 @@ int buildImage(array_t fileArray, char *output_file) {
 		FILE *source = fopen(fileArray.array[i], "r");
 		
 		//Write the file size;
-		writesize(target, fileArray.array[i]);
+		write_size(target, fileArray.array[i]);
 
 		//Write the binary
-		writeFile(target, source);
+		write_file(target, source);
 
 		fclose(source);
 
@@ -98,7 +98,7 @@ int checkFiles(array_t fileArray) {
 
 }
 
-int writeSize(FILE *target, char *filename) {
+int write_size(FILE *target, char *filename) {
 	struct stat st;
 	stat(filename, &st);
 	uint32_t size = st.st_size;
@@ -106,7 +106,7 @@ int writeSize(FILE *target, char *filename) {
 }
 
 
-int writeFile(FILE *target, FILE *source) {
+int write_file(FILE *target, FILE *source) {
 	char buffer[BUFFER_SIZE];
 	int read;
 
@@ -121,7 +121,7 @@ int writeFile(FILE *target, FILE *source) {
 
 /* Parse a single option. */
 static error_t
-parseOpt (int key, char *arg, struct argp_state *state)
+parse_opt (int key, char *arg, struct argp_state *state)
 {
   /* Get the input argument from argp_parse, which we
      know is a pointer to our arguments structure. */
