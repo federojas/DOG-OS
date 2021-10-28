@@ -1,3 +1,4 @@
+#include <libc.h>
 
 #define N_PHILOS 5
 #define MAX_PHILOS 8
@@ -16,18 +17,35 @@ typedef struct t_philosofer {
 
 t_philosofer * philosophers[MAX_PHILOS];
 
+void philo(int argc, char * argv[]);
+void takeForks(int i);
+void putForks(int i);
+void eat();
+
 void philo(int argc, char * argv[]) {
+    int i = strToInt(argv[1], );
     while (1) {
         think();
-        take_forks(i);
+        takeForks(i);
         eat();
-        put_forks(i);
+        putForks(i);
+
     }
 }
 
-void take_forks(int i) {
+void eat() {
+    sleep(1);
+}
+
+void takeForks(int i) {
 
 }
+
+void placeForks(int i) {
+
+}
+
+
 // The solution presented in Fig. 2-47 is deadlock-free and allows the maximum
 // parallelism for an arbitrary number of philosophers. It uses an array, state, to keep
 // track of whether a philosopher is eating, thinking, or hungry (trying to acquire
