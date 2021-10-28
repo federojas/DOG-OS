@@ -21,7 +21,7 @@ void setBGC(t_color colour) {
     currentBGC = colour;
 }
 
-int isVowel(char c){
+int isVowel(char c) {
 	if(c>='A' && c<='Z'){
 		//uppercase
 		return (c=='A'||c=='E'||c=='I'||c=='O'||c=='U');

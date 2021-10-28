@@ -3,6 +3,7 @@
 #include <videoDriver.h>
 #include <infoReg.h>
 #include <pipes.h>
+#include <processManager.h>
 
 static uint64_t registers[16] = {0};
 

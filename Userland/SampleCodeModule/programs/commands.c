@@ -436,19 +436,23 @@ void testProcessesWrapper(int argc, char ** argv) {
 	testProcesses();
 }
 void filter(int argc, char **argv){
-	if(argc!=2){
-		printf("\n Cantidad invalida de argumentos.\n\n");
-		return;
+	if(argc != 1){
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return ; 
 	}
-	char *str=argv[1];
-	int i=0;
-	while(str[i]!=0){
-		if(!isVowel(str[i])){
-			putChar(str[i]);
+
+	char userInput[BUFFER_SIZE];
+	char output[BUFFER_SIZE];
+	scanf("%s", userInput);
+	int inputIndex = 0;
+	int outputIndex = 0;
+	while(userInput[inputIndex] != 0) {
+		if(!isVowel(userInput[inputIndex])){
+			output[outputIndex++] = userInput[inputIndex];
 		}
-		i++;
+		inputIndex++;
 	}
-	putChar('\n');
+	printf("%s\n", output);
 }
 void testPriorityWrapper(int argc, char ** argv) {
 	if (argc != 1) {
@@ -473,8 +477,7 @@ void cat(int argc, char ** argv) {
     }
 	char * userInput[BUFFER_SIZE];
 	scanf("%s", userInput);
-	printf("%s", userInput);
-	printf("\n");
+	printf("%s\n", userInput);
 }
 
 void loop(int argc, char ** argv) {
