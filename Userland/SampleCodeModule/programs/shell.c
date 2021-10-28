@@ -54,7 +54,7 @@ static t_command commands[COMMAND_COUNT] = {
     {&cat, "/cat", "Imprime el texto ingresado luego de ejecutar el comando"},
     {&loop, "/loop", "Imprime un saludo cada 3 segundos"},
     {&pipeStatusWrapper, "/pipe", "Imprime el estado de los pipes"},
-    {&filter,"/filter","filtro de vocales"},
+    {&filter,"/filter","Filtra las vocales del texto ingresado luego de ejecutar el comando"},
   // limite
     {&testMemoryWrapper, "/memtest", "Testeo de memory manager"},
     {&testProcessesWrapper, "/proctest", "Testeo de process manager"},
