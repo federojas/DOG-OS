@@ -20,4 +20,5 @@ void changeCurrentScreen();
 void cursor();
 void stopCursor();
 void setUsernameLen(int len);
+int halfScreenCharSize();
 #endif

@@ -95,3 +95,7 @@ int pipeRead(int pipeID) {
 void wait(int pipeID) {
     (void)_syscall(SYS_WAIT_ID, (uint64_t) pipeID, 0, 0, 0, 0);
 }
+
+int getHalfScreenSize() {
+    return _syscall(SYS_HALF_SCREEN_SIZE_ID, 0, 0, 0, 0, 0);
+}

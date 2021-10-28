@@ -162,6 +162,10 @@ static int waitWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, ui
     return 0;
 }
 
+static int getHalfScreenSizeWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    return halfScreenCharSize();
+}
+
 static functionPointer syscall[] = {
     getCurrentTimeWrapper,
     getCPUFeaturesWrapper,
@@ -196,7 +200,8 @@ static functionPointer syscall[] = {
     pipeCloseWrapper,
     pipeWriteWrapper,
     pipeReadWrapper,
-    waitWrapper
+    waitWrapper,
+    getHalfScreenSizeWrapper
 };
 
 int syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {

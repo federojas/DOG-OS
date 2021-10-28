@@ -117,7 +117,7 @@ static int getPixData(uint32_t x, uint32_t y){
 }
 
 void divideScreen(t_color color){
-    for(int x=(WIDTH/2);x<(WIDTH/2)+CHAR_WIDTH;x++){
+    for(int x=(WIDTH/2)-CHAR_WIDTH;x<=(WIDTH/2)+CHAR_WIDTH;x++){
         for(int y=0; y<HEIGHT;y++ ){
             putPixel(x,y,color);
         }
@@ -212,24 +212,6 @@ void deleteChar(){
 }
 
 void scrollDown(){
-/*
-    si no fueran dos pantallas independientes se podria usar el siguiente codigo comentado, pero como las dos pantallas son independientes
-    es necesario hacer un memcpy el cual se encargue solo de copiar la mitad del estado de la pantalla 
-*/
-//basado en: https://forum.osdev.org/viewtopic.php?f=1&t=22702
-    // unsigned long x=0;
-    // unsigned long long *vidmem = (unsigned long long*)screenData->framebuffer;
-
-    // while(x<=HEIGHT*WIDTH/2) //1024*768/2== HEIGHT * WIDTH /2
-    // {
-    // vidmem[x]=vidmem[x+(CHAR_HEIGHT*screenData->width/4)*3];    /* Valid only for 1024x768x32bpp */   
-    // x=x+1;
-    // }    
-
-
-
-    //void *memcpy(void *dest, const void * src, size_t n)
-    // sc2.offset=(WIDTH/2)+2*CHAR_WIDTH;
     if(currentScreen==&screens[SCREEN1]){
         for(int i=0;i<CHAR_HEIGHT*2;i++){
             for(int j=0; j<HEIGHT;j++){
@@ -278,20 +260,6 @@ void stopCursor() {
     printChar(' ', BLACK, BLACK, 0);
 }
 
-//PRE TP MODO TEXTO
-
-//static uint8_t * currentVideo = (uint8_t*)0xB8000;
-
-// void printChar(char character, int colour) {
-// 	*currentVideo = character;
-// 	currentVideo += 1;
-// 	*currentVideo = colour;
-// 	currentVideo += 1;
-// }
-
-// void printString(const char * string) {
-// 	int i;
-// 	for(i=0; string[i] != 0; i++){
-// 		printChar(string[i], 0xF2);
-// 	}
-// }
+int halfScreenCharSize() {
+    return (WIDTH/(2*CHAR_WIDTH)) - 2;
+}

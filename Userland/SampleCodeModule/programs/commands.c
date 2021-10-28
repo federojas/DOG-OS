@@ -475,7 +475,7 @@ void cat(int argc, char ** argv) {
 		printf("\nCantidad invalida de argumentos.\n\n");
 		return;
     }
-	char * userInput[BUFFER_SIZE];
+	char userInput[BUFFER_SIZE];
 	scanf("%s", userInput);
 	printf("%s\n", userInput);
 }
@@ -502,3 +502,15 @@ void pipeStatusWrapper(int argc, char ** argv) {
 	pipeStatus();
 }
 
+void wc(int argc, char ** argv) {
+	if (argc != 1) {
+		printf("\nCantidad invalida de argumentos.\n\n");
+		return;
+    }
+	char userInput[BUFFER_SIZE];
+	scanf("%s", userInput);
+	int inputLength = strlen(userInput);
+	int halfScreenSize = getHalfScreenSize();
+	int lines = (int)((inputLength / halfScreenSize) + ((inputLength % halfScreenSize) != 0));
+	printf("\nCantidad de lineas: %d\n\n", lines);
+}
