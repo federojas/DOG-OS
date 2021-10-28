@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <userSyscalls.h>
 #include <stdint.h>
+#include <phylo.h>
 
 #define USERLAND_INIT_PID 1
 
@@ -63,6 +64,7 @@ static t_command commands[COMMAND_COUNT] = {
     {&pipeStatusWrapper, "/pipe", "Imprime el estado de los pipes"},
     {&filter,"/filter","Filtra las vocales del texto ingresadoluego de ejecutar el comando"},
     {&wc, "/wc", "Cantidad de lineas del texto ingresadoluego de ejecutar el comando"},
+    {&philoProblem, "/phylo", "Problema de filosofos comensales"},
   // limite
     {&testMemoryWrapper, "/memtest", "Testeo de memory manager"},
     {&testProcessesWrapper, "/proctest", "Testeo de process manager"},

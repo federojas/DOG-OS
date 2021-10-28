@@ -1,50 +1,116 @@
 #include <libc.h>
+#include <userSyscalls.h>
+#include <phylo.h>
 
-#define N_PHILOS 5
-#define MAX_PHILOS 8
-#define LEFT(i) ((i+N_PHILOS-1) % N_PHILOS)
-#define RIGHT(i) ((i+1) % N_PHILOS)
+#define INITIAL_PHILOS 5
+#define MAX_PHILOS 10
+
+
+#define FILO_SEM_ID 2000
+#define MUTEX_SEM_ID 3000
+#define THINK_EAT_WAIT_SECONDS 1
 
 typedef enum {
     THINKING, HUNGRY, EATING
-} t_state;
+} t_philo_state;
 
 typedef struct t_philosofer {
     int pid;
     int sem;
-    t_state state;
+    int ID;
+    t_philo_state state;
 } t_philosofer;
 
 t_philosofer * philosophers[MAX_PHILOS];
+static int philosopherCount = 0;
+static int mutex;
 
-void philo(int argc, char * argv[]);
-void takeForks(int i);
-void putForks(int i);
-void eat();
+#define LEFT(i) ((i+philosopherCount-1) % philosopherCount)
+#define RIGHT(i) ((i+1) % philosopherCount)
 
-void philo(int argc, char * argv[]) {
-    int i = strToInt(argv[1], );
+static void thinkOrEat();
+static void philoMain(int argc, char ** argv);
+static void takeForks(int i);
+static void putForks(int i);
+static void test(int i);
+static int addPhilo();
+
+void philoProblem(int argc, char ** argv) {
+    if (argc != 1) {
+        printf("\nCantidad invalida de argumentos.\n\n");
+        return;
+    }
+    semOpen(MUTEX_SEM_ID, 1);
+    printf("\nBienvenido al problema de los filosofos comensales.\n\n");
+    int i = 0;
+    while (i < INITIAL_PHILOS) {
+        addPhilo();
+        i++;
+    }
+    semClose(MUTEX_SEM_ID);
+}
+
+        
+static int addPhilo() {
+    if(philosopherCount == MAX_PHILOS) {
+        return -1;
+    }
+
+    semWait(mutex);
+    t_philosofer * philosopher = malloc(sizeof(t_philosofer));
+    if(philosopher == NULL) {
+        return -1;
+    }
+    philosopher->sem = semOpen(FILO_SEM_ID + philosopherCount, 1);
+    philosopher->state = THINKING;
+    philosopher->ID = philosopherCount;
+
+    char * argv[] = {"philosopher"};
+    philosopher->pid = newProcess(&philoMain, 1, argv, BACKGROUND, NULL);
+    
+    philosophers[philosopherCount++] = philosopher;
+    
+    semPost(mutex);
+    return 0;    
+}
+
+static void philoMain(int argc, char ** argv) {
+    int i = strToInt(argv[1], 0);
     while (1) {
-        think();
+        thinkOrEat();
         takeForks(i);
-        eat();
+        thinkOrEat();
         putForks(i);
-
     }
 }
 
-void eat() {
-    sleep(1);
+static void takeForks(int i) {
+    semWait(mutex);
+    philosophers[i]->state = HUNGRY;
+    test(i);
+    semPost(mutex);
+    semWait(philosophers[i]->sem);
 }
 
-void takeForks(int i) {
-
+static void putForks(int i) {
+    semWait(mutex);
+    philosophers[i]->state = THINKING;   
+    test(LEFT(i));          
+    test(RIGHT(i));
+    semPost(mutex);
 }
 
-void placeForks(int i) {
-
+static void test(int i) {
+    if (philosophers[i]->state == HUNGRY && philosophers[LEFT(i)]->state != EATING && philosophers[RIGHT(i)]->state != EATING) {
+        philosophers[i]->state = EATING;
+        semPost(philosophers[i]->sem);
+    }
 }
 
+static void thinkOrEat() {
+    int wait = getSecondsElapsed() + THINK_EAT_WAIT_SECONDS;
+    while(getSecondsElapsed() < wait);
+}
 
 // The solution presented in Fig. 2-47 is deadlock-free and allows the maximum
 // parallelism for an arbitrary number of philosophers. It uses an array, state, to keep

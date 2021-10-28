@@ -193,15 +193,18 @@ int getProcessPID() {
 void printProcessStatus() {
     printf("\nPROCESSES STATUS\n\n");
 
-  if (currentProcess != NULL)
+  if (currentProcess != NULL) {
     printProcess(currentProcess);
+  }
 
+  printProcess(baseProcess);
+  
   t_process_node *toPrint = processes->first;
   while (toPrint) {
     printProcess(toPrint);
     toPrint = toPrint->next;
   }
-  printProcess(baseProcess);
+  
 }
 
 void printCurrentProcess() {
