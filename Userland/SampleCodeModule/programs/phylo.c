@@ -24,6 +24,7 @@ typedef struct t_philosofer {
 t_philosofer * philosophers[MAX_PHILOS];
 static int philosopherCount = 0;
 static int mutex;
+static int tableOpen;
 
 #define LEFT(i) ((i+philosopherCount-1) % philosopherCount)
 #define RIGHT(i) ((i+1) % philosopherCount)
@@ -34,19 +35,56 @@ static void takeForks(int i);
 static void putForks(int i);
 static void test(int i);
 static int addPhilo();
+static int removePhilo();
 
 void philoProblem(int argc, char ** argv) {
     if (argc != 1) {
         printf("\nCantidad invalida de argumentos.\n\n");
         return;
     }
+    philosopherCount = 0;
+    tableOpen = 1;
     semOpen(MUTEX_SEM_ID, 1);
-    printf("\nBienvenido al problema de los filosofos comensales.\n\n");
+    printf("\nBienvenido al problema de los filosofos comensales.\n");
+    printf("\nUse a para agregar un filosofo, maximo: %d.\n", MAX_PHILOS);
+    printf("\nUse r para remover un filosofo, minimo: %d.\n", INITIAL_PHILOS);
+    printf("\nUse q para finalizar el problema de los filosofos comensales.\n\n");
     int i = 0;
     while (i < INITIAL_PHILOS) {
         addPhilo();
         i++;
     }
+    while (tableOpen) {
+        char key = getChar();
+        switch (key) {
+            case 'a':
+                if (addPhilo() == -1) {
+                    printf("\nNo hay mas luagr en la mesa.\n\n");
+                } else {
+                    printf("\nSe agrego un comensal.\n\n");
+                }
+                break;
+            case 'r':
+                if(removePhilo() == -1) {
+                    printf("\nPor favor no se vaya, ya llega el postre.\n\n");
+                } else {
+                    printf("\nSe retiro un comensal.\n\n");
+                }
+                break;
+            case 'q': 
+                printf("\nMesa cerrada, cuenta: $999999, esperamos hayan disrutado su\ncomida.\n\n");
+                printf("\nRecuerden propina sugerida: 10%%.\n\n");
+                tableOpen = 0;
+                break;
+        }
+    }
+
+    for (int i = 0; i < philosopherCount; i++) {
+        semClose(philosophers[i]->sem);
+        killProcess(philosophers[i]->pid);
+        free(philosophers[i]);
+    }
+
     semClose(MUTEX_SEM_ID);
 }
 
@@ -72,6 +110,22 @@ static int addPhilo() {
     
     semPost(mutex);
     return 0;    
+}
+
+static int removePhilo() {
+    if(philosopherCount == INITIAL_PHILOS) {
+        return -1;
+    }
+
+    semWait(mutex);
+
+    t_philosofer * philosopher = philosophers[--philosopherCount];
+    semClose(philosopher->sem);
+    killProcess(philosopher->pid);
+    free(philosopher);
+    
+    semPost(mutex);
+    return 0;
 }
 
 static void philoMain(int argc, char ** argv) {
