@@ -75,3 +75,23 @@ int getSecondsElapsed() {
 void pipeStatus() {
     (void)_syscall(SYS_PIPE_STATUS_ID, 0, 0, 0, 0, 0);
 }
+
+int pipeOpen(int pipeID) {
+    return _syscall(SYS_PIPE_OPEN_ID, (uint64_t) pipeID, 0, 0, 0, 0);
+}
+
+int pipeClose(int pipeID) {
+    return _syscall(SYS_PIPE_CLOSE_ID, (uint64_t) pipeID, 0, 0, 0, 0);
+}
+
+int pipeWrite(int pipeID, char * str) {
+    return _syscall(SYS_PIPE_WRITE_ID, (uint64_t) pipeID, (uint64_t) str, 0, 0, 0);
+}
+
+int pipeRead(int pipeID) {
+    return _syscall(SYS_PIPE_READ_ID, (uint64_t) pipeID, 0, 0, 0, 0);
+}
+
+void wait(int pipeID) {
+    (void)_syscall(SYS_WAIT_ID, (uint64_t) pipeID, 0, 0, 0, 0);
+}

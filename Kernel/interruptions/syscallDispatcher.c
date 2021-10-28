@@ -141,6 +141,26 @@ static int pipeStatusWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t 
     return 0;
 }
 
+static int pipeOpenWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    return pipeOpen((int) rsi);
+}
+
+static int pipeCloseWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    return pipeClose((int) rsi);
+}
+
+static int pipeWriteWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    return pipeWrite((int) rsi, (char *) rdx);
+}
+
+static int pipeReadWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    return pipeRead((int) rsi);
+}
+
+static int waitWrapper(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
+    wait((int) rsi);
+    return 0;
+}
 
 static functionPointer syscall[] = {
     getCurrentTimeWrapper,
@@ -171,7 +191,12 @@ static functionPointer syscall[] = {
     semCloseWrapper,
     semStatusWrapper,
     getSecondsElapsedWrapper,
-    pipeStatusWrapper
+    pipeStatusWrapper,
+    pipeOpenWrapper,
+    pipeCloseWrapper,
+    pipeWriteWrapper,
+    pipeReadWrapper,
+    waitWrapper
 };
 
 int syscallSelector(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {

@@ -23,5 +23,5 @@ void killCurrentFGProcess();
 int currentProcessIsForeground();
 int getCurrentProcessInputFD();
 int getCurrentProcessOutputFD();
-
+void wait(int pid);
 #endif

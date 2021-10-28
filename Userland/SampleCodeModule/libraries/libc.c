@@ -6,7 +6,7 @@
 static int currentBGC = BLACK;
 static int currentFTC = WHITE;
 
-#define BUFF_LEN 100
+#define BUFF_LEN 500
 
 static int buffSize = 0;
 static char buffer[BUFF_LEN]={0};

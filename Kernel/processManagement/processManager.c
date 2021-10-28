@@ -283,6 +283,14 @@ int getCurrentProcessOutputFD() {
   }
 }
 
+void wait(int pid) {
+  t_process_node * process = getProcess(pid);
+  if(process) {
+    process->pcb.foreground = 1;
+    blockProcess(currentProcess->pcb.pid);
+  }
+}
+
 static void idleProcess(int argc, char **argv) {
   while (1) {
     cursor();

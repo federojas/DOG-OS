@@ -7,6 +7,7 @@
 #include <shell.h>
 #include <stdint.h>
 #include <userSyscalls.h>
+#include <stdint.h>
 
 #define USERLAND_INIT_PID 1
 
@@ -23,6 +24,12 @@ static void printHelpTestTable();
 static void printRow(char *str1, char *str2, int firstRow);
 static void printCol(char *str, int width);
 static void printDivider();
+static int findPipe(int argc, char ** argv);
+static void initializePipe(int pipeIndex, int argc, char ** argv, int foreground);
+static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground);
+static int runPipeCmd(int argc, char ** argv, int foreground, int fdin, int fdout);
+
+static int pipeId = 70;
 
 static t_command commands[COMMAND_COUNT] = {
     {&help, "/help", "Listado de comandos"},
@@ -100,6 +107,8 @@ static void initializeCommands() {
 static void shellExecute() {
     char userInput[BUFFER_SIZE] = {0};
     int argc = 0;
+    int pipeIndex;
+    int foreground;
     
     while (1) {
         printUser();
@@ -107,18 +116,32 @@ static void shellExecute() {
         argc = 0;
         userInput[0] = 0;
         char * argv [MAX_ARGUMENTS] = {0};
+        foreground = FOREGROUND;
 
         scanf("%s", userInput);
         
         argc = getCommandArgs(userInput, argv);
-        
+
         if(argc == -1) {
             printf("\nIngreso argumentos de mas.\nLa maxima cantidad de argumentos permitida es: %d.\n\n", MAX_ARGUMENTS);
         } 
+
+        pipeIndex = findPipe(argc, argv);
+
+        if(pipeIndex >= 0) {
+          initializePipe(pipeIndex, argc, argv, foreground);
+          return ;
+        } 
+
+        if(argv[argc - 1][0] == '&') {
+          foreground = BACKGROUND;
+          argc--;
+        }
+
         int commandIdx = getCommandIdx(argv[0]);
         
         if(commandIdx >= 0) {
-            newProcess((void (*)(int, char**))shellData.commands[commandIdx].commandFn, argc, (char **)argv, FOREGROUND, NULL);     
+            newProcess((void (*)(int, char**))shellData.commands[commandIdx].commandFn, argc, (char **)argv, foreground, NULL);     
         } else {
             printf("\nComando invalido: use /help\n\n");
         }
@@ -136,7 +159,7 @@ static int getCommandArgs(char* userInput, char ** argv) {
     while(*userInput != 0) {
         if(*userInput == ' ') {
             *userInput = 0;
-            if( (*(userInput + 1) != ' ') &&  (*(userInput + 1) != 0)) {
+            if( (*(userInput + 1) != ' ') && (*(userInput + 1) != 0)) {
                 if(argc >= MAX_ARGUMENTS) {
                     return -1;
                 }
@@ -146,6 +169,85 @@ static int getCommandArgs(char* userInput, char ** argv) {
         userInput++;
     }
     return argc;
+}
+
+static int findPipe(int argc, char ** argv) {
+  for (int i = 0; i < argc; i++) {
+    if (strcmp(argv[i], "|") == 0) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+static void initializePipe(int pipeIndex, int argc, char ** argv, int foreground) {
+  if(pipeIndex == 0 || pipeIndex == argc - 1) {
+    printf("\nPipe (|) debe ser usado entre dos comandos.\n");
+    return ;
+  }
+  int pipe = handlePipe(pipeIndex, argc, argv, foreground);
+  if(pipe == -1) {
+    printf("\nUno de los comandos es invalido.\n");
+    return ;
+  }
+}
+
+static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground) {
+  char * currentArgv[MAX_ARGUMENTS];
+  int currentArgc = 0;
+  int pids[2];
+
+  int pipe = pipeOpen(pipeId++);
+  if (pipe == -1) {
+    printf("\nError creating pipe.\n");
+    return -1;
+  }
+
+  for (int i = pipeIndex + 1, j = 0; i < argc; i++, j++) {
+    currentArgv[j] = argv[i];
+    currentArgc++;
+  }
+
+  pids[0] = runPipeCmd(currentArgc, currentArgv, BACKGROUND, pipe, 1);
+  if (pids[0] == -1) {
+    pipeClose(pipe);
+    return -1;
+  }
+
+  currentArgc = pipeIndex;
+  for (int i = 0; i < pipeIndex; i++) {
+    currentArgv[i] = argv[i];
+  }
+
+  pids[1] = runPipeCmd(currentArgc, currentArgv, foreground, 0, pipe);
+  if (pids[1] == -1) {
+    pipeClose(pipe);
+    return -1;
+  }
+
+  int a = -1;
+  if (foreground == 0) {
+    wait(pids[1]);
+  } 
+
+  pipeWrite(pipe, (char *)&a);
+  wait(pids[0]);
+  pipeClose(pipe);
+
+  return 1;
+}
+
+static int runPipeCmd(int argc, char ** argv, int foreground, int fdin, int fdout) {
+  uint16_t fd[2];
+  int commandIdx = getCommandIdx(argv[0]);
+  if (commandIdx == -1) {
+    return -1;
+  } 
+
+  fd[0] = fdin;
+  fd[1] = fdout;
+
+  return newProcess(shellData.commands[commandIdx].commandFn, argc, argv, foreground, fd);
 }
 
 static void shellWelcomeMessage() {
