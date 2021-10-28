@@ -2,6 +2,7 @@
 #include <keyboardDriver.h>
 #include <videoDriver.h>
 #include <infoReg.h>
+#include <pipes.h>
 
 static uint64_t registers[16] = {0};
 
@@ -39,16 +40,34 @@ void sysWrite(char * str, uint8_t len, t_color bgColor, t_color ftColor, int usr
     if (str == 0 ||  len <= 0 || bgColor < 0 || ftColor < 0) {
         return ;
     }
+
+    int outputFD = getCurrentProcessOutputFD();
+
 	if(usrLen > 1){
 		setUsernameLen(len);
 	}
-	for (int i = 0; str[i] != 0 && i < len; i++) {
-        printChar(str[i], ftColor, bgColor, 1);
-    }		     
+
+    if(outputFD == 1) {
+        for (int i = 0; str[i] != 0 && i < len; i++) {
+            printChar(str[i], ftColor, bgColor, 1);
+        }	
+    } else {
+        pipeWrite(outputFD, str);
+    }
+		     
 }
 
 uint64_t sysRead() {
-	return getChar();
+    int inputFD = getCurrentProcessInputFD();
+    if(inputFD == 0) {
+        if(currentProcessIsForeground()) {
+            return getChar();
+        }
+        else {
+            return -1;
+        }
+    }
+	return pipeRead(inputFD);
 }
 
 uint64_t* getRegisters(){

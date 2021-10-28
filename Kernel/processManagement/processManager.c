@@ -259,6 +259,30 @@ void killCurrentFGProcess() {
   }
 }
 
+int currentProcessIsForeground() {  
+  if(currentProcess) {
+    return currentProcess->pcb.foreground;
+  } else {
+    return -1;
+  }
+}
+
+int getCurrentProcessInputFD() {
+  if(currentProcess) {
+    return currentProcess->pcb.fileDescriptors[0];
+  } else {
+    return -1;
+  }
+}
+
+int getCurrentProcessOutputFD() {
+  if(currentProcess) {
+    return currentProcess->pcb.fileDescriptors[1];
+  } else {
+    return -1;
+  }
+}
+
 static void idleProcess(int argc, char **argv) {
   while (1) {
     cursor();

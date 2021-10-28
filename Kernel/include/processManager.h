@@ -20,5 +20,8 @@ int getProcessPID();
 void setPriority(uint64_t pid, int newPriority);
 void printCurrentProcess();
 void killCurrentFGProcess();
+int currentProcessIsForeground();
+int getCurrentProcessInputFD();
+int getCurrentProcessOutputFD();
 
 #endif
