@@ -15,6 +15,7 @@ void getMem(int argc, char ** argv);
 void _opcodeExp(void);
 void getCPUVendor(int argc, char ** argv);
 void logo(int argc, char ** argv);
+void doge(int argc, char ** argv);
 void changeFtColour(int argc, char ** argv);
 void changeBgColour(int argc, char ** argv);
 void _quadratic(double * a, double * b, double * c, double * root1, double * root2);

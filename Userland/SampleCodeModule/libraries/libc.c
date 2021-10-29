@@ -528,3 +528,112 @@ void sleep(int seconds) {
   int wait = getSecondsElapsed() + seconds;
   while(getSecondsElapsed() < wait);
 }
+
+
+void printLogo(t_color color, int colored) {
+  char dog[5][52] = {"              ____  ____  ______      ____  _____\n",
+                     "             / __ \\/ __ \\/ ____/     / __ \\/ ___/\n",
+                     "            / / / / / / / / ________/ / / /\\__ \\ \n",
+                     "           / /_/ / /_/ / /_/ /_____/ /_/ /___/ /\n",
+                     "          /_____/\\____/\\____/      \\____//____/\n\n"};
+
+    if (!colored) {
+        for (int k = 0; k < 5; k++) {
+            printf(dog[k]);
+        }
+    } else {
+        for (int j = 0; j < 5; j++) {
+        printc(color, dog[j]);
+    }
+    }
+  
+}
+
+void printDog1() {
+  char dog[6][30] = {
+      "                  ;~~,__ \n", "   :-....,-------'`-'._.'\n",
+      "    `-,,,  ,       ,'~~' \n", "        ; ,'~.__; /      \n",
+      "        :|      :|       \n", "        `-'     `-'      \n"};
+
+  for (int j = 0; j < 6; j++) {
+       printf("  ");
+        
+    printf("  ");
+    printf("  ");
+    printf(dog[j]);
+  }
+}
+
+void printDog2() {
+  char dog[6][30] = {
+      "                  ;~~,__ \n", "   :-....,-------'`-'._.'\n",
+      "    `-,,,  ,       ,'~~' \n", "        ; ,'~.__; /--.   \n",
+      "        :| :|   :|``(;   \n", "        `-'`-'  `-'      \n"};
+
+  for (int j = 0; j < 6; j++) {
+        printf("  ");
+   
+    printf("  ");
+       printf("  ");
+      printf("  ");
+      printf("  ");
+    printf(dog[j]);
+  }
+}
+
+void printDog3() {
+  char dog[6][30] = {
+      "                  ;~~,__ \n", "   :-....,-------'`-'._.'\n",
+      "    `-,,,  ,       ;'~~' \n", "       ,'_,'~.__; '--.   \n",
+      "      //'       ````(;   \n", "     `-'                 \n"};
+
+  for (int j = 0; j < 6; j++) {
+      printf("  ");
+      
+    printf("  ");
+    printf("  ");
+      printf("  ");
+      printf("  ");
+      printf("  ");
+         printf("  ");
+      printf("  ");
+    printf(dog[j]);
+  }
+}
+
+
+void printDog4() {
+  char dog[6][32] = {
+    "                .--~~,__ \n",
+    "   :-....,-------`~~'._.'\n",
+    "    `-,,,  ,_      ;'~U' \n",
+    "     _,-' ,'`-__; '--.   \n",
+    "    (_/'~~      ''''(;   \n",
+    "                         \n",
+  };
+
+for (int j = 0; j < 6; j++) {
+      printf("  ");
+    
+    printf("  ");
+    printf("  ");
+    printf("  ");
+    printf("  ");
+    printf("  ");
+    printf("  ");
+    printf("  ");
+    printf("  ");
+    printf("  ");
+    printf("  ");
+    printf(dog[j]);
+  }
+}
+
+void printDogAnimation(int i) {
+    switch (i+1) {
+        case 1: printDog1(); break;
+        case 2: printDog2(); break;
+        case 3: printDog3(); break;
+        case 4: printDog4(); break;
+    }
+}
