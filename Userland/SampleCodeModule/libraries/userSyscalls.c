@@ -1,6 +1,6 @@
 #include <userSyscalls.h>
 
-int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground, uint16_t * fd) {
+int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, int foreground, int * fd) {
    return _syscall(SYS_NEW_PROCESS_ID, (uint64_t) entryPoint, argc, (uint64_t) argv, (uint64_t) foreground, (uint64_t) fd);
 }
 

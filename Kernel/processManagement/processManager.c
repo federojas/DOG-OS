@@ -43,7 +43,7 @@ typedef struct {
 
 static void idleProcess(int argc, char **argv);
 static int initializeProcessControlBlock(t_PCB *PCB, char *name,
-                                         uint8_t foreground, uint16_t *fd);
+                                         uint8_t foreground, int *fd);
 static void getArguments(char **to, char **from, int count);
 static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv);
 static void initializeProcessStackFrame(void (*entryPoint)(int, char **),
@@ -126,7 +126,7 @@ void *processManager(void *sp) {
 }
 
 int newProcess(void (*entryPoint)(int, char **), int argc, char **argv,
-               uint8_t foreground, uint16_t *fd) {
+               int foreground, int *fd) {
                  
   if (entryPoint == NULL) {
     return -1;
@@ -304,7 +304,7 @@ static void idleProcess(int argc, char **argv) {
 static uint64_t getPID() { return currentPID++; }
 
 static int initializeProcessControlBlock(t_PCB *PCB, char *name,
-                                         uint8_t foreground, uint16_t *fd) {
+                                         uint8_t foreground, int *fd) {
   strcpy(PCB->name, name);
   PCB->pid = getPID();
   PCB->ppid = (currentProcess == NULL ? 0 : currentProcess->pcb.pid);

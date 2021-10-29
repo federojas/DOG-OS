@@ -72,7 +72,7 @@ static t_command commands[COMMAND_COUNT] = {
      "Testeo de prioridad process manager"},
     {&testSyncWrapper, "/semtest", "Testeo de semaforos con uso"},
     {&testNoSyncWrapper, "/nosemtest", "Testeo de semaforos sin uso"},
-       {&helpTest, "/helpTest", "Instrucciones acerca de los tests"},
+       {&helpTest, "/helptest", "Instrucciones acerca de los tests"},
 };
 
 
@@ -133,7 +133,7 @@ static void shellExecute() {
 
         if(pipeIndex >= 0) {
           initializePipe(pipeIndex, argc, argv, foreground);
-          return ;
+          continue ;
         } 
 
         if(argv[argc - 1][0] == '&') {
@@ -185,12 +185,12 @@ static int findPipe(int argc, char ** argv) {
 
 static void initializePipe(int pipeIndex, int argc, char ** argv, int foreground) {
   if(pipeIndex == 0 || pipeIndex == argc - 1) {
-    printf("\nPipe (|) debe ser usado entre dos comandos.\n");
+    printf("\nPipe (|) debe ser usado entre dos comandos.\n\n");
     return ;
   }
   int pipe = handlePipe(pipeIndex, argc, argv, foreground);
   if(pipe == -1) {
-    printf("\nUno de los comandos es invalido.\n");
+    printf("\nUno de los comandos es invalido. Use /help.\n\n");
     return ;
   }
 }
@@ -203,7 +203,7 @@ static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground) {
   int pipe = pipeOpen(pipeId++);
   if (pipe == -1) {
     printf("\nError creating pipe.\n");
-    return -1;
+    return -2;
   }
 
   for (int i = pipeIndex + 1, j = 0; i < argc; i++, j++) {
@@ -217,11 +217,12 @@ static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground) {
     return -1;
   }
 
-  currentArgc = pipeIndex;
+  currentArgc = 0;
   for (int i = 0; i < pipeIndex; i++) {
     currentArgv[i] = argv[i];
+    currentArgc++;
   }
-
+ 
   pids[1] = runPipeCmd(currentArgc, currentArgv, foreground, 0, pipe);
   if (pids[1] == -1) {
     pipeClose(pipe);
@@ -241,7 +242,7 @@ static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground) {
 }
 
 static int runPipeCmd(int argc, char ** argv, int foreground, int fdin, int fdout) {
-  uint16_t fd[2];
+  int fd[2];
   int commandIdx = getCommandIdx(argv[0]);
   if (commandIdx == -1) {
     return -1;
@@ -270,7 +271,7 @@ printCenteredHeading("Lista de comandos");
   }
   printDivider(0, C1_WIDTH, C2_WIDTH);
     printCenteredHeading("Ejemplos de uso:    c1 | c2    c1 &    c1 arg1 ...");
-    printCenteredHeading("Corra /helpTest para informacion acerca de los tests");
+    printCenteredHeading("Use /helptest para obtener informacion acerca de los tests");
     printDivider(1, C1_WIDTH, C2_WIDTH);
 }
 
