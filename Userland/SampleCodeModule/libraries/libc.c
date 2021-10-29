@@ -8,8 +8,6 @@ static int currentBGC = BLACK;
 static int currentFTC = WHITE;
 
 #define BUFF_LEN 1000
-#define PHYLO_HEADER_WIDTH 41
-#define PHYLO_HEADER_HEIGHT 8
 
 static int buffSize = 0;
 static char buffer[BUFF_LEN] = {0};
@@ -526,26 +524,7 @@ void printCol(char *str, int width) {
   }
 }
 
-void printPhyloHeader() {
-    
-  char header[PHYLO_HEADER_HEIGHT][PHYLO_HEADER_WIDTH] = {
-      "  _____  _           _                  ",
-      " |  __  | |         | |             ||||",
-      " | |__) | |__  _   _| | ___         ||||",
-      " |  ___/| '_  | | | | |/ _           __/",
-      " | |    | | | | |_| | | (_) |        || ",
-      " |_|    |_| |_| __, |_| ___/         || ",
-      "                __/ |                || ",
-      "               |___/                 || "};
-
-    printFullDivider();
-    for (int i = 0; i < PHYLO_HEADER_HEIGHT; i++) {
-        printCenteredHeading(header[i]);
-    }
-    printCenteredHeading("");
-    printCenteredHeading("Bienvenido al problema de los filosofos comensales.");
-    printCenteredHeading("Use A para agregar un filosofo");
-    printCenteredHeading("Use R para remover un filosofo");
-    printCenteredHeading("Use Q para finalizar");
-    printFullDivider();
+void sleep(int seconds) {
+  int wait = getSecondsElapsed() + seconds;
+  while(getSecondsElapsed() < wait);
 }

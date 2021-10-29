@@ -9,6 +9,8 @@
 #define FILO_SEM_ID 2000
 #define MUTEX_SEM_ID 3000
 #define THINK_EAT_WAIT_SECONDS 1
+#define PHYLO_HEADER_WIDTH 41
+#define PHYLO_HEADER_HEIGHT 8
 
 void philoProblem(int argc, char ** argv);
 

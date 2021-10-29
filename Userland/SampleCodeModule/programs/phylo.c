@@ -1,6 +1,7 @@
 #include <libc.h>
 #include <userSyscalls.h>
 #include <phylo.h>
+#include <commands.h>
 
 
 typedef enum {
@@ -30,10 +31,10 @@ static void test(int i);
 static int addPhilo();
 static int removePhilo();
 static void printTable(int argc, char **argv);
+static void printPhyloHeader();
 
 void philoProblem(int argc, char ** argv) {
-    if (argc != 1) {
-        printf("\nCantidad invalida de argumentos.\n\n");
+    if (checkArgcWrapper(argc, 1) == -1) {
         return;
     }
     philosopherCount = 0;
@@ -49,7 +50,7 @@ void philoProblem(int argc, char ** argv) {
     }
 
     char *args[] = {"PrintTable"};
-    int main_pid = newProcess(&printTable, 1, args, BACKGROUND, NULL);
+    int tablePID = newProcess(&printTable, 1, args, BACKGROUND, NULL);
 
     while (tableOpen) {
         char key = getChar();
@@ -81,7 +82,7 @@ void philoProblem(int argc, char ** argv) {
         killProcess(philosophers[i]->pid);
         free(philosophers[i]);
     }
-
+    killProcess(tablePID);
     semClose(MUTEX_SEM_ID);
 }
 
@@ -128,10 +129,10 @@ static int removePhilo() {
 static void philoMain(int argc, char ** argv) {
     int i = strToInt(argv[1], 0);
     while (1) {
-        thinkOrEat();
         takeForks(i);
         thinkOrEat();
         putForks(i);
+        thinkOrEat();
     }
 }
 
@@ -159,26 +160,51 @@ static void test(int i) {
 }
 
 static void thinkOrEat() {
-    int wait = getSecondsElapsed() + THINK_EAT_WAIT_SECONDS;
-    while(getSecondsElapsed() < wait);
+    sleep(THINK_EAT_WAIT_SECONDS);
 }
 
 static void printTable(int argc, char **argv) {
     while (tableOpen) {
         semWait(mutex);
-        char table[philosopherCount];
+        char table[MAX_PHILOS];
         int i;
         for (i = 0 ; i < philosopherCount; i++) {
             if (philosophers[i]->state == EATING) {
                 table[i] = 'E';
             } else {
-                table[i] = '.';
+                table[i] = '-';
             }
         }
         table[i] = '\0';
         printRow("-", table, 1);
         semPost(mutex);
+        yield();
     }
+}
+
+static void printPhyloHeader() {
+    
+  char header[PHYLO_HEADER_HEIGHT][PHYLO_HEADER_WIDTH] = {
+      "  _____  _           _                  ",
+      " |  __  | |         | |             ||||",
+      " | |__) | |__  _   _| | ___         ||||",
+      " |  ___/| '_  | | | | |/ _           __/",
+      " | |    | | | | |_| | | (_) |        || ",
+      " |_|    |_| |_| __, |_| ___/         || ",
+      "                __/ |                || ",
+      "               |___/                 || "};
+
+    printFullDivider();
+    for (int i = 0; i < PHYLO_HEADER_HEIGHT; i++) {
+        printCenteredHeading(header[i]);
+    }
+    printCenteredHeading("");
+    printCenteredHeading("Bienvenido al problema de los filosofos comensales.");
+    printCenteredHeading("Use A para agregar un filosofo");
+    printCenteredHeading("Use R para remover un filosofo");
+    printCenteredHeading("Use Q para finalizar");
+    printFullDivider();
+    sleep(3);
 }
 
 // The solution presented in Fig. 2-47 is deadlock-free and allows the maximum

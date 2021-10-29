@@ -460,9 +460,8 @@ void loop(int argc, char ** argv) {
 	int pid = getProcessPID();
 	uint32_t timeToWake;
 	while(1) {
-		timeToWake = getSecondsElapsed() + WAIT_SECONDS_LOOP;
 		printf("El proceso %d dice hola. Imprimiendo devuelta en %d segundos.\n", pid, WAIT_SECONDS_LOOP);
-    	while(getSecondsElapsed() < timeToWake);
+    	sleep(WAIT_SECONDS_LOOP);
 	}
 }
 
