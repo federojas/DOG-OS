@@ -23,10 +23,7 @@ static void help(int argc, char ** argv);
 static void helpTest(int argc, char ** argv);
 static void printHelpTable();
 static void printHelpTestTable();
-static void printRow(char *str1, char *str2, int firstRow);
-static void printCol(char *str, int width);
-static void printDivider(int uniformly);
-static void printCenteredHeading(char * str);
+
 static int findPipe(int argc, char ** argv);
 static void initializePipe(int pipeIndex, int argc, char ** argv, int foreground);
 static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground);
@@ -263,57 +260,29 @@ static void shellWelcomeMessage() {
     printf("\n  Utilice el comando /help para obtener un manual de usuario.\n\n\n\n");
 }
 
-static void printDivider(int uniformly) {
-  printf("+");
-  for (int i = 0; i < C1_WIDTH+2; i++)
-    printf("-");
-  if (!uniformly) printf("+");
-  else printf("-");
-  for (int j = 0; j < C2_WIDTH+2; j++)
-   printf("-");
-  printf("+\n");
-}
 
 static void printHelpTable() {
-  printDivider(1);
+  printDivider(1, C1_WIDTH, C2_WIDTH);
 printCenteredHeading("Lista de comandos");
-  printDivider(0);
+  printDivider(0, C1_WIDTH, C2_WIDTH);
   for (int i = 0; i < TEST_COMMAND_START ; i++) {
     printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
-  printDivider(0);
+  printDivider(0, C1_WIDTH, C2_WIDTH);
     printCenteredHeading("Ejemplos de uso:    c1 | c2    c1 &    c1 arg1 ...");
     printCenteredHeading("Corra /helpTest para informacion acerca de los tests");
-    printDivider(1);
+    printDivider(1, C1_WIDTH, C2_WIDTH);
 }
 
 static void printHelpTestTable() {
-  printDivider(1);
+  printDivider(1, C1_WIDTH, C2_WIDTH);
   printCenteredHeading("Lista de tests");
-  printDivider(0);
+  printDivider(0, C1_WIDTH, C2_WIDTH);
   for (int i = TEST_COMMAND_START; i < COMMAND_COUNT-1; i++) {
   printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
     
-  printDivider(0);
-}
-
-static void printCenteredHeading(char * str) {
-    int len = strlen(str);
-    int terminalLen = getHalfScreenSize() - 5;
-    int delta1 =((terminalLen - len)/2);
-    int i;
-    printf("|");
-    for (i = 1; i < delta1; i++) {
-        printf(" ");
-    }
-    for (int j = 0; i < delta1 + len; i++) {
-        printf("%c", str[j++]);
-    }
-    for ( ; i < terminalLen; i++) {
-        printf(" ");
-    }
-    printf("|\n");
+  printDivider(0, C1_WIDTH, C2_WIDTH);
 }
 
 static int getCommandIdx(char *command) {
@@ -325,35 +294,6 @@ static int getCommandIdx(char *command) {
     return -1;
 }
 
-void printRow(char *str1, char *str2, int firstRow) {
-  printf("|");
-  printCol(str1, C1_WIDTH);
-  printCol(str2, C2_WIDTH);
-  if (firstRow)
-    printf("\n");
-}
-
-void printCol(char *str, int width) {
-  int done = 0;
-  printf(" ");
-  for (int i = 0; i < width; i++) {
-    if (!done) {
-      if (str[i])
-        printf("%c", str[i]);
-      else
-        done = 1;
-    }
-    if (done) {
-      printf(" ");
-    }
-  }
-  if (done)
-    printf(" |");
-  else {
-    printf(" |\n");
-    printRow(" ", str + width, 0);
-  }
-}
 
 static void help(int argc, char ** argv) {
   if (argc != 1) {

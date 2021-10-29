@@ -2,13 +2,6 @@
 #include <userSyscalls.h>
 #include <phylo.h>
 
-#define INITIAL_PHILOS 5
-#define MAX_PHILOS 10
-
-
-#define FILO_SEM_ID 2000
-#define MUTEX_SEM_ID 3000
-#define THINK_EAT_WAIT_SECONDS 1
 
 typedef enum {
     THINKING, HUNGRY, EATING
@@ -36,6 +29,7 @@ static void putForks(int i);
 static void test(int i);
 static int addPhilo();
 static int removePhilo();
+static void printTable(int argc, char **argv);
 
 void philoProblem(int argc, char ** argv) {
     if (argc != 1) {
@@ -45,30 +39,33 @@ void philoProblem(int argc, char ** argv) {
     philosopherCount = 0;
     tableOpen = 1;
     semOpen(MUTEX_SEM_ID, 1);
-    printf("\nBienvenido al problema de los filosofos comensales.\n");
-    printf("\nUse a para agregar un filosofo, maximo: %d.\n", MAX_PHILOS);
-    printf("\nUse r para remover un filosofo, minimo: %d.\n", INITIAL_PHILOS);
-    printf("\nUse q para finalizar el problema de los filosofos comensales.\n\n");
+
+    printPhyloHeader();
+
     int i = 0;
     while (i < INITIAL_PHILOS) {
         addPhilo();
         i++;
     }
+
+    char *args[] = {"PrintTable"};
+    int main_pid = newProcess(&printTable, 1, args, BACKGROUND, NULL);
+
     while (tableOpen) {
         char key = getChar();
         switch (key) {
             case 'a':
                 if (addPhilo() == -1) {
-                    printf("\nNo hay mas luagr en la mesa.\n\n");
+                    printc(RED, "\nNo hay mas luagr en la mesa.\n\n");
                 } else {
-                    printf("\nSe agrego un comensal.\n\n");
+                    printc(GREEN, "\nSe agrego un comensal.\n\n");
                 }
                 break;
             case 'r':
                 if(removePhilo() == -1) {
-                    printf("\nPor favor no se vaya, ya llega el postre.\n\n");
+                    printc(BLUE, "\nPor favor no se vaya, ya llega el postre.\n\n");
                 } else {
-                    printf("\nSe retiro un comensal.\n\n");
+                    printc(RED, "\nSe retiro un comensal.\n\n");
                 }
                 break;
             case 'q': 
@@ -164,6 +161,24 @@ static void test(int i) {
 static void thinkOrEat() {
     int wait = getSecondsElapsed() + THINK_EAT_WAIT_SECONDS;
     while(getSecondsElapsed() < wait);
+}
+
+static void printTable(int argc, char **argv) {
+    while (tableOpen) {
+        semWait(mutex);
+        char table[philosopherCount];
+        int i;
+        for (i = 0 ; i < philosopherCount; i++) {
+            if (philosophers[i]->state == EATING) {
+                table[i] = 'E';
+            } else {
+                table[i] = '.';
+            }
+        }
+        table[i] = '\0';
+        printRow("-", table, 1);
+        semPost(mutex);
+    }
 }
 
 // The solution presented in Fig. 2-47 is deadlock-free and allows the maximum

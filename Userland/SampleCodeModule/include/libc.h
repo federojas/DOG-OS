@@ -4,10 +4,15 @@
 #include <colors.h>
 #include <stdint.h>
 
+#define C1_WIDTH 13
+#define C2_WIDTH 38
+#define TABLE_WIDHT (C1_WIDTH + C2_WIDTH + 3)
+
 void setBGC(t_color colour);
 void setFTC(t_color colour);
 int scanf(char * str, ...);
 void printf(char *str, ...);
+void printc(t_color color, char *str, ...);
 void putChar(char c);
 // int getChar(); // MODO ESPERA ACTIVA
 char getChar(); // MODO HLT
@@ -30,4 +35,10 @@ void strToDouble(char *numStr, double *result);
 void setFirstChange(int number);
 void * memset(void * destination, int32_t c, uint64_t length);
 int isVowel(char c);
+
+void printDivider(int uniformly, int c1, int);
+void printCenteredHeading(char * str, ...);
+void printRow(char *str1, char *str2, int firstRow);
+void printCol(char *str, int width);
+void printPhyloHeader();
 #endif

@@ -8,8 +8,6 @@
 #define TEST_COMMAND_COUNT 5
 #define TEST_COMMAND_START (COMMAND_COUNT - TEST_COMMAND_COUNT) - 1
 
-#define C1_WIDTH 13
-#define C2_WIDTH 38
 
 void startShell(int argc, char **argv);
 void printUser();
