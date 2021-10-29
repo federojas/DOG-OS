@@ -16,6 +16,12 @@
 #define FLOAT_PRECISION 8 //Precision para los puntos flotantes
 #define WAIT_SECONDS_LOOP 3
 
+static char* registerNames[] = {
+"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9: ",
+"R8: ", "RSI: ", "RDI: ", "RBP: ", "RDX: ", "RCX: ", "RBX: ",
+"RAX: ", "RIP: ", "RSP: "
+};
+
 void getCurrentDayTime(int argc, char ** argv) {
 	if (checkArgcWrapper(argc, 1) == -1) {
 		return;
@@ -458,7 +464,6 @@ void loop(int argc, char ** argv) {
 		return;
     }
 	int pid = getProcessPID();
-	uint32_t timeToWake;
 	while(1) {
 		printf("El proceso %d dice hola. Imprimiendo devuelta en %d segundos.\n", pid, WAIT_SECONDS_LOOP);
     	sleep(WAIT_SECONDS_LOOP);
