@@ -67,7 +67,7 @@ static t_command commands[COMMAND_COUNT] = {
     {&filter,"/filter","Filtra las vocales del texto ingresadoluego de ejecutar el comando"},
     {&wc, "/wc", "Cantidad de lineas del texto ingresadoluego de ejecutar el comando"},
     {&philoProblem, "/phylo", "Problema de filosofos comensales"},
-    {&helpTest, "/helpTest", "Instrucciones acerca de los tests"},
+ 
   // limite
     {&testMemoryWrapper, "/memtest", "Testeo de memory manager"},
     {&testProcessesWrapper, "/proctest", "Testeo de process manager"},
@@ -75,7 +75,7 @@ static t_command commands[COMMAND_COUNT] = {
      "Testeo de prioridad process manager"},
     {&testSyncWrapper, "/semtest", "Testeo de semaforos con uso"},
     {&testNoSyncWrapper, "/nosemtest", "Testeo de semaforos sin uso"},
-    
+       {&helpTest, "/helpTest", "Instrucciones acerca de los tests"},
 };
 
 
@@ -291,7 +291,7 @@ static void printHelpTestTable() {
   printDivider(1);
   printCenteredHeading("Lista de tests");
   printDivider(0);
-  for (int i = TEST_COMMAND_START; i < COMMAND_COUNT; i++) {
+  for (int i = TEST_COMMAND_START; i < COMMAND_COUNT-1; i++) {
   printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
     
