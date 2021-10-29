@@ -35,4 +35,5 @@ void loop(int argc, char ** argv);
 void pipeStatusWrapper(int argc, char ** argv);
 void filter(int argc, char **argv);
 void wc(int argc, char ** argv);
+int checkArgcWrapper(int argc, int argumentsPermitted);
 #endif

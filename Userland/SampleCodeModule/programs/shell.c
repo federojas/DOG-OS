@@ -296,8 +296,7 @@ static int getCommandIdx(char *command) {
 
 
 static void help(int argc, char ** argv) {
-  if (argc != 1) {
-    printf("\nCantidad invalida de argumentos.\n\n");
+  if (checkArgcWrapper(argc, 1) == -1) {
     return;
   }
   
@@ -311,22 +310,16 @@ static void help(int argc, char ** argv) {
 }
 
 static void helpTest(int argc, char ** argv) {
-  if (argc != 1) {
-    printf("\nCantidad invalida de argumentos.\n\n");
+  if (checkArgcWrapper(argc, 1) == -1) {
     return;
   }
-
   printHelpTestTable();
-  
 }
 
-
-
 static void changeUser(int argc, char ** argv) {
-	if (argc != 2) {
-		printf("\nCantidad invalida de argumentos.\n\n");
+	if (checkArgcWrapper(argc, 2) == -1) {
 		return;
-    }
+  }
 	if(strlen(argv[1]) > USER_SIZE - 1) {
 		printf("\nEl nombre de usuario puede tener un maximo de %d caracteres.\n\n", USER_SIZE - 1);
 		return;
