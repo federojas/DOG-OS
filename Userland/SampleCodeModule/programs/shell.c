@@ -72,7 +72,7 @@ static t_command commands[COMMAND_COUNT] = {
      "Testeo de prioridad process manager"},
     {&testSyncWrapper, "/semtest", "Testeo de semaforos con uso"},
     {&testNoSyncWrapper, "/nosemtest", "Testeo de semaforos sin uso"},
-       {&helpTest, "/helptest", "Instrucciones acerca de los tests"},
+    {&helpTest, "/helptest", "Instrucciones acerca de los tests"},
 };
 
 
