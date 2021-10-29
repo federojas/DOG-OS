@@ -41,4 +41,10 @@ void printRow(char *str1, char *str2, int firstRow);
 void printCol(char *str, int width);
 void printFullDivider();
 void sleep(int seconds);
+void printLogo(t_color color, int colored);
+void printDog1();
+void printDog2();
+void printDog3();
+void printDog4();
+void printDogAnimation(int i);
 #endif
