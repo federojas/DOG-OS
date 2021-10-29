@@ -11,6 +11,12 @@ static void zeroDivision();
 static void invOpCode();
 static void printRegs(uint64_t* rsp);
 
+static char* registerNames[] = {
+"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9: ",
+"R8: ", "RSI: ", "RDI: ", "RBP: ", "RDX: ", "RCX: ", "RBX: ",
+"RAX: ", "RIP: ", "RSP: "
+};
+
 
 void exceptionDispatcher(int exception, uint64_t rsp) {
 	switch (exception)

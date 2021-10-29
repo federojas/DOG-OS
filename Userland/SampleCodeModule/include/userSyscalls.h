@@ -20,7 +20,7 @@ SYS_PIPE_STATUS_ID, SYS_PIPE_OPEN_ID, SYS_PIPE_CLOSE_ID, SYS_PIPE_WRITE_ID,
 SYS_PIPE_READ_ID, SYS_WAIT_ID, SYS_HALF_SCREEN_SIZE_ID} t_syscall_id;
 
 uint64_t _syscall(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
-int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground, uint16_t * fd);
+int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, int foreground, int * fd);
 int killProcess(uint64_t pid);
 int getProcessPID();
 void processStatus();

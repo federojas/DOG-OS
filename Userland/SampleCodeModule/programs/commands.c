@@ -24,6 +24,20 @@ void getCurrentDayTime(int argc, char **argv) {
   uint64_t result = _syscall(SYS_RTC_ID, DAY_RTC_ID, 0, 0, 0, 0);
   printf("%d", result);
   putChar('/');
+static char* registerNames[] = {
+"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9: ",
+"R8: ", "RSI: ", "RDI: ", "RBP: ", "RDX: ", "RCX: ", "RBX: ",
+"RAX: ", "RIP: ", "RSP: "
+};
+
+void getCurrentDayTime(int argc, char ** argv) {
+	if (checkArgcWrapper(argc, 1) == -1) {
+		return;
+	}
+    printf("\nFecha de hoy: ");
+    uint64_t result = _syscall(SYS_RTC_ID, DAY_RTC_ID, 0, 0, 0, 0);
+    printf("%d", result);
+	putChar('/');
 
   result = _syscall(SYS_RTC_ID, MONTH_RTC_ID, 0, 0, 0, 0);
   printf("%d", result);
@@ -487,6 +501,15 @@ void loop(int argc, char **argv) {
            pid, WAIT_SECONDS_LOOP);
     sleep(WAIT_SECONDS_LOOP);
   }
+void loop(int argc, char ** argv) {
+	if (checkArgcWrapper(argc, 1) == -1) {
+		return;
+    }
+	int pid = getProcessPID();
+	while(1) {
+		printf("El proceso %d dice hola. Imprimiendo devuelta en %d segundos.\n", pid, WAIT_SECONDS_LOOP);
+    	sleep(WAIT_SECONDS_LOOP);
+	}
 }
 
 void pipeStatusWrapper(int argc, char **argv) {

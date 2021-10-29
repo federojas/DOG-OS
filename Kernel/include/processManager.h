@@ -7,7 +7,7 @@
 #define BACKGROUND 0
 
 void initializeProcessManager();
-int newProcess(void (*entryPoint)(int, char **), int argc, char ** argv, uint8_t foreground, uint16_t * fd);
+int newProcess(void (*entryPoint)(int, char **), int argc, char **argv, int foreground, int *fd) ;
 int killProcess(uint64_t pid);
 int blockProcess(uint64_t pid);
 int readyProcess(uint64_t pid);

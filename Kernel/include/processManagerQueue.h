@@ -11,11 +11,11 @@ typedef struct {
 
   int pid;
   int ppid;
-  uint8_t foreground;
+  int foreground;
   t_state state;
   uint64_t priority;
   char name[30];
-  uint16_t fileDescriptors[2];
+  int fileDescriptors[2];
   void *rsp;
   void *rbp;
   int argc;
