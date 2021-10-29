@@ -7,6 +7,7 @@
 #define C1_WIDTH 13
 #define C2_WIDTH 38
 #define TABLE_WIDHT (C1_WIDTH + C2_WIDTH + 3)
+#define EOF 96
 
 void setBGC(t_color colour);
 void setFTC(t_color colour);

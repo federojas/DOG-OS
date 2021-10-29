@@ -49,7 +49,6 @@ static t_command commands[COMMAND_COUNT] = {
     {&getCPUVendor, "/cpuvendor", "ID de fabricante del CPU"},
     {&getRoots, "/roots", "Calculo de raices de una funcion      cuadratica"},
     {&logo, "/dog", "Imprime DOG-OS logo"},
-    {&doge, "/doge", "Doge animation"},
     {&changeBgColour, "/bgcolour", "Cambia el color del fondo del texto"},
     {&changeFtColour, "/ftcolour", "Cambia el color del texto"},
     {&memStatusWrapper, "/mem", "Imprime el estado de la memoria"},
@@ -217,12 +216,15 @@ static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground) {
     pipeClose(pipe);
     return -1;
   }
-  
+
   currentArgc = 0;
   for (int i = pipeIndex + 1, j = 0; i < argc; i++, j++) {
     currentArgv[j] = argv[i];
     currentArgc++;
   }
+
+  int endOfFile = EOF;
+  pipeWrite(pipe, (char *)&endOfFile);
 
   pids[0] = runPipeCmd(currentArgc, currentArgv, foreground, pipe, 1);
   if (pids[0] == -1) {
@@ -231,6 +233,7 @@ static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground) {
   }
 
   pipeClose(pipe);
+  putChar('\n');
   return 1;
 }
 

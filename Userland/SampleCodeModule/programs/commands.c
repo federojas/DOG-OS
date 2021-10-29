@@ -446,20 +446,14 @@ void filter(int argc, char **argv) {
   if (checkArgcWrapper(argc, 1) == -1) {
     return;
   }
-
-  char userInput[BUFFER_SIZE];
-  char output[BUFFER_SIZE];
-  scanf("%s", userInput);
-  int inputIndex = 0;
-  int outputIndex = 0;
-  while (userInput[inputIndex] != 0) {
-    if (!isVowel(userInput[inputIndex])) {
-      output[outputIndex++] = userInput[inputIndex];
+  char c;
+  while((c=getChar()) != EOF) {
+    if(!isVowel(c)) {
+      putChar(c);
     }
-    inputIndex++;
   }
-  printf("%s\n", output);
 }
+
 void testPriorityWrapper(int argc, char **argv) {
   if (checkArgcWrapper(argc, 1) == -1) {
     return;
@@ -478,9 +472,10 @@ void cat(int argc, char **argv) {
   if (checkArgcWrapper(argc, 1) == -1) {
     return;
   }
-  char userInput[BUFFER_SIZE];
-  scanf("%s", userInput);
-  printf("%s\n", userInput);
+  int c;
+  while((c=getChar()) != EOF) {
+	  putChar(c);
+  }
 }
 
 void loop(int argc, char ** argv) {
@@ -505,13 +500,15 @@ void wc(int argc, char **argv) {
   if (checkArgcWrapper(argc, 1) == -1) {
     return;
   }
-  char userInput[BUFFER_SIZE];
-  scanf("%s", userInput);
-  int inputLength = strlen(userInput);
-  int halfScreenSize = getHalfScreenSize();
-  int lines = (int)((inputLength / halfScreenSize) +
-                    ((inputLength % halfScreenSize) != 0));
-  printf("\nCantidad de lineas: %d\n\n", lines);
+  char c;
+  int lineCount = 1;
+  while((c=getChar()) != EOF) {
+    putChar(c);
+    if(c == '\n') {
+      lineCount++;
+    }
+  }
+  printf("\nCantidad de lineas: %d\n", lineCount);
 }
 
 int checkArgcWrapper(int argc, int argumentsPermitted) {

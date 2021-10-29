@@ -53,7 +53,7 @@ void sysWrite(char * str, uint8_t len, t_color bgColor, t_color ftColor, int usr
             printChar(str[i], ftColor, bgColor, 1);
         }	
     } else {
-        pipeWrite(outputFD, str);
+        pipeWrite(outputFD, str);	
     }
 		     
 }

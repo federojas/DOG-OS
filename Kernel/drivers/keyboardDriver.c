@@ -91,11 +91,16 @@ void keyboardHandler(uint64_t rsp) {
                         updateRegisters((uint64_t*) rsp);
                     } else if(ctrl && charTable[scanCode][0] == 'c') {
                         killCurrentFGProcess();
+                    } else if(ctrl && charTable[scanCode][0] == 'd') {
+                        putCharInBuffer(96);
                     }
                     else if((shift && !capsLock) || (shift && capsLock && !(charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z')) || (!shift && capsLock && charTable[scanCode][0] >= 'a' && charTable[scanCode][0] <= 'z') ) {
                         putCharInBuffer(charTable[scanCode][1]);
                     }
                     else {
+                        if(charTable[scanCode][0] == 96) {
+                            return ;
+                        }
                         putCharInBuffer(charTable[scanCode][0]);
                     }
                 }
