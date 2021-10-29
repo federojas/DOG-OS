@@ -61,7 +61,7 @@ void sysWrite(char * str, uint8_t len, t_color bgColor, t_color ftColor, int usr
 uint64_t sysRead() {
     int inputFD = getCurrentProcessInputFD();
     if(inputFD == 0) {
-        if(currentProcessIsForeground()) {
+        if(currentProcessIsForeground() == 1) {
             return getChar();
         }
         else {

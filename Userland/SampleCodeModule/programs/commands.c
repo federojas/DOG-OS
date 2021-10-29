@@ -14,7 +14,7 @@
 #define YEAR 20 //Debe escribir aca los digitos de su año (excepto los ultimos dos)
 #define BYTES 32 //Cantidad de bytes para el mem dump
 #define FLOAT_PRECISION 8 //Precision para los puntos flotantes
-#define WAIT_SECONDS_LOOP 3
+#define WAIT_SECONDS_LOOP 2
 
 static char* registerNames[] = {
 "R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9: ",
@@ -465,7 +465,7 @@ void loop(int argc, char ** argv) {
     }
 	int pid = getProcessPID();
 	while(1) {
-		printf("El proceso %d dice hola. Imprimiendo devuelta en %d segundos.\n", pid, WAIT_SECONDS_LOOP);
+		printf("El proceso %d dice hola. Imprimiendo devuelta en %d segundos.", pid, WAIT_SECONDS_LOOP);
     	sleep(WAIT_SECONDS_LOOP);
 	}
 }

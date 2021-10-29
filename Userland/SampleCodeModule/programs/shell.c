@@ -206,38 +206,30 @@ static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground) {
     return -2;
   }
 
-  for (int i = pipeIndex + 1, j = 0; i < argc; i++, j++) {
-    currentArgv[j] = argv[i];
-    currentArgc++;
-  }
-
-  pids[0] = runPipeCmd(currentArgc, currentArgv, BACKGROUND, pipe, 1);
-  if (pids[0] == -1) {
-    pipeClose(pipe);
-    return -1;
-  }
-
-  currentArgc = 0;
   for (int i = 0; i < pipeIndex; i++) {
     currentArgv[i] = argv[i];
     currentArgc++;
   }
- 
+
   pids[1] = runPipeCmd(currentArgc, currentArgv, foreground, 0, pipe);
   if (pids[1] == -1) {
     pipeClose(pipe);
     return -1;
   }
+  
+  currentArgc = 0;
+  for (int i = pipeIndex + 1, j = 0; i < argc; i++, j++) {
+    currentArgv[j] = argv[i];
+    currentArgc++;
+  }
 
-  int a = -1;
-  if (foreground == 0) {
-    wait(pids[1]);
-  } 
+  pids[0] = runPipeCmd(currentArgc, currentArgv, foreground, pipe, 1);
+  if (pids[0] == -1) {
+    pipeClose(pipe);
+    return -1;
+  }
 
-  pipeWrite(pipe, (char *)&a);
-  wait(pids[0]);
   pipeClose(pipe);
-
   return 1;
 }
 
