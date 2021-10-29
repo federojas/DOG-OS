@@ -20,11 +20,13 @@ static void initializeCommands();
 static int getCommandIdx(char *command);
 static void changeUser(int argc, char ** argv);
 static void help(int argc, char ** argv);
+static void helpTest(int argc, char ** argv);
 static void printHelpTable();
 static void printHelpTestTable();
 static void printRow(char *str1, char *str2, int firstRow);
 static void printCol(char *str, int width);
-static void printDivider();
+static void printDivider(int uniformly);
+static void printCenteredHeading(char * str);
 static int findPipe(int argc, char ** argv);
 static void initializePipe(int pipeIndex, int argc, char ** argv, int foreground);
 static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground);
@@ -65,6 +67,7 @@ static t_command commands[COMMAND_COUNT] = {
     {&filter,"/filter","Filtra las vocales del texto ingresadoluego de ejecutar el comando"},
     {&wc, "/wc", "Cantidad de lineas del texto ingresadoluego de ejecutar el comando"},
     {&philoProblem, "/phylo", "Problema de filosofos comensales"},
+    {&helpTest, "/helpTest", "Instrucciones acerca de los tests"},
   // limite
     {&testMemoryWrapper, "/memtest", "Testeo de memory manager"},
     {&testProcessesWrapper, "/proctest", "Testeo de process manager"},
@@ -260,36 +263,57 @@ static void shellWelcomeMessage() {
     printf("\n  Utilice el comando /help para obtener un manual de usuario.\n\n\n\n");
 }
 
-static void printDivider() {
+static void printDivider(int uniformly) {
   printf("+");
   for (int i = 0; i < C1_WIDTH+2; i++)
     printf("-");
-  printf("+");
+  if (!uniformly) printf("+");
+  else printf("-");
   for (int j = 0; j < C2_WIDTH+2; j++)
    printf("-");
   printf("+\n");
 }
 
 static void printHelpTable() {
-  printDivider();
-  printRow("Comando", "Descripcion", 1);
-  printDivider();
+  printDivider(1);
+printCenteredHeading("Lista de comandos");
+  printDivider(0);
   for (int i = 0; i < TEST_COMMAND_START ; i++) {
     printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
-  printDivider();
+  printDivider(0);
+    printCenteredHeading("Ejemplos de uso:    c1 | c2    c1 &    c1 arg1 ...");
+    printCenteredHeading("Corra /helpTest para informacion acerca de los tests");
+    printDivider(1);
 }
 
 static void printHelpTestTable() {
-  printDivider();
-  printRow("Comando", "Descripcion del test", 1);
-  printDivider();
+  printDivider(1);
+  printCenteredHeading("Lista de tests");
+  printDivider(0);
   for (int i = TEST_COMMAND_START; i < COMMAND_COUNT; i++) {
   printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
     
-  
-  printDivider();
+  printDivider(0);
+}
+
+static void printCenteredHeading(char * str) {
+    int len = strlen(str);
+    int terminalLen = getHalfScreenSize() - 5;
+    int delta1 =((terminalLen - len)/2);
+    int i;
+    printf("|");
+    for (i = 1; i < delta1; i++) {
+        printf(" ");
+    }
+    for (int j = 0; i < delta1 + len; i++) {
+        printf("%c", str[j++]);
+    }
+    for ( ; i < terminalLen; i++) {
+        printf(" ");
+    }
+    printf("|\n");
 }
 
 static int getCommandIdx(char *command) {
@@ -337,14 +361,26 @@ static void help(int argc, char ** argv) {
     return;
   }
   
-  printf("\nUse ctrl + tab para cambiar de pantalla.\n");
-  printf("Use ctrl + c para terminar el proceso actual.\n");
+  printf("\nUse Ctrl + TAB para cambiar de pantalla.\n");
+  printf("Use Ctrl + C para terminar el proceso actual.\n");
   printf("\nBLANCO | NEGRO | ROJO | VERDE | AZUL\n");
-  printf("  1    |   2   |  3   |   4   |  5\n");
+    printf("  1    |   2   |  3   |   4   |  5\n");
 
   printHelpTable();
-  printHelpTestTable();
+  
 }
+
+static void helpTest(int argc, char ** argv) {
+  if (argc != 1) {
+    printf("\nCantidad invalida de argumentos.\n\n");
+    return;
+  }
+
+  printHelpTestTable();
+  
+}
+
+
 
 static void changeUser(int argc, char ** argv) {
 	if (argc != 2) {
