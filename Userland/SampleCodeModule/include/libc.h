@@ -39,5 +39,6 @@ void printDivider(int uniformly, int c1, int);
 void printCenteredHeading(char * str, ...);
 void printRow(char *str1, char *str2, int firstRow);
 void printCol(char *str, int width);
+void printFullDivider();
 void sleep(int seconds);
 #endif
