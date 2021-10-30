@@ -4,9 +4,9 @@
 #define USER_SIZE 25
 #define BUFFER_SIZE 1000
 #define MAX_ARGUMENTS 5
-#define COMMAND_COUNT 35
+#define COMMAND_COUNT 36
 #define TEST_COMMAND_COUNT 5
-#define TEST_COMMAND_START (COMMAND_COUNT - TEST_COMMAND_COUNT) - 1
+#define TEST_COMMAND_START (COMMAND_COUNT - TEST_COMMAND_COUNT) - 2
 
 
 void startShell(int argc, char **argv);

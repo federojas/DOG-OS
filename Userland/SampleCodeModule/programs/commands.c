@@ -252,7 +252,7 @@ void doge(int argc, char **argv) {
   if (checkArgcWrapper(argc, 1) == -1) {
     return;
   }
-  (void)_syscall(SYS_CLEAR_ID, 0, 0, 0, 0, 0);
+  ( void)_syscall(SYS_CLEAR_ID, 0, 0, 0, 0, 0);
   int colors[4] = {WHITE, RED, GREEN, BLUE};
   for (int j = 0; j < 4; j++) {
     for (int i = 0; i < 4; i++) {

@@ -472,7 +472,7 @@ void printDivider(int uniformly, int c1, int c2) {
 void printFullDivider() {
     printDivider(1, C1_WIDTH,C2_WIDTH);
 }
-void printCenteredHeading(char *str, ...) {
+void printCenteredHeading(int delimiters, char *str, ...) {
     va_list args;
   va_start(args, str);
   
@@ -481,7 +481,7 @@ void printCenteredHeading(char *str, ...) {
   int terminalLen = getHalfScreenSize() - 5;
   int delta1 = ((terminalLen - len) / 2);
   int i;
-  printf("|");
+  if (delimiters) printf("|");
   for (i = 1; i < delta1; i++) {
     printf(" ");
   }
@@ -490,7 +490,8 @@ void printCenteredHeading(char *str, ...) {
   for (; i < terminalLen; i++) {
     printf(" ");
   }
-  printf("|\n");
+    if (delimiters) printf("|");
+    printf("\n");
     va_end(args);
 }
 

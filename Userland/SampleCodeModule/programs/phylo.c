@@ -206,13 +206,13 @@ static void printPhyloHeader() {
 
     printFullDivider();
     for (int i = 0; i < PHYLO_HEADER_HEIGHT; i++) {
-        printCenteredHeading(header[i]);
+        printCenteredHeading(1, header[i]);
     }
-    printCenteredHeading("");
-    printCenteredHeading("Bienvenido al problema de los filosofos comensales.");
-    printCenteredHeading("Use A para agregar un filosofo");
-    printCenteredHeading("Use R para remover un filosofo");
-    printCenteredHeading("Use Q para finalizar");
+    printCenteredHeading(1, "");
+    printCenteredHeading(1,"Bienvenido al problema de los filosofos comensales.");
+    printCenteredHeading(1,"Use A para agregar un filosofo");
+    printCenteredHeading(1,"Use R para remover un filosofo");
+    printCenteredHeading(1,"Use Q para finalizar");
     printFullDivider();
     sleep(FRONTEND_WAIT_SECONDS);
 }

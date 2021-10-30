@@ -37,7 +37,7 @@ void setFirstChange(int number);
 void * memset(void * destination, int32_t c, uint64_t length);
 int isVowel(char c);
 void printDivider(int uniformly, int c1, int);
-void printCenteredHeading(char * str, ...);
+void printCenteredHeading(int delimiters, char * str, ...);
 void printRow(char *str1, char *str2, int firstRow);
 void printCol(char *str, int width);
 void printFullDivider();

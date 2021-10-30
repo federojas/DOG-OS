@@ -21,6 +21,7 @@ static int getCommandIdx(char *command);
 static void changeUser(int argc, char ** argv);
 static void help(int argc, char ** argv);
 static void helpTest(int argc, char ** argv);
+static void helpShell(int argc, char ** argv);
 static void printHelpTable();
 static void printHelpTestTable();
 
@@ -74,6 +75,7 @@ static t_command commands[COMMAND_COUNT] = {
     {&testSyncWrapper, "/semtest", "Testeo de semaforos con uso"},
     {&testNoSyncWrapper, "/nosemtest", "Testeo de semaforos sin uso"},
     {&helpTest, "/helptest", "Instrucciones acerca de los tests"},
+    {&helpShell, "/helpshell", "Instrucciones acerca de la shell"},
 };
 
 
@@ -261,22 +263,34 @@ static void shellWelcomeMessage() {
 
 static void printHelpTable() {
   printDivider(1, C1_WIDTH, C2_WIDTH);
-printCenteredHeading("Lista de comandos");
+     setBGC(WHITE);
+    setFTC(BLACK);
+    printCenteredHeading(1,"Lista de comandos");
+    setFTC(WHITE);
+    setBGC(BLACK);
+
   printDivider(0, C1_WIDTH, C2_WIDTH);
-  for (int i = 0; i < TEST_COMMAND_START ; i++) {
+  for (int i = 0; i < TEST_COMMAND_START  ; i++) {
     printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
   printDivider(0, C1_WIDTH, C2_WIDTH);
-    printCenteredHeading("Ejemplos de uso:  /c1 | /c2   /c1 &   /c1 arg1 ...");
-    printCenteredHeading("Use /helptest para obtener informacion de los tests");
+       setBGC(WHITE);
+    setFTC(BLACK);
+    
+    printCenteredHeading(1,"Ejemplos de uso:  /c1 | /c2   /c1 &   /c1 arg1 ...");
+    printCenteredHeading(1,"Use /helptest para obtener informacion de los tests");
+    printCenteredHeading(1,"Use /helpshell para obtener informacion de la shell");
+    setFTC(WHITE);
+    setBGC(BLACK);
+
     printDivider(1, C1_WIDTH, C2_WIDTH);
 }
 
 static void printHelpTestTable() {
   printDivider(1, C1_WIDTH, C2_WIDTH);
-  printCenteredHeading("Lista de tests");
+  printCenteredHeading(1, "Lista de tests");
   printDivider(0, C1_WIDTH, C2_WIDTH);
-  for (int i = TEST_COMMAND_START; i < COMMAND_COUNT-1; i++) {
+  for (int i = TEST_COMMAND_START; i < COMMAND_COUNT-2; i++) {
   printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
     
@@ -297,14 +311,42 @@ static void help(int argc, char ** argv) {
   if (checkArgcWrapper(argc, 1) == -1) {
     return;
   }
-  
-  printf("\nUse Ctrl + TAB para cambiar de pantalla.\n");
-  printf("Use Ctrl + C para terminar el proceso actual.\n");
-  printf("\nBLANCO | NEGRO | ROJO | VERDE | AZUL\n");
-    printf("  1    |   2   |  3   |   4   |  5\n");
 
   printHelpTable();
   
+}
+
+static void helpShell(int argc, char ** argv) {
+    if (checkArgcWrapper(argc, 1) == -1) { return ;}
+
+    printf("\n");
+    setBGC(WHITE);
+    setFTC(BLACK);
+    printCenteredHeading(0, "Instructivo para manejo de la shell");
+    setFTC(WHITE);
+    setBGC(BLACK);
+    printf("\nUse Ctrl + TAB para cambiar de pantalla.\n");
+    printf("Use Ctrl + C para terminar el proceso actual.\n");
+    printf("Use Ctrl + D para obtener resultados en comandos como \n/wc o /filter\n");
+
+    printf("\n");
+    setBGC(WHITE);
+    setFTC(BLACK);
+    printCenteredHeading(0, "Tabla de colores");
+    setFTC(WHITE);
+
+    setBGC(BLACK);
+    printf("\n");
+
+    printc(WHITE, "                      Blanco   1\n");
+    printf("                      ");
+    setBGC(WHITE);
+    printc(BLACK, "Negro    2\n");
+    setBGC(BLACK);
+    printc(RED, "                      Rojo     3\n");
+    printc(GREEN, "                      Verde    4\n");
+    printc(BLUE, "                      Azul     5\n");
+    printf("\n");
 }
 
 static void helpTest(int argc, char ** argv) {
