@@ -256,7 +256,7 @@ void doge(int argc, char **argv) {
     (void)_syscall(SYS_CLEAR_ID, 0, 0, 0, 0, 0);
     // sleep(1);
       int colors[4] = {WHITE, RED, GREEN, BLUE};
-  for (int j = 0; j < 40; j++) {
+  for (int j = 0; j < 4; j++) {
     for (int i = 0; i < 4; i++) {
         printf("\n\n\n\n\n\n\n\n\n\n");
       printLogo(colors[i], 1);
