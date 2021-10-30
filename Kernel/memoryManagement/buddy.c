@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 //https://github.com/evanw/buddy-malloc/blob/master/buddy-malloc.c
 
 #ifdef MEMORY_MANAGER_BUDDY
@@ -24,7 +26,7 @@ static uint8_t buckets_amount;
 
 static void addNodeToBucket(list_t * bucketList, list_t * node, uint8_t bucketLevel);
 static size_t getMinimumSuitableBucket(size_t request);
-static size_t getAvailableBucket(uint8_t minBucketRequired);
+static int getAvailableBucket(uint8_t minBucketRequired);
 static list_t *getNodeBuddy(list_t *node);
 static list_t *getNodeAddress(list_t *node);
 
@@ -60,7 +62,7 @@ void *malloc(uint64_t nbytes) {
     }
 
     uint8_t idealBucket =  getMinimumSuitableBucket(bytesNeeded);
-    uint8_t availableBucket = getAvailableBucket(idealBucket);
+    int availableBucket = getAvailableBucket(idealBucket);
 
     if(availableBucket == -1) {
         return NULL;
@@ -123,7 +125,7 @@ static size_t getMinimumSuitableBucket(size_t request) {
     return requestLog2 + 1;
 }
 
-static size_t getAvailableBucket(uint8_t minBucketRequired) {
+static int getAvailableBucket(uint8_t minBucketRequired) {
     uint8_t availableBucket;
 
     for (availableBucket = minBucketRequired; availableBucket < buckets_amount && listIsEmpty(&buckets[availableBucket]); availableBucket++);

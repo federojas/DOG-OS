@@ -1,8 +1,10 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <memoryTest.h>
 #include <userSyscalls.h>
 
 #define MAX_BLOCKS 128
-#define MAX_MEMORY 32 * 1024 * 1024
+#define MAX_MEMORY (32 * 1024 * 1024)
 
 typedef struct MM_rq{
   void *address;

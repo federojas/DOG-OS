@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <RTCID.h>
 #include <commands.h>
 #include <infoReg.h>
@@ -254,8 +256,9 @@ void doge(int argc, char **argv) {
   }
   ( void)_syscall(SYS_CLEAR_ID, 0, 0, 0, 0, 0);
   int colors[4] = {WHITE, RED, GREEN, BLUE};
-  for (int j = 0; j < 4; j++) {
-    for (int i = 0; i < 4; i++) {
+  int j = 0; 
+  while (j < 4) {
+      for (int i = 0; i < 4; i++) {
       printf("\n\n\n\n\n\n\n\n\n\n");
       printLogo(colors[i], 1);
       printf("\n\n\n\n\n");
@@ -263,6 +266,7 @@ void doge(int argc, char **argv) {
       sleep(1);
       (void)_syscall(SYS_CLEAR_ID, 0, 0, 0, 0, 0);
     }
+    j++;
   }
 }
 

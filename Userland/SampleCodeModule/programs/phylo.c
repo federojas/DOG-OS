@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <libc.h>
 #include <userSyscalls.h>
 #include <phylo.h>
@@ -20,8 +22,8 @@ static int philosopherCount = 0;
 static int mutex;
 static int tableOpen;
 
-#define LEFT(i) ((i+philosopherCount-1) % philosopherCount)
-#define RIGHT(i) ((i+1) % philosopherCount)
+#define LEFT(i) (((i)+philosopherCount-1) % philosopherCount)
+#define RIGHT(i) (((i)+1) % philosopherCount)
 
 static void thinkOrEat();
 static void philoMain(int argc, char ** argv);

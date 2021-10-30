@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <interrupts.h>
 #include <memoryManager.h>
 #include <prints.h>
@@ -44,7 +46,7 @@ typedef struct {
 static void idleProcess(int argc, char **argv);
 static int initializeProcessControlBlock(t_PCB *PCB, char *name,
                                          uint8_t foreground, int *fd);
-static void getArguments(char **to, char **from, int count);
+static int getArguments(char **to, char **from, int count);
 static void wrapper(void (*entryPoint)(int, char **), int argc, char **argv);
 static void initializeProcessStackFrame(void (*entryPoint)(int, char **),
                                         int argc, char **argv, void *rbp);
@@ -144,11 +146,16 @@ int newProcess(void (*entryPoint)(int, char **), int argc, char **argv,
   }
   
   char **arguments = malloc(sizeof(char *) * argc);
-  if (arguments == 0) {
+  if (arguments == NULL) {
+    free(newProcess);
     return -1;
   }
 
-  getArguments(arguments, argv, argc);
+  if (getArguments(arguments, argv, argc) == -1) {
+      free(newProcess);
+      free(arguments);
+      return -1;
+  }
 
   newProcess->pcb.argc = argc;
   newProcess->pcb.argv = arguments;
@@ -309,7 +316,7 @@ static int initializeProcessControlBlock(t_PCB *PCB, char *name,
   strcpy(PCB->name, name);
   PCB->pid = getPID();
   PCB->ppid = (currentProcess == NULL ? 0 : currentProcess->pcb.pid);
-  if (foreground > 1 || foreground < 0) {
+  if (foreground > 1) {
     return -1;
   }
 
@@ -331,11 +338,20 @@ static int initializeProcessControlBlock(t_PCB *PCB, char *name,
   return 0;
 }
 
-static void getArguments(char **to, char **from, int count) {
+static int getArguments(char **to, char **from, int count) {
   for (int i = 0; i < count; i++) {
     to[i] = malloc(sizeof(char) * (strlen(from[i]) + 1));
+    if (to[i] == NULL) {
+        i--;
+        while (i >= 0) {
+            free(to[i]);
+            i--;
+        }
+        return -1;
+    }
     strcpy(to[i], from[i]);
   }
+  return 0;
 }
 
 static void end() {
