@@ -1,6 +1,5 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-//https://github.com/evanw/buddy-malloc/blob/master/buddy-malloc.c
 
 #ifdef MEMORY_MANAGER_BUDDY
 
