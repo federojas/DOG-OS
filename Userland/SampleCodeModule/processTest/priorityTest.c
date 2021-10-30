@@ -46,12 +46,16 @@ void testPriority(){
 
   printf("\nUNBLOCKING...\n\nUNBLOCKING...\n\nUNBLOCKING...\n");
 
-  for(i = 0; i < TOTAL_PROCESSES; i++)
+  for(i = 0; i < TOTAL_PROCESSES; i++) {
     unblockProcess(pids[i]);
+  }
+    
 
   busyWait(TOTAL_PROCESSES * MAJOR_WAIT);
   printf("\nKILLING...\n\nKILLING...\n\nKILLING...\n");
 
-  for(i = 0; i < TOTAL_PROCESSES; i++)
+  for(i = 0; i < TOTAL_PROCESSES; i++) {
     killProcess(pids[i]);
+  }
+    
 }

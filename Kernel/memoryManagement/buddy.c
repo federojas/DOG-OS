@@ -144,7 +144,7 @@ static list_t *getNodeBuddy(list_t *node) {
 }
 
  void memoryDump() {
-    list_t *list, *aux;
+    list_t *list, *listAux;
     uint32_t idx=0;
     uint32_t spaceAvailable=0;
 
@@ -156,8 +156,8 @@ static list_t *getNodeBuddy(list_t *node) {
         if(!listIsEmpty(list)) {
             printf("    Bucket %d\n", i + MIN_ALLOC_LOG2);
             printf("    Free blocks of size 2^%d\n", i + MIN_ALLOC_LOG2);
-            for(aux = list->next, idx = 1; aux != list; idx++, aux = aux->next){
-                if(aux->free) {
+            for(listAux = list->next, idx = 1; listAux != list; idx++, listAux = listAux->next){
+                if(listAux->free) {
                     printf("        Block number: %d\n", idx);
                     printf("        State: free\n\n");
                     spaceAvailable += idx * (1 << (MIN_ALLOC_LOG2 + i)); 

@@ -47,7 +47,7 @@ void printf(char *str, ...) {
   char buff[BUFF_LEN] = {0};
   int strIdx = 0, buffIdx = 0;
   char *str_arg;
-  char aux[20];
+  char stringAux[20];
   va_start(args, str);
 
   while (str && str[strIdx]) {
@@ -60,15 +60,15 @@ void printf(char *str, ...) {
         break;
       }
       case 'd': {
-        intToStr(va_arg(args, int), aux, 10);
-        strcpy(&buff[buffIdx], aux);
-        buffIdx += strlen(aux);
+        intToStr(va_arg(args, int), stringAux, 10);
+        strcpy(&buff[buffIdx], stringAux);
+        buffIdx += strlen(stringAux);
         break;
       }
       case 'x': {
-        intToStr(va_arg(args, int), aux, 16);
-        strcpy(&buff[buffIdx], aux);
-        buffIdx += strlen(aux);
+        intToStr(va_arg(args, int), stringAux, 16);
+        strcpy(&buff[buffIdx], stringAux);
+        buffIdx += strlen(stringAux);
         break;
       }
       case 's': {
@@ -270,7 +270,7 @@ void newLine() { putChar('\n'); }
 
 char *strcpy(char *destino, const char *fuente) {
 
-  char *aux = destino;
+  char *result = destino;
 
   while (*fuente != '\0') {
     *destino = *fuente;
@@ -279,7 +279,7 @@ char *strcpy(char *destino, const char *fuente) {
   }
 
   *destino = '\0';
-  return aux;
+  return result;
 }
 
 // http://vivi.dyndns.org/tech/cpp/atohex.html
@@ -355,8 +355,8 @@ void strToDouble(char *numStr, double *result) {
   for (k = 0; numStr[i] != 0 && numStr[i] != '.'; i++, k++) {
     integerPart[k] = numStr[i];
   }
-  int aux;
-  *result += strToInt(integerPart, &aux);
+  
+  *result += strToInt(integerPart, 0);
   if (numStr[i] == '.') {
     i++;
     for (; numStr[i] != 0; i++, commaOffset++) {

@@ -355,12 +355,12 @@ void killProcessWrapper(int argc, char **argv) {
     return;
   }
   int pid = strToInt(argv[1], 0);
-  char userInput[2] = {0};
+  char userInput;
   if (pid == 2) {
     printf("\nUsted va a matar a un proceso clave para el sistema.\nSi quiere "
            "continuar presione y.\n\n");
-    scanf("%c", userInput);
-    if (userInput[0] != 'y') {
+   userInput = getChar();
+    if (userInput != 'y') {
       return;
     }
   }
@@ -373,12 +373,12 @@ void setPriorityWrapper(int argc, char **argv) {
   }
   int pid = strToInt(argv[1], 0);
   int priority = strToInt(argv[2], 0);
-  char userInput[2] = {0};
+  char userInput;
   if (pid == 2) {
     printf("\nUsted va a cambiar la prioridad de un proceso clave para el "
            "sistema.\nSi quiere continuar presione y.\n\n");
-    scanf("%c", userInput);
-    if (userInput[0] != 'y') {
+    userInput = getChar();
+    if (userInput != 'y') {
       return;
     }
   }
@@ -390,12 +390,12 @@ void blockProcessWrapper(int argc, char **argv) {
     return;
   }
   int pid = strToInt(argv[1], 0);
-  char userInput[2] = {0};
+  char userInput;
   if (pid == 2) {
     printf("\nUsted va a bloquear un proceso clave para el sistema.\nSi quiere "
            "continuar presione y.\n\n");
-    scanf("%c", userInput);
-    if (userInput[0] != 'y') {
+    userInput = getChar();
+    if (userInput != 'y') {
       return;
     }
   }
@@ -407,13 +407,12 @@ void unblockProcessWrapper(int argc, char **argv) {
     return;
   }
   int pid = strToInt(argv[1], 0);
-  char userInput[2] = {0};
+  char userInput;
   if (pid < 2) {
     printf("\nUsted va a desbloquear un proceso clave para el sistema.\nSi "
            "quiere continuar presione y.\n\n");
-    scanf("%c", userInput);
-    userInput[1] = 0;
-    if (userInput[0] != 'y') {
+    userInput = getChar();
+    if (userInput != 'y') {
       return;
     }
   }
@@ -506,7 +505,7 @@ void wc(int argc, char **argv) {
       lineCount++;
     }
   }
-  printf("\nCantidad de lineas: %d\n", lineCount);
+  printf("\n\nCantidad de lineas: %d\n", lineCount);
 }
 
 int checkArgcWrapper(int argc, int argumentsPermitted) {
