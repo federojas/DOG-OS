@@ -482,7 +482,7 @@ void loop(int argc, char ** argv) {
     }
 	int pid = getProcessPID();
 	while(1) {
-		printf("El proceso %d dice hola. Imprimiendo devuelta en %d segundos.", pid, WAIT_SECONDS_LOOP);
+		printf("El proceso %d dice hola. Imprimiendo devuelta en %d segundos.\n", pid, WAIT_SECONDS_LOOP);
     	sleep(WAIT_SECONDS_LOOP);
 	}
 }

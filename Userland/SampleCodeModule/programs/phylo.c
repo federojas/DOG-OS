@@ -49,8 +49,14 @@ void philoProblem(int argc, char ** argv) {
         i++;
     }
 
+    printf("\nVamos a dejar comer a los filosofos iniciales por %d segundos.\n\n", FRONTEND_WAIT_SECONDS);
+    
     char *args[] = {"Phylo Table"};
     int tablePID = newProcess(&printTable, 1, args, BACKGROUND, NULL);
+    
+    sleep(FRONTEND_WAIT_SECONDS);
+
+    printf("\nYa puede agregar o retirar comensales y terminar la cena.\n\n");
 
     while (tableOpen) {
         char key = getChar();
@@ -208,5 +214,5 @@ static void printPhyloHeader() {
     printCenteredHeading("Use R para remover un filosofo");
     printCenteredHeading("Use Q para finalizar");
     printFullDivider();
-    sleep(3);
+    sleep(FRONTEND_WAIT_SECONDS);
 }

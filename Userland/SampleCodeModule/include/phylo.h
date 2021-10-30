@@ -11,6 +11,7 @@
 #define THINK_EAT_WAIT_SECONDS 1
 #define PHYLO_HEADER_WIDTH 41
 #define PHYLO_HEADER_HEIGHT 8
+#define FRONTEND_WAIT_SECONDS 2
 
 void philoProblem(int argc, char ** argv);
 
