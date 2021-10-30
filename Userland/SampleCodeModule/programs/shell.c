@@ -49,7 +49,7 @@ static t_command commands[COMMAND_COUNT] = {
     {&getCPUVendor, "/cpuvendor", "ID de fabricante del CPU"},
     {&getRoots, "/roots", "Calculo de raices de una funcion      cuadratica"},
     {&logo, "/dog", "Imprime DOG-OS logo"},
-    {&doge, "/doge", "Doge animation"},
+    {&doge, "/doge", "DogOS animation"},
     {&changeBgColour, "/bgcolour", "Cambia el color del fondo del texto"},
     {&changeFtColour, "/ftcolour", "Cambia el color del texto"},
     {&memStatusWrapper, "/mem", "Imprime el estado de la memoria"},
