@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #ifdef MEMORY_MANAGER_FREE
 
 #include <stdint.h>
@@ -14,7 +16,7 @@ typedef union header
     {
         union header *ptr;
         size_t size;  
-    } s;
+    } data;
 
     Align x; 
 
@@ -30,8 +32,8 @@ void initializeMemoryManager(char * heap_base, size_t heap_size) {
         return ;
     total_units = (heap_size + sizeof(Header) - 1) / sizeof(Header) + 1;
     free_node = base = (Header *) heap_base;
-    free_node->s.size = total_units;
-    free_node->s.ptr = free_node;
+    free_node->data.size = total_units;
+    free_node->data.ptr = free_node;
 }
 
 
@@ -50,19 +52,19 @@ void *malloc(uint64_t nbytes) {
     prevptr = free_node;
 
     is_allocating = true;
-    for (current_node = prevptr->s.ptr; is_allocating; current_node = current_node->s.ptr)
+    for (current_node = prevptr->data.ptr; is_allocating; current_node = current_node->data.ptr)
     {
-        if (current_node->s.size >= nunits)
+        if (current_node->data.size >= nunits)
         {
-            if (current_node->s.size == nunits)
+            if (current_node->data.size == nunits)
             {
-                prevptr->s.ptr = current_node->s.ptr;
+                prevptr->data.ptr = current_node->data.ptr;
             }
             else
             {
-                current_node->s.size -= nunits;
-                current_node += current_node->s.size;
-                current_node->s.size = nunits;
+                current_node->data.size -= nunits;
+                current_node += current_node->data.size;
+                current_node->data.size = nunits;
             }
 
             free_node = prevptr;
@@ -97,52 +99,52 @@ void free(void *block) {
 
     bool external = false;
 
-    for (current_node = free_node; !(free_block > current_node && free_block < current_node->s.ptr); current_node = current_node->s.ptr) {
-        if(free_block == current_node || free_block == current_node->s.ptr) {
+    for (current_node = free_node; !(free_block > current_node && free_block < current_node->data.ptr); current_node = current_node->data.ptr) {
+        if(free_block == current_node || free_block == current_node->data.ptr) {
             return ;
         }   
-        if (current_node >= current_node->s.ptr && (free_block > current_node || free_block < current_node->s.ptr)) {
+        if (current_node >= current_node->data.ptr && (free_block > current_node || free_block < current_node->data.ptr)) {
             external = true;
             break; 
         }
     }
 
-    if (!external && (current_node + current_node->s.size > free_block || free_block + free_block->s.size > current_node->s.ptr)) {
+    if (!external && (current_node + current_node->data.size > free_block || free_block + free_block->data.size > current_node->data.ptr)) {
             return;
     }
             
         
-    if (free_block + free_block->s.size == current_node->s.ptr) {
+    if (free_block + free_block->data.size == current_node->data.ptr) {
    
 
-        free_block->s.size += current_node->s.ptr->s.size;
+        free_block->data.size += current_node->data.ptr->data.size;
    
-        free_block->s.ptr = current_node->s.ptr->s.ptr;
+        free_block->data.ptr = current_node->data.ptr->data.ptr;
 
     } else {
 
-        free_block->s.ptr = current_node->s.ptr;
+        free_block->data.ptr = current_node->data.ptr;
     }
 
-    if (current_node + current_node->s.size == free_block) {              
+    if (current_node + current_node->data.size == free_block) {              
 
-        current_node->s.size += free_block->s.size;
+        current_node->data.size += free_block->data.size;
 
-        current_node->s.ptr = free_block->s.ptr;
+        current_node->data.ptr = free_block->data.ptr;
 
     } else {
-        current_node->s.ptr = free_block;
+        current_node->data.ptr = free_block;
     }
 
     free_node = current_node;
 }
 void memoryDump(){
-    long long idx=1;
+    int blockNumber = 1;
     Header *original,*current;
     original=current=free_node;
     int flag=1;
     printf("\nMEMORY DUMP (Free List Memory Manager)\n");
-    printf("\nTotal memory: %d bytes\n\n", total_units*sizeof(Header));
+    printf("\nTotal memory: %d bytes\n\n", (uint32_t) total_units*sizeof(Header));
     if(free_node==NULL){
         printf("\nNo free blocks available\n");
         return;
@@ -151,12 +153,12 @@ void memoryDump(){
 
     while(current!=original||flag){
         flag=0;
-        printf("    Block number %d\n",idx);
+        printf("    Block number %d\n",blockNumber);
         printf("    Base:%x\n", (uint64_t)current);
-        printf("    Free units: %d\n\n", current->s.size);
+        printf("    Free units: %d\n\n", (int) current->data.size);
 
-        current=current->s.ptr;
-        idx++;
+        current=current->data.ptr;
+        blockNumber++;
     }
     printf("\n");
 }

@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <syscalls.h>
 #include <keyboardDriver.h>
 #include <videoDriver.h>
@@ -38,7 +40,7 @@ void getMem(uint64_t direc, uint8_t * buffer, uint64_t bytes) {
 
 
 void sysWrite(char * str, uint8_t len, t_color bgColor, t_color ftColor, int usrLen) {
-    if (str == 0 ||  len <= 0 || bgColor < 0 || ftColor < 0) {
+    if (str == 0 ||  len <= 0 ) {
         return ;
     }
 
@@ -49,7 +51,8 @@ void sysWrite(char * str, uint8_t len, t_color bgColor, t_color ftColor, int usr
 	}
 
     if(outputFD == 1) {
-        for (int i = 0; str[i] != 0 && i < len; i++) {
+        int i = 0;
+        for (; i < len && str[i] != 0; i++) {
             printChar(str[i], ftColor, bgColor, 1);
         }	
     } else {

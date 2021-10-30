@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <pipes.h>
 #include <semaphores.h>
 #include <prints.h>
@@ -30,7 +32,7 @@ int pipeWrite(int pipeId, char *str) {
     if (idx == -1) {
         return -1;
     } 
-    int i;
+    int i = 0;
     while (str[i] != 0) {
         pipeWriter(str[i], idx);
         i++;
@@ -151,7 +153,7 @@ void pipeStatus() {
             printf("    Write semaphore: %d\n", pipe.writeLock);
             printf("    Pipe buffer content: ");
             for (int i = pipe.readIndex; i != pipe.writeIndex; i = (i + 1) % PIPE_BUFFER_SIZE) {
-                printf("%s", pipe.buffer[i]);
+                putChar(pipe.buffer[i]);
             }
         }
     }

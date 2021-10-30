@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <libc.h>
 #include <shell.h>
 #include <stdarg.h>
@@ -540,7 +542,7 @@ void printLogo(t_color color, int colored) {
 
     if (!colored) {
         for (int k = 0; k < 5; k++) {
-            printf(dog[k]);
+            printf("%s", dog[k]);
         }
     } else {
         for (int j = 0; j < 5; j++) {
@@ -561,7 +563,7 @@ void printDog1() {
         
     printf("  ");
     printf("  ");
-    printf(dog[j]);
+    printf("%s", dog[j]);
   }
 }
 
@@ -578,7 +580,7 @@ void printDog2() {
        printf("  ");
       printf("  ");
       printf("  ");
-    printf(dog[j]);
+    printf("%s", dog[j]);
   }
 }
 
@@ -598,7 +600,7 @@ void printDog3() {
       printf("  ");
          printf("  ");
       printf("  ");
-    printf(dog[j]);
+    printf("%s", dog[j]);
   }
 }
 
@@ -626,7 +628,7 @@ for (int j = 0; j < 6; j++) {
     printf("  ");
     printf("  ");
     printf("  ");
-    printf(dog[j]);
+    printf("%s", dog[j]);
   }
 }
 

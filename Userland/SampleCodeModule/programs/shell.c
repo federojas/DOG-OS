@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <commands.h>
 #include <libc.h>
 #include <memoryTest.h>
@@ -112,19 +114,20 @@ static void initializeCommands() {
 
 static void shellExecute() {
     char userInput[BUFFER_SIZE] = {0};
-    int argc = 0;
-    int pipeIndex;
     int foreground;
     
     while (1) {
         printUser();
-
-        argc = 0;
+        int argc;
+        int pipeIndex;
         userInput[0] = 0;
         char * argv [MAX_ARGUMENTS] = {0};
         foreground = FOREGROUND;
 
-        scanf("%s", userInput);
+        if ( scanf("%s", userInput) >= BUFFER_SIZE ) {
+            printf("\nMaximo de caracteres permitidos para input: %d\n\n", BUFFER_SIZE-1);
+            continue;
+        }
         
         argc = getCommandArgs(userInput, argv);
 
@@ -327,8 +330,9 @@ static void helpShell(int argc, char ** argv) {
     setBGC(BLACK);
     printf("\nUse Ctrl + TAB para cambiar de pantalla.\n");
     printf("Use Ctrl + C para terminar el proceso actual.\n");
+    printf("Use Ctrl + R para capturar el valor de los registros\n");
     printf("Use Ctrl + D para obtener resultados en comandos como \n/wc o /filter\n");
-
+    
     printf("\n");
     setBGC(WHITE);
     setFTC(BLACK);
