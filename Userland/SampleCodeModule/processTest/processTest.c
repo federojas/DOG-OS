@@ -27,7 +27,7 @@ void testProcesses(){
       if (p_rqs[rq].pid == -1){                           
         printf("Error creating process\n");               
         return;
-      }else{
+      } else {
         p_rqs[rq].state = RUNNING;
         alive++;
       }

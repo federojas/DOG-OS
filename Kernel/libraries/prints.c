@@ -67,25 +67,29 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 }
 
 int log2(uint32_t number) {
-      if (number == 0)
-            return -1;
+      if (number == 0) {
+        return -1;
+      }
+            
       int result = -1;
-      while (number)
-      {
-            result++;
-            number >>= 1;
+      while (number) {
+        result++;
+        number >>= 1;
       }
       return result;
 }
 
 int pow(int x, unsigned int y) {
-    if (y == 0)
+    if (y == 0) {
         return 1;
-    else if ((y % 2) == 0)
+    }
+    else if ((y % 2) == 0) {
         return pow (x, y / 2) * pow (x, y / 2);
-    else
+    }
+        
+    else {
         return x * pow (x, y / 2) * pow (x, y / 2);
-
+    }
 }
 
 void printIntDec(uint64_t num) {

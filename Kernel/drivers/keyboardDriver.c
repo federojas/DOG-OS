@@ -152,8 +152,10 @@ char getChar() {
 }
 
 char removeCharFromBuffer() {
-  if (buffSize <= 0)
+  if (buffSize <= 0) {
     return -1;
+  }
+    
   int c = buffer[ridx];
   ridx = (ridx + 1) % BUFF_LEN;
 
@@ -162,8 +164,10 @@ char removeCharFromBuffer() {
 }
 uint64_t dumpBuffer(char *dest, int size) {
   int i = 0;
-  if (size <= 0 || buffSize <= 0)
+  if (size <= 0 || buffSize <= 0) {
     return -1;
+  }
+    
 
   while (i < size - 1 && buffSize) {
     dest[i++] = removeCharFromBuffer();

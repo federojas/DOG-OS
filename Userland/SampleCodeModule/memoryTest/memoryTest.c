@@ -40,10 +40,11 @@ void testMemory() {
         
 
     for (i = 0; i < rq; i++)
-      if (mm_rqs[i].address != NULL)
+      if (mm_rqs[i].address != NULL) {
         if(!memcheck(mm_rqs[i].address, i, mm_rqs[i].size)) {
           printf("ERROR!\n");
         }
+      }
           
 
     for (i = 0; i < rq; i++)

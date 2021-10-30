@@ -37,8 +37,9 @@ void sendUserData(char *userName, int len) {
                  currentFTC, (uint64_t)&len);
 }
 void setFirstChange(int number) {
-  if (number < 0 || number > 1)
+  if (number < 0 || number > 1) {
     return;
+  }
   changedUserName = number;
 }
 
@@ -110,12 +111,15 @@ void printc(t_color color, char *str, ...) {
 
 // https://stackoverflow.com/questions/26860574/pow-implementation-in-cmath-and-efficient-replacement
 int pow(int x, unsigned int y) {
-  if (y == 0)
+  if (y == 0) {
     return 1;
-  else if ((y % 2) == 0)
+  }
+  else if ((y % 2) == 0) {
     return pow(x, y / 2) * pow(x, y / 2);
-  else
+  }
+  else {
     return x * pow(x, y / 2) * pow(x, y / 2);
+  } 
 }
 
 static void reverseAUX(char *str, int len) {
@@ -138,8 +142,10 @@ static int intToStrAUX(int x, char str[], int d) {
 
   // If number of digits required is more, then
   // add 0s at the beginning
-  while (i < d)
+  while (i < d) {
     str[i++] = '0';
+  }
+    
 
   reverseAUX(str, i);
   str[i] = '\0';
@@ -174,8 +180,10 @@ void doubleToStr(double n, char *res, int afterpoint) {
     // of points after dot. The third parameter
     // is needed to handle cases like 233.007
     fpart = fpart * pow(10, afterpoint);
-    if (n < 0)
+    if (n < 0) {
       fpart *= -1;
+    }
+      
 
     intToStrAUX((int)fpart, res + resIdx + 1, afterpoint);
   }
@@ -316,8 +324,9 @@ int strToInt(char *str, int *size) {
   // Iterate through all digits
   // and update the result
   for (; str[i] != '\0'; ++i) {
-    if (str[i] < '0' || str[i] > '9')
+    if (str[i] < '0' || str[i] > '9') {
       return res;
+    }
     res = res * 10 + str[i] - '0';
     *size += 1;
   }
@@ -434,16 +443,20 @@ char *intToStr(int value, char *buffer, int base) {
 int strcmp(char string1[], char string2[]) {
   int i = 0;
   while (string1[i] != 0 && string2[i] != 0) {
-    if (string1[i] < string2[i])
+    if (string1[i] < string2[i]) {
       return -1;
-    if (string1[i] > string2[i])
+    } 
+    if (string1[i] > string2[i]) {
       return 1;
+    }
     i++;
   }
-  if (string1[i] == 0 && string2[i] == 0)
+  if (string1[i] == 0 && string2[i] == 0) {
     return 0;
-  if (string1[i] != 0 && string2[i] == 0)
+  }
+  if (string1[i] != 0 && string2[i] == 0) {
     return 1;
+  }
   return -1;
 }
 
@@ -460,14 +473,18 @@ void *memset(void *destination, int32_t c, uint64_t length) {
 
 void printDivider(int uniformly, int c1, int c2) {
   printf("+");
-  for (int i = 0; i < c1 + 2; i++)
+  for (int i = 0; i < c1 + 2; i++) {
     printf("-");
-  if (!uniformly)
+  }
+  if (!uniformly) {
     printf("+");
-  else
+  }
+  else {
     printf("-");
-  for (int j = 0; j < c2 + 2; j++)
+  }
+  for (int j = 0; j < c2 + 2; j++) {
     printf("-");
+  }
   printf("+\n");
 }
 
@@ -483,7 +500,9 @@ void printCenteredHeading(int delimiters, char *str, ...) {
   int terminalLen = getHalfScreenSize() - 5;
   int delta1 = ((terminalLen - len) / 2);
   int i;
-  if (delimiters) printf("|");
+  if (delimiters) {
+    printf("|");
+  } 
   for (i = 1; i < delta1; i++) {
     printf(" ");
   }
@@ -492,7 +511,9 @@ void printCenteredHeading(int delimiters, char *str, ...) {
   for (; i < terminalLen; i++) {
     printf(" ");
   }
-    if (delimiters) printf("|");
+    if (delimiters) {
+      printf("|");
+    } 
     printf("\n");
     va_end(args);
 }
@@ -501,8 +522,9 @@ void printRow(char *str1, char *str2, int firstRow) {
   printf("|");
   printCol(str1, C1_WIDTH);
   printCol(str2, C2_WIDTH);
-  if (firstRow)
+  if (firstRow) {
     printf("\n");
+  }
 }
 
 void printCol(char *str, int width) {
@@ -510,17 +532,20 @@ void printCol(char *str, int width) {
   printf(" ");
   for (int i = 0; i < width; i++) {
     if (!done) {
-      if (str[i])
+      if (str[i]) {
         printf("%c", str[i]);
-      else
+      }
+      else {
         done = 1;
+      }
     }
     if (done) {
       printf(" ");
     }
   }
-  if (done)
+  if (done) {
     printf(" |");
+  }
   else {
     printf(" |\n");
     printRow(" ", str + width, 0);
@@ -545,9 +570,9 @@ void printLogo(t_color color, int colored) {
             printf("%s", dog[k]);
         }
     } else {
-        for (int j = 0; j < 5; j++) {
+      for (int j = 0; j < 5; j++) {
         printc(color, dog[j]);
-    }
+      }
     }
   
 }

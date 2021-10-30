@@ -320,7 +320,9 @@ static void help(int argc, char ** argv) {
 }
 
 static void helpShell(int argc, char ** argv) {
-    if (checkArgcWrapper(argc, 1) == -1) { return ;}
+    if (checkArgcWrapper(argc, 1) == -1) { 
+      return ;
+    }
 
     printf("\n");
     setBGC(WHITE);
@@ -364,7 +366,7 @@ static void changeUser(int argc, char ** argv) {
 	if (checkArgcWrapper(argc, 2) == -1) {
 		return;
   }
-	if(strlen(argv[1]) > USER_SIZE - 1) {
+	if (strlen(argv[1]) > USER_SIZE - 1) {
 		printf("\nEl nombre de usuario puede tener un maximo de %d caracteres.\n\n", USER_SIZE - 1);
 		return;
 	}

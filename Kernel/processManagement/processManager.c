@@ -253,15 +253,19 @@ int setState(uint64_t pid, t_state newState) {
 
 void setPriority(uint64_t pid, int newPriority) {
 
-      if (newPriority < 0)
-            newPriority = 0;
-      if (newPriority > MAX_PRIORITY)
-            newPriority = MAX_PRIORITY;
-
+      if (newPriority < 0) {
+        newPriority = 0;
+      }
+      if (newPriority > MAX_PRIORITY) {
+        newPriority = MAX_PRIORITY;
+      }
+        
       t_process_node *p = getProcess(pid);
 
-      if (p != NULL)
-            p->pcb.priority = newPriority;
+      if (p != NULL) {
+        p->pcb.priority = newPriority;
+      }
+            
 }
 
 void killCurrentFGProcess() {
@@ -436,9 +440,10 @@ static char * fgToBoolStr(int fg) {
 }
 
 static void printProcess(t_process_node *process) {
-  if (process != NULL)
-  printf("Name: %s\nPID: %d\nPPID: %d\nForeground: %s\nRSP: %x\nRBP: %x\nPriority: %d\nState: %s\n\n", 
-  process->pcb.name, process->pcb.pid, 
-  process->pcb.ppid, fgToBoolStr((int)process->pcb.foreground) , (uint64_t)process->pcb.rsp,
-  (uint64_t)process->pcb.rbp, process->pcb.priority, stateToStr(process->pcb.state));
+  if (process != NULL) {
+    printf("Name: %s\nPID: %d\nPPID: %d\nForeground: %s\nRSP: %x\nRBP: %x\nPriority: %d\nState: %s\n\n", 
+    process->pcb.name, process->pcb.pid, 
+    process->pcb.ppid, fgToBoolStr((int)process->pcb.foreground) , (uint64_t)process->pcb.rsp,
+    (uint64_t)process->pcb.rbp, process->pcb.priority, stateToStr(process->pcb.state));
+  }
 }

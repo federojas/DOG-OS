@@ -28,8 +28,9 @@ static Header *free_node = NULL;
 size_t total_units;
 
 void initializeMemoryManager(char * heap_base, size_t heap_size) {
-    if(heap_base == NULL) 
+    if(heap_base == NULL) {
         return ;
+    } 
     total_units = (heap_size + sizeof(Header) - 1) / sizeof(Header) + 1;
     free_node = base = (Header *) heap_base;
     free_node->data.size = total_units;
@@ -39,9 +40,10 @@ void initializeMemoryManager(char * heap_base, size_t heap_size) {
 
 void *malloc(uint64_t nbytes) {
 
-    if(nbytes == 0) 
+    if(nbytes == 0) {
         return 0;
-
+    }
+        
     Header *current_node, *prevptr;
     size_t nunits;
     void *result;
@@ -52,16 +54,11 @@ void *malloc(uint64_t nbytes) {
     prevptr = free_node;
 
     is_allocating = true;
-    for (current_node = prevptr->data.ptr; is_allocating; current_node = current_node->data.ptr)
-    {
-        if (current_node->data.size >= nunits)
-        {
-            if (current_node->data.size == nunits)
-            {
+    for (current_node = prevptr->data.ptr; is_allocating; current_node = current_node->data.ptr) {
+        if (current_node->data.size >= nunits) {
+            if (current_node->data.size == nunits) {
                 prevptr->data.ptr = current_node->data.ptr;
-            }
-            else
-            {
+            } else {
                 current_node->data.size -= nunits;
                 current_node += current_node->data.size;
                 current_node->data.size = nunits;
@@ -72,8 +69,10 @@ void *malloc(uint64_t nbytes) {
             is_allocating = false; 
         }
 
-        if (current_node == free_node)
+        if (current_node == free_node) {
             return NULL;
+        }
+            
 
         prevptr = current_node;
     } /* for */
