@@ -358,7 +358,7 @@ void killProcessWrapper(int argc, char **argv) {
   }
   int pid = strToInt(argv[1], 0);
   char userInput[2] = {0};
-  if (pid < 2) {
+  if (pid == 2) {
     printf("\nUsted va a matar a un proceso clave para el sistema.\nSi quiere "
            "continuar presione y.\n\n");
     scanf("%c", userInput);
@@ -376,7 +376,7 @@ void setPriorityWrapper(int argc, char **argv) {
   int pid = strToInt(argv[1], 0);
   int priority = strToInt(argv[2], 0);
   char userInput[2] = {0};
-  if (pid < 2) {
+  if (pid == 2) {
     printf("\nUsted va a cambiar la prioridad de un proceso clave para el "
            "sistema.\nSi quiere continuar presione y.\n\n");
     scanf("%c", userInput);
@@ -393,7 +393,7 @@ void blockProcessWrapper(int argc, char **argv) {
   }
   int pid = strToInt(argv[1], 0);
   char userInput[2] = {0};
-  if (pid < 2) {
+  if (pid == 2) {
     printf("\nUsted va a bloquear un proceso clave para el sistema.\nSi quiere "
            "continuar presione y.\n\n");
     scanf("%c", userInput);

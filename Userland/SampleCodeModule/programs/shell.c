@@ -266,8 +266,8 @@ printCenteredHeading("Lista de comandos");
     printRow(shellData.commands[i].name, shellData.commands[i].description, 1);
   }
   printDivider(0, C1_WIDTH, C2_WIDTH);
-    printCenteredHeading("Ejemplos de uso:    c1 | c2    c1 &    c1 arg1 ...");
-    printCenteredHeading("Use /helptest para obtener informacion acerca de los tests");
+    printCenteredHeading("Ejemplos de uso:  /c1 | /c2   /c1 &   /c1 arg1 ...");
+    printCenteredHeading("Use /helptest para obtener informacion de los tests");
     printDivider(1, C1_WIDTH, C2_WIDTH);
 }
 

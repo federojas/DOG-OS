@@ -151,7 +151,7 @@ int newProcess(void (*entryPoint)(int, char **), int argc, char **argv,
   getArguments(arguments, argv, argc);
 
   newProcess->pcb.argc = argc;
-  newProcess->pcb.argv = argv;
+  newProcess->pcb.argv = arguments;
 
   initializeProcessStackFrame(entryPoint, argc, arguments, newProcess->pcb.rbp);
 
@@ -161,6 +161,7 @@ int newProcess(void (*entryPoint)(int, char **), int argc, char **argv,
   if (newProcess->pcb.foreground && newProcess->pcb.ppid) {
     blockProcess(newProcess->pcb.ppid);
   }
+
   return newProcess->pcb.pid;
 }
 
@@ -365,7 +366,7 @@ static void initializeProcessStackFrame(void (*entryPoint)(int, char **),
   stackFrame->rsi = (uint64_t)argc;
   stackFrame->rdi = (uint64_t)entryPoint;
   stackFrame->rbp = 0x00B;
-  stackFrame->rdx = (uint64_t)argv;
+  stackFrame->rdx = (uint64_t)argv; 
   stackFrame->rcx = 0x00C;
   stackFrame->rbx = 0x00D;
   stackFrame->rax = 0x00E;
