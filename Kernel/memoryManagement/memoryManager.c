@@ -75,7 +75,7 @@ void *malloc(uint64_t nbytes) {
             
 
         prevptr = current_node;
-    } /* for */
+    }
 
     return result;
 }

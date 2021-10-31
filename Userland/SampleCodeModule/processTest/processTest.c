@@ -39,8 +39,8 @@ void testProcesses(){
         action = GetUniform(2) % 2; 
         switch(action){
           case 0:
-            if (p_rqs[rq].state == RUNNING || p_rqs[rq].state == WAITING){
-              if (killProcess(p_rqs[rq].pid) == -1){         
+            if (p_rqs[rq].state == RUNNING || p_rqs[rq].state == WAITING) {
+              if (killProcess(p_rqs[rq].pid) == -1) {         
                 printf("Error killing process\n");        
                 return;
               }
@@ -51,8 +51,8 @@ void testProcesses(){
             break;
 
           case 1:
-            if (p_rqs[rq].state == RUNNING){
-              if(blockProcess(p_rqs[rq].pid) == -1){ 
+            if (p_rqs[rq].state == RUNNING) {
+              if(blockProcess(p_rqs[rq].pid) == -1) { 
                 printf("Error blocking process\n");
                 return;
               }
