@@ -28,9 +28,9 @@ static void printHelpTable();
 static void printHelpTestTable();
 
 static int findPipe(int argc, char ** argv);
-static void initializePipe(int pipeIndex, int argc, char ** argv, int foreground);
-static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground);
-static int runPipeCmd(int argc, char ** argv, int foreground, int fdin, int fdout);
+static void initializePipe(int pipeIndex, int argc, char ** argv);
+static int handlePipe(int pipeIndex, int argc, char ** argv);
+static int runPipeCmd(int argc, char ** argv, int fdin, int fdout);
 
 static int pipeId = 70;
 
@@ -138,7 +138,7 @@ static void shellExecute() {
         pipeIndex = findPipe(argc, argv);
 
         if(pipeIndex >= 0) {
-          initializePipe(pipeIndex, argc, argv, foreground);
+          initializePipe(pipeIndex, argc, argv);
           continue ;
         } 
 
@@ -189,19 +189,19 @@ static int findPipe(int argc, char ** argv) {
   return -1;
 }
 
-static void initializePipe(int pipeIndex, int argc, char ** argv, int foreground) {
+static void initializePipe(int pipeIndex, int argc, char ** argv) {
   if(pipeIndex == 0 || pipeIndex == argc - 1) {
     printf("\nPipe (|) debe ser usado entre dos comandos.\n\n");
     return ;
   }
-  int pipe = handlePipe(pipeIndex, argc, argv, foreground);
+  int pipe = handlePipe(pipeIndex, argc, argv);
   if(pipe == -1) {
     printf("\nUno de los comandos es invalido. Use /help.\n\n");
     return ;
   }
 }
 
-static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground) {
+static int handlePipe(int pipeIndex, int argc, char ** argv) {
   char * currentArgv[MAX_ARGUMENTS];
   int currentArgc = 0;
   int pids[2];
@@ -217,7 +217,7 @@ static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground) {
     currentArgc++;
   }
 
-  pids[1] = runPipeCmd(currentArgc, currentArgv, foreground, 0, pipe);
+  pids[1] = runPipeCmd(currentArgc, currentArgv, 0, pipe);
   if (pids[1] == -1) {
     pipeClose(pipe);
     return -1;
@@ -232,7 +232,7 @@ static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground) {
   int endOfFile = EOF;
   pipeWrite(pipe, (char *)&endOfFile);
 
-  pids[0] = runPipeCmd(currentArgc, currentArgv, foreground, pipe, 1);
+  pids[0] = runPipeCmd(currentArgc, currentArgv, pipe, 1);
   if (pids[0] == -1) {
     pipeClose(pipe);
     return -1;
@@ -243,7 +243,7 @@ static int handlePipe(int pipeIndex, int argc, char ** argv, int foreground) {
   return 1;
 }
 
-static int runPipeCmd(int argc, char ** argv, int foreground, int fdin, int fdout) {
+static int runPipeCmd(int argc, char ** argv, int fdin, int fdout) {
   int fd[2];
   int commandIdx = getCommandIdx(argv[0]);
   if (commandIdx == -1) {
@@ -253,7 +253,7 @@ static int runPipeCmd(int argc, char ** argv, int foreground, int fdin, int fdou
   fd[0] = fdin;
   fd[1] = fdout;
 
-  return newProcess(shellData.commands[commandIdx].commandFn, argc, argv, foreground, fd);
+  return newProcess(shellData.commands[commandIdx].commandFn, argc, argv, FOREGROUND, fd);
 }
 
 static void shellWelcomeMessage() {

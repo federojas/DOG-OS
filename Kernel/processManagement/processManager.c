@@ -78,7 +78,7 @@ void initializeProcessManager() {
 
   char *argv[] = {"Initial Idle Process"};
 
-  newProcess(&idleProcess, 1, argv, FOREGROUND, 0);
+  newProcess(&idleProcess, 1, argv, BACKGROUND, 0);
 
   baseProcess = dequeueProcess(processes);
 }
@@ -192,7 +192,9 @@ int blockProcess(uint64_t pid) {
   return resPID;
 }
 
-int readyProcess(uint64_t pid) { return setState(pid, READY); }
+int readyProcess(uint64_t pid) { 
+  return setState(pid, READY); 
+}
 
 int getProcessPID() {
   return currentProcess ? currentProcess->pcb.pid : -1;
