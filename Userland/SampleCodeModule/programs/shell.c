@@ -217,8 +217,8 @@ static int handlePipe(int pipeIndex, int argc, char ** argv) {
     currentArgc++;
   }
 
-  pids[1] = runPipeCmd(currentArgc, currentArgv, 0, pipe);
-  if (pids[1] == -1) {
+  pids[0] = runPipeCmd(currentArgc, currentArgv, 0, pipe);
+  if (pids[0] == -1) {
     pipeClose(pipe);
     return -1;
   }
@@ -232,8 +232,8 @@ static int handlePipe(int pipeIndex, int argc, char ** argv) {
   int endOfFile = EOF;
   pipeWrite(pipe, (char *)&endOfFile);
 
-  pids[0] = runPipeCmd(currentArgc, currentArgv, pipe, 1);
-  if (pids[0] == -1) {
+  pids[1] = runPipeCmd(currentArgc, currentArgv, pipe, 1);
+  if (pids[1] == -1) {
     pipeClose(pipe);
     return -1;
   }
