@@ -8,7 +8,7 @@
 #define TOTAL_PAIR_PROCESSES 2
 #define SEM_ID 55
 
-int64_t global;  //shared memory
+int64_t global;
 int64_t iterations = 0;
 
 static void printUserPrompt() {
