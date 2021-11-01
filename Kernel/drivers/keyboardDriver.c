@@ -20,9 +20,9 @@
 
 static char buffer[BUFF_LEN] = {0};
 
-static int buffSize = 0; // cantidad de elementos del buffer
-static int ridx = 0;     // posicion de escritura
-static int widx = 0;     // posicion de lectura
+static int buffSize = 0;  // cantidad de elementos del buffer
+static int ridx = 0;      // posicion de escritura
+static int widx = 0;      // posicion de lectura
 
 static int shift = 0;
 static int ctrl = 0;
@@ -65,7 +65,6 @@ void cleanKeyboardBuffer() {
 }
 int bufferSize() { return buffSize; }
 void keyboardHandler(uint64_t rsp) {
-
   if (_hasKey()) {
     uint8_t scanCode = _getKey();
     uint8_t currentAction = getAction(scanCode);
@@ -78,7 +77,7 @@ void keyboardHandler(uint64_t rsp) {
         ctrl = 1;
       } else if (scanCode >= 58 || scanCode & 0x80 ||
                  (scanCode == 15 && ctrl == 0)) {
-        return; // NO ASCII
+        return;  // NO ASCII
       } else {
         if (charTable[scanCode][0] != 0) {
           if (ctrl && charTable[scanCode][0] == '\t') {
@@ -155,7 +154,7 @@ char removeCharFromBuffer() {
   if (buffSize <= 0) {
     return -1;
   }
-    
+
   int c = buffer[ridx];
   ridx = (ridx + 1) % BUFF_LEN;
 
@@ -167,7 +166,6 @@ uint64_t dumpBuffer(char *dest, int size) {
   if (size <= 0 || buffSize <= 0) {
     return -1;
   }
-    
 
   while (i < size - 1 && buffSize) {
     dest[i++] = removeCharFromBuffer();

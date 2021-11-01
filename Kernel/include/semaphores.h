@@ -7,13 +7,13 @@
 #define NULL ((void *)0)
 
 typedef struct t_semaphore {
-    uint32_t id;
-    uint64_t value;
-    int blockedProcesses[MAX_BLOCKED_PROCESSES];
-    uint16_t blockedProcessesAmount;
-    uint16_t listeningProcesses;
-    struct t_semaphore * next;
-    int lock;
+  uint32_t id;
+  uint64_t value;
+  int blockedProcesses[MAX_BLOCKED_PROCESSES];
+  uint16_t blockedProcessesAmount;
+  uint16_t listeningProcesses;
+  struct t_semaphore *next;
+  int lock;
 } t_semaphore;
 
 int semOpen(uint32_t id, uint64_t initialValue);

@@ -12,27 +12,25 @@
 #include <stdint.h>
 #include <userSyscalls.h>
 
-
-#define YEAR 20 //Debe escribir aca los digitos de su año (excepto los ultimos dos)
-#define BYTES 32 //Cantidad de bytes para el mem dump
-#define FLOAT_PRECISION 8 //Precision para los puntos flotantes
+#define YEAR \
+  20  // Debe escribir aca los digitos de su año (excepto los ultimos dos)
+#define BYTES 32           // Cantidad de bytes para el mem dump
+#define FLOAT_PRECISION 8  // Precision para los puntos flotantes
 #define WAIT_SECONDS_LOOP 2
 
+static char *registerNames[] = {
+    "R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ",
+    "R9: ",  "R8: ",  "RSI: ", "RDI: ", "RBP: ", "RDX: ",
+    "RCX: ", "RBX: ", "RAX: ", "RIP: ", "RSP: "};
 
-static char* registerNames[] = {
-"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9: ",
-"R8: ", "RSI: ", "RDI: ", "RBP: ", "RDX: ", "RCX: ", "RBX: ",
-"RAX: ", "RIP: ", "RSP: "
-};
-
-void getCurrentDayTime(int argc, char ** argv) {
-	if (checkArgcWrapper(argc, 1) == -1) {
-		return;
-	}
-    printf("\nFecha de hoy: ");
-    uint64_t result = _syscall(SYS_RTC_ID, DAY_RTC_ID, 0, 0, 0, 0);
-    printf("%d", result);
-	putChar('/');
+void getCurrentDayTime(int argc, char **argv) {
+  if (checkArgcWrapper(argc, 1) == -1) {
+    return;
+  }
+  printf("\nFecha de hoy: ");
+  uint64_t result = _syscall(SYS_RTC_ID, DAY_RTC_ID, 0, 0, 0, 0);
+  printf("%d", result);
+  putChar('/');
 
   result = _syscall(SYS_RTC_ID, MONTH_RTC_ID, 0, 0, 0, 0);
   printf("%d", result);
@@ -205,8 +203,9 @@ void getRoots(int argc, char **argv) {
   }
 
   if (b * b - 4 * a * c < 0) {
-    printf("\nEl polinomio no puede tener raices imaginarias.\nSu "
-           "discriminante no puede ser menor que 0.\n\n");
+    printf(
+        "\nEl polinomio no puede tener raices imaginarias.\nSu "
+        "discriminante no puede ser menor que 0.\n\n");
     return;
   }
 
@@ -240,25 +239,24 @@ void exit(int argc, char **argv) {
   (void)_syscall(SYS_EXIT_ID, 0, 0, 0, 0, 0);
 }
 
-
 // https://patorjk.com/software/taag/#p=display&f=Slant&t=DOG-OS
 void logo(int argc, char **argv) {
   if (checkArgcWrapper(argc, 1) == -1) {
     return;
   }
 
-    printLogo(WHITE, 0);
+  printLogo(WHITE, 0);
 }
 
 void doge(int argc, char **argv) {
   if (checkArgcWrapper(argc, 1) == -1) {
     return;
   }
-  ( void)_syscall(SYS_CLEAR_ID, 0, 0, 0, 0, 0);
+  (void)_syscall(SYS_CLEAR_ID, 0, 0, 0, 0, 0);
   int colors[4] = {WHITE, RED, GREEN, BLUE};
-  int j = 0; 
+  int j = 0;
   while (j < 4) {
-      for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
       printf("\n\n\n\n\n\n\n\n\n\n");
       printLogo(colors[i], 1);
       printf("\n\n\n\n\n");
@@ -285,24 +283,24 @@ void changeFtColour(int argc, char **argv) {
   }
   int aux = strToInt(argv[1], 0);
   switch (aux) {
-  case 1:
-    setFTC(WHITE);
-    break;
-  case 2:
-    setFTC(BLACK);
-    break;
-  case 3:
-    setFTC(RED);
-    break;
-  case 4:
-    setFTC(GREEN);
-    break;
-  case 5:
-    setFTC(BLUE);
-    break;
-  default:
-    printf("\nEl codigo de color que ingreso es invalido. Use /help.\n\n");
-    break;
+    case 1:
+      setFTC(WHITE);
+      break;
+    case 2:
+      setFTC(BLACK);
+      break;
+    case 3:
+      setFTC(RED);
+      break;
+    case 4:
+      setFTC(GREEN);
+      break;
+    case 5:
+      setFTC(BLUE);
+      break;
+    default:
+      printf("\nEl codigo de color que ingreso es invalido. Use /help.\n\n");
+      break;
   }
 }
 
@@ -312,24 +310,24 @@ void changeBgColour(int argc, char **argv) {
   }
   int aux = strToInt(argv[1], 0);
   switch (aux) {
-  case 1:
-    setBGC(WHITE);
-    break;
-  case 2:
-    setBGC(BLACK);
-    break;
-  case 3:
-    setBGC(RED);
-    break;
-  case 4:
-    setBGC(GREEN);
-    break;
-  case 5:
-    setBGC(BLUE);
-    break;
-  default:
-    printf("\nEl codigo de color que ingreso es invalido. Use /help.\n\n");
-    break;
+    case 1:
+      setBGC(WHITE);
+      break;
+    case 2:
+      setBGC(BLACK);
+      break;
+    case 3:
+      setBGC(RED);
+      break;
+    case 4:
+      setBGC(GREEN);
+      break;
+    case 5:
+      setBGC(BLUE);
+      break;
+    default:
+      printf("\nEl codigo de color que ingreso es invalido. Use /help.\n\n");
+      break;
   }
 }
 
@@ -361,9 +359,10 @@ void killProcessWrapper(int argc, char **argv) {
   int pid = strToInt(argv[1], 0);
   char userInput;
   if (pid == 2) {
-    printf("\nUsted va a matar a un proceso clave para el sistema.\nSi quiere "
-           "continuar presione y.\n\n");
-   userInput = getChar();
+    printf(
+        "\nUsted va a matar a un proceso clave para el sistema.\nSi quiere "
+        "continuar presione y.\n\n");
+    userInput = getChar();
     if (userInput != 'y') {
       return;
     }
@@ -379,8 +378,9 @@ void setPriorityWrapper(int argc, char **argv) {
   int priority = strToInt(argv[2], 0);
   char userInput;
   if (pid == 2) {
-    printf("\nUsted va a cambiar la prioridad de un proceso clave para el "
-           "sistema.\nSi quiere continuar presione y.\n\n");
+    printf(
+        "\nUsted va a cambiar la prioridad de un proceso clave para el "
+        "sistema.\nSi quiere continuar presione y.\n\n");
     userInput = getChar();
     if (userInput != 'y') {
       return;
@@ -396,8 +396,9 @@ void blockProcessWrapper(int argc, char **argv) {
   int pid = strToInt(argv[1], 0);
   char userInput;
   if (pid == 2) {
-    printf("\nUsted va a bloquear un proceso clave para el sistema.\nSi quiere "
-           "continuar presione y.\n\n");
+    printf(
+        "\nUsted va a bloquear un proceso clave para el sistema.\nSi quiere "
+        "continuar presione y.\n\n");
     userInput = getChar();
     if (userInput != 'y') {
       return;
@@ -413,8 +414,9 @@ void unblockProcessWrapper(int argc, char **argv) {
   int pid = strToInt(argv[1], 0);
   char userInput;
   if (pid < 2) {
-    printf("\nUsted va a desbloquear un proceso clave para el sistema.\nSi "
-           "quiere continuar presione y.\n\n");
+    printf(
+        "\nUsted va a desbloquear un proceso clave para el sistema.\nSi "
+        "quiere continuar presione y.\n\n");
     userInput = getChar();
     if (userInput != 'y') {
       return;
@@ -448,8 +450,8 @@ void filter(int argc, char **argv) {
     return;
   }
   char c;
-  while((c=getChar()) != EOF) {
-    if(!isVowel(c)) {
+  while ((c = getChar()) != EOF) {
+    if (!isVowel(c)) {
       putChar(c);
     }
   }
@@ -474,20 +476,21 @@ void cat(int argc, char **argv) {
     return;
   }
   int c;
-  while((c=getChar()) != EOF) {
-	  putChar(c);
+  while ((c = getChar()) != EOF) {
+    putChar(c);
   }
 }
 
-void loop(int argc, char ** argv) {
-	if (checkArgcWrapper(argc, 1) == -1) {
-		return;
-    }
-	int pid = getProcessPID();
-	while(1) {
-		printf("El proceso %d dice hola. Imprimiendo devuelta en %d segundos.\n", pid, WAIT_SECONDS_LOOP);
-    	sleep(WAIT_SECONDS_LOOP);
-	}
+void loop(int argc, char **argv) {
+  if (checkArgcWrapper(argc, 1) == -1) {
+    return;
+  }
+  int pid = getProcessPID();
+  while (1) {
+    printf("El proceso %d dice hola. Imprimiendo devuelta en %d segundos.\n",
+           pid, WAIT_SECONDS_LOOP);
+    sleep(WAIT_SECONDS_LOOP);
+  }
 }
 
 void pipeStatusWrapper(int argc, char **argv) {
@@ -503,9 +506,9 @@ void wc(int argc, char **argv) {
   }
   char c;
   int lineCount = 1;
-  while((c=getChar()) != EOF) {
+  while ((c = getChar()) != EOF) {
     putChar(c);
-    if(c == '\n') {
+    if (c == '\n') {
       lineCount++;
     }
   }

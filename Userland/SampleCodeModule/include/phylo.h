@@ -13,6 +13,6 @@
 #define PHYLO_HEADER_HEIGHT 8
 #define FRONTEND_WAIT_SECONDS 2
 
-void philoProblem(int argc, char ** argv);
+void philoProblem(int argc, char **argv);
 
 #endif

@@ -6,12 +6,12 @@
 #define EMPTY 0
 
 typedef struct t_pipe {
-    int id;
-    char buffer[PIPE_BUFFER_SIZE];
-    int writeIndex, readIndex;
-    long totalProcesses;
-    int writeLock, readLock;
-    int state;
+  int id;
+  char buffer[PIPE_BUFFER_SIZE];
+  int writeIndex, readIndex;
+  long totalProcesses;
+  int writeLock, readLock;
+  int state;
 } t_pipe;
 
 int pipeOpen(int pipeId);
@@ -19,5 +19,5 @@ int pipeWrite(int pipeId, char *str);
 int pipeClose(int pipeId);
 int pipeRead(int pipeId);
 void pipeStatus();
-   
+
 #endif

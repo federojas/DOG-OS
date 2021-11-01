@@ -2,8 +2,8 @@
 #define _PROCESSTEST_H
 
 #include <libc.h>
-#include <testUtil.h>
 #include <shell.h>
+#include <testUtil.h>
 
 void testProcesses();
 

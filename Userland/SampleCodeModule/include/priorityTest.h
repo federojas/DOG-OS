@@ -2,8 +2,8 @@
 #define _PRIORITYTEST_H
 
 #include <libc.h>
-#include <testUtil.h>
 #include <shell.h>
+#include <testUtil.h>
 
 void testPriority();
 

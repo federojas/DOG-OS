@@ -11,15 +11,15 @@
 
 void setBGC(t_color colour);
 void setFTC(t_color colour);
-int scanf(char * str, ...);
+int scanf(char *str, ...);
 void printf(char *str, ...);
 void printc(t_color color, char *str, ...);
 void putChar(char c);
 // int getChar(); // MODO ESPERA ACTIVA
-char getChar(); // MODO HLT
+char getChar();  // MODO HLT
 int strlen(const char *s);
 int strcmp(char string1[], char string2[]);
-int strToInt(char *str, int* size);
+int strToInt(char *str, int *size);
 char *intToStr(int value, char *buffer, int base);
 void newLine();
 char *reverse(char *buffer, int i, int j);
@@ -30,14 +30,14 @@ void newLine();
 int readText();
 int strToHex(const char *str);
 void sendUserData(char *userName, int len);
-void doubleToStr(double n, char* res, int afterpoint);
+void doubleToStr(double n, char *res, int afterpoint);
 int pow(int x, unsigned int y);
 void strToDouble(char *numStr, double *result);
 void setFirstChange(int number);
-void * memset(void * destination, int32_t c, uint64_t length);
+void *memset(void *destination, int32_t c, uint64_t length);
 int isVowel(char c);
 void printDivider(int uniformly, int c1, int);
-void printCenteredHeading(int delimiters, char * str, ...);
+void printCenteredHeading(int delimiters, char *str, ...);
 void printRow(char *str1, char *str2, int firstRow);
 void printCol(char *str, int width);
 void printFullDivider();
