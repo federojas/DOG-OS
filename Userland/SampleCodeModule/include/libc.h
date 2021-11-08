@@ -48,4 +48,5 @@ void printDog2();
 void printDog3();
 void printDog4();
 void printDogAnimation(int i);
+
 #endif

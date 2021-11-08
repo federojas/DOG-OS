@@ -99,6 +99,7 @@ void printf(char *str, ...) {
   return;
 }
 
+
 void printc(t_color color, char *str, ...) {
   t_color old = currentFTC;
   setFTC(color);

@@ -29,7 +29,7 @@ static void printHelpTestTable();
 static int findPipe(int argc, char **argv);
 static void initializePipe(int pipeIndex, int argc, char **argv);
 static int handlePipe(int pipeIndex, int argc, char **argv);
-static int runPipeCmd(int argc, char **argv, int fdin, int fdout);
+static int runPipeCmd(int argc, char **argv, int fdin, int fdout, int foreground);
 
 static int pipeId = 70;
 
@@ -216,38 +216,38 @@ static int handlePipe(int pipeIndex, int argc, char **argv) {
     return -2;
   }
 
-  for (int i = 0; i < pipeIndex; i++) {
-    currentArgv[i] = argv[i];
-    currentArgc++;
-  }
-
-  pids[0] = runPipeCmd(currentArgc, currentArgv, 0, pipe);
-  if (pids[0] == -1) {
-    pipeClose(pipe);
-    return -1;
-  }
-
-  currentArgc = 0;
   for (int i = pipeIndex + 1, j = 0; i < argc; i++, j++) {
     currentArgv[j] = argv[i];
     currentArgc++;
   }
 
-  int endOfFile = EOF;
-  pipeWrite(pipe, (char *)&endOfFile);
-
-  pids[1] = runPipeCmd(currentArgc, currentArgv, pipe, 1);
+  pids[0] = runPipeCmd(currentArgc, currentArgv, pipe, 1, BACKGROUND);
+  if (pids[0] == -1) {
+    pipeClose(pipe);
+    return -1;
+  }
+  
+  currentArgc = 0;
+  for (int i = 0; i < pipeIndex; i++) {
+    currentArgv[i] = argv[i];
+    currentArgc++;
+  }
+  
+  pids[1] = runPipeCmd(currentArgc, currentArgv, 0, pipe, FOREGROUND);
   if (pids[1] == -1) {
     pipeClose(pipe);
     return -1;
   }
+  
+  int endOfFile = EOF;
+  pipeWrite(pipe, (char *)&endOfFile);
 
   pipeClose(pipe);
   putChar('\n');
   return 1;
 }
 
-static int runPipeCmd(int argc, char **argv, int fdin, int fdout) {
+static int runPipeCmd(int argc, char **argv, int fdin, int fdout, int foreground) {
   int fd[2];
   int commandIdx = getCommandIdx(argv[0]);
   if (commandIdx == -1) {
@@ -258,7 +258,7 @@ static int runPipeCmd(int argc, char **argv, int fdin, int fdout) {
   fd[1] = fdout;
 
   return newProcess(shellData.commands[commandIdx].commandFn, argc, argv,
-                    FOREGROUND, fd);
+                    foreground, fd);
 }
 
 static void shellWelcomeMessage() {

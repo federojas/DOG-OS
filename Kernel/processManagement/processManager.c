@@ -307,6 +307,7 @@ static void idleProcess(int argc, char **argv) {
   }
 }
 
+
 static uint64_t getPID() { return currentPID++; }
 
 static int initializeProcessControlBlock(t_PCB *PCB, char *name,
